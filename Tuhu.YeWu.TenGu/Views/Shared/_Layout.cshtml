@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>途虎采购管理</title>
+    <!-- Link -->
+    <link rel="stylesheet" href="../../Content/css/style.css">
+    <link rel="stylesheet" href="../../Content/Css/loader-style.css">
+    <link rel="stylesheet" href="../../Content/Css/bootstrap.css">
+    <link href="../../Content/js/iCheck/flat/all.css" rel="stylesheet">
+    <link href="../../Content/js/iCheck/line/all.css" rel="stylesheet">
+    <link href="../../Content/js/colorPicker/bootstrap-colorpicker.css" rel="stylesheet">
+    <link href="../../Content/js/switch/bootstrap-switch.css" rel="stylesheet">
+    <link href="../../Content/js/idealform/css/jquery.idealforms.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../../Content/ico/minus.png">
+    <!-- Script -->
+    <script type="text/javascript" src="~/Content/js/jquery.js"></script>
+    <script type="text/javascript" src="../../Content/js/preloader.js"></script>
+    <script type="text/javascript" src="../../Content/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../../Content/js/app.js"></script>
+    <script type="text/javascript" src="../../Content/js/load.js"></script>
+    <script type="text/javascript" src="../../Content/js/main.js" charset="gbk"></script>
+    <script type="text/javascript" src="../../Content/js/iCheck/jquery.icheck.js"></script>
+    <script type="text/javascript" src="../../Content/js/switch/bootstrap-switch.js"></script>
+</head>
+<body onresize="ResetSize()" onload="ResetSize()">
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="status">&nbsp;</div>
+    </div>
+    <!-- 顶部固定栏 -->
+    <nav role="navigation" class="navbar navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="entypo-menu"></span>
+                </button>
+                <button class="navbar-toggle toggle-menu-mobile toggle-left" type="button">
+                    <span class="entypo-list-add"></span>
+                </button>
+                <div id="logo-mobile" class="visible-xs">
+                    <h1>途虎采购管理</h1>
+                </div>
+            </div>
+            <!-- 中间信息栏 -->
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- 消息提示1 -->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i style="font-size: 20px;" class="icon-conversation"></i>
+                            <div class="noft-red">5</div>
+                        </a>
+                        <ul style="margin: 11px 0 0 9px;" role="menu" class="dropdown-menu dropdown-wrap">
+                            <li>
+                                <a href="#">
+                                    <img alt="" class="img-msg img-circle" src="~/Content/img/user.png">Jhon Doe <b>Just Now</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <img alt="" class="img-msg img-circle" src="~/Content/img/user.png">Jeniffer <b>3 Min Ago</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <img alt="" class="img-msg img-circle" src="~/Content/img/user.png">Dave <b>2 Hours Ago</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <img alt="" class="img-msg img-circle" src="~/Content/img/user.png"><i>Keanu</i> <b>1 Day Ago</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <img alt="" class="img-msg img-circle" src="~/Content/img/user.png"><i>Masashi</i> <b>2 Mounth Ago</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div>See All Messege</div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 消息提示2 -->
+                    <li>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i style="font-size: 19px;" class="icon-warning tooltitle"></i>
+                            <div class="noft-green">5</div>
+                        </a>
+                        <ul style="margin: 12px 0 0 0;" role="menu" class="dropdown-menu dropdown-wrap">
+                            <li>
+                                <a href="#">
+                                    <span style="background: #DF2135" class="noft-icon maki-bus"></span><i>From Station</i> <b>01B</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <span style="background: #AB6DB0" class="noft-icon maki-ferry"></span><i>Departing at</i> <b>9:00 AM</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <span style="background: #FFA200" class="noft-icon maki-aboveground-rail"></span><i>Delay for</i> <b>09 Min</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <span style="background: #86C440" class="noft-icon maki-airport"></span><i>Take of</i> <b>08:30 AM</b>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <span style="background: #0DB8DF" class="noft-icon maki-bicycle"></span><i>Take of</i> <b>08:30 AM</b>
+                                </a>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li>
+
+                                <div>See All Notification</div>
+
+                            </li>
+
+                        </ul>
+                    </li>
+                    <!-- 消息提示3 -->
+                    <li>
+                        <a href="#"><i data-toggle="tooltip" data-placement="bottom" title="Help" style="font-size: 20px;" class="icon-help tooltitle"></i></a>
+                    </li>
+                </ul>
+                <!-- 主要信息 -->
+                <div id="nt-title-container" class="navbar-left running-text visible-lg">
+                    <!-- 日期 -->
+                    <ul class="date-top">
+                        <li class="entypo-calendar" style="margin-right: 5px"></li>
+                        <li id="Date">@(DateTime.Now.ToString("yyyy年MM月dd日") + " " + DateTime.Now.ToString("ddd", new System.Globalization.CultureInfo("zh-cn")))</li>
+                    </ul>
+                    <!-- 时间 -->
+                    <ul id="digital-clock" class="digital">
+                        <li class="entypo-clock" style="margin-right: 5px"></li>
+                        <li class="hour"></li>
+                        <li>:</li>
+                        <li class="min"></li>
+                        <li>:</li>
+                        <li class="sec"></li>
+                        <li class="meridiem"></li>
+                    </ul>
+                    <!-- 天气 -->
+                    <ul id="nt-title">
+                        <li>
+                            <i class="wi-day-lightning"></i>&#160;&#160;上海&#160;
+                            <b>63</b><i class="wi-fahrenheit"></i>&#160;; Tonight- 72 °F (22.2 °C)
+                        </li>
+                        <li>
+                            <i class="wi-day-lightning"></i>&#160;&#160;北京&#160;
+                            <b>85</b><i class="wi-fahrenheit"></i>&#160;; Tonight- 78 °F (25.2 °C)
+                        </li>
+                    </ul>
+                </div>
+                <ul style="margin-right: 0;" class="nav navbar-nav navbar-right">
+                    <li>
+                        <!-- 用户头像名称 -->
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img alt="" class="admin-pic img-circle" src="~/Content/img/user.png">Hi, 阿狸 <b class="caret"></b>
+                        </a>
+                        <!-- 用户操作 -->
+                        <ul style="margin-top: 14px;" role="menu" class="dropdown-setting dropdown-menu">
+                            <li>
+                                <a href="#">
+                                    <span class="entypo-user"></span>&#160;&#160;个人信息
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="entypo-vcard"></span>&#160;&#160;系统设置
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="entypo-lifebuoy"></span>&#160;&#160;帮助
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#">
+                                    <span class="entypo-basket"></span>&#160;&#160; 购买
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 主题设置 -->
+                    <li>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="icon-gear"></span>&#160;&#160;主题
+                        </a>
+                        <ul role="menu" class="dropdown-setting dropdown-menu">
+                            <li class="theme-bg">
+                                <div id="button-bg"></div>
+                                <div id="button-bg2"></div>
+                                <div id="button-bg3"></div>
+                                <div id="button-bg5"></div>
+                                <div id="button-bg6"></div>
+                                <div id="button-bg7"></div>
+                                <div id="button-bg8"></div>
+                                <div id="button-bg9"></div>
+                                <div id="button-bg10"></div>
+                                <div id="button-bg11"></div>
+                                <div id="button-bg12"></div>
+                                <div id="button-bg13"></div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- 右侧导航开关 -->
+                    <li class="hidden-xs">
+                        <a class="toggle-left" href="#">
+                            <span style="font-size: 20px;" class="entypo-list-add"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- 中间信息栏 -->
+        </div>
+    </nav>
+    <!-- END 顶部固定栏 -->
+
+    <!-- 左边导航 -->
+    <div id="skin-select">
+        <div id="logo">
+            <h1>途虎采购管理</h1>
+        </div>
+        <a id="toggle">
+            <span class="entypo-menu"></span>
+        </a>
+        <div class="dark">
+            <form action="#">
+                <span>
+                    <input type="text" name="search" value="" class="search rounded id_search" placeholder="导航检索" autofocus="">
+                </span>
+            </form>
+        </div>
+        <div class="search-hover">
+            <form id="demo-2">
+                <input type="search" placeholder="导航检索" class="id_search">
+            </form>
+        </div>
+        <div class="skin-part">
+            <div id="tree-wrap">
+            <div class="side-bar">
+            <!-- 导航列表 -->
+            <ul class="topnav menu-left-nest">
+                <!-- 一级导航 常展开 -->
+                <li>
+                    <a href="#" style="border-left: 0px solid !important;" class="title-menu-left">
+                        <span class="widget-menu"></span>
+                        <i data-toggle="tooltip" class="entypo-cog pull-right config-wrap"></i>
+                    </a>
+                </li>
+                <!-- 二级导航 默认关闭-->
+                <li>
+                    <a class="tooltip-tip ajax-load" href="#" title="Blog App">
+                        <i class="icon-document-edit"></i>
+                        <span>Blog App</span>
+                    </a>
+                    <!-- 三级导航 -->
+                    <ul>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="blog-list.html" title="Blog List"><i class="entypo-doc-text"></i><span>Blog List</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="blog-detail.html" title="Blog Detail"><i class="entypo-newspaper"></i><span>Blog Details</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="tooltip-tip ajax-load" href="social.html" title="Social">
+                        <i class="icon-feed"></i>
+                        <span>Social</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="tooltip-tip ajax-load" href="media.html" title="Media">
+                        <i class="icon-camera"></i>
+                        <span>Media</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="topnav menu-left-nest">
+                <li>
+                    <a href="#" style="border-left: 0px solid !important;" class="title-menu-left">
+                        <span class="design-kit"></span>
+                        <i data-toggle="tooltip" class="entypo-cog pull-right config-wrap"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="tooltip-tip ajax-load" href="index.html" title="Dashboard">
+                        <i class="icon-window"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="tooltip-tip ajax-load" href="mail.html" title="Mail">
+                        <i class="icon-mail"></i>
+                        <span>mail</span>
+                        <div class="noft-blue">289</div>
+                    </a>
+                </li>
+                <li>
+                    <a class="tooltip-tip ajax-load" href="icon.html" title="Icons">
+                        <i class="icon-preview"></i>
+                        <span>Icons</span>
+                        <div class="noft-blue" style="display: inline-block; float: none;">New</div>
+                    </a>
+                </li>
+                <li>
+                    <a class="tooltip-tip" href="#" title="Extra Pages">
+                        <i class="icon-document-new"></i>
+                        <span>Extra Page</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="blank_page.html" title="Blank Page"><i class="icon-media-record"></i><span>Blank Page</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="profile.html" title="Profile Page"><i class="icon-user"></i><span>Profile Page</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="invoice.html" title="Invoice"><i class="entypo-newspaper"></i><span>Invoice</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="pricing_table.html" title="Pricing Table"><i class="fontawesome-money"></i><span>Pricing Table</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2 ajax-load" href="time-line.html" title="Time Line"><i class="entypo-clock"></i><span>Time Line</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2" href="404.html" title="404 Error Page"><i class="icon-thumbs-down"></i><span>404 Error Page</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2" href="500.html" title="500 Error Page"><i class="icon-thumbs-down"></i><span>500 Error Page</span></a>
+                        </li>
+                        <li>
+                            <a class="tooltip-tip2" href="lock-screen.html" title="Lock Screen"><i class="icon-lock"></i><span>Lock Screen</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="tooltip-tip " href="login.html" title="login">
+                        <i class="icon-download"></i>
+                        <span>Login</span>
+                    </a>
+                </li>
+            </ul>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- END 左边导航 -->
+
+    <!-- 主要内容 -->
+    <div class="wrap-fluid">
+        <div class="container-fluid paper-wrap bevel tlbr" id="mainPager">
+            <!-- 标题 -->
+            <div class="row">
+                <div id="paper-top">
+                    <!-- 左边 页面标题 -->
+                    <div class="col-sm-3">
+                        <h2 class="tittle-content-header">
+                            <i class="icon-document-edit"></i>
+                            <span>
+                                Form Element
+                            </span>
+                        </h2>
+                    </div>
+                    <!-- 中间 提醒说明 -->
+                    <div class="col-sm-7">
+                        <div class="devider-vertical visible-lg"></div>
+                        <div class="tittle-middle-header">
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <span class="tittle-alert entypo-info-circled"></span>
+                                Welcome back,&nbsp;
+                                <strong>Dave mattew!</strong>&nbsp;&nbsp;Your last sig in at Yesterday, 16:54 PM
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 右间 其他 -->
+                    <div class="col-sm-2">
+                        <div class="devider-vertical visible-lg"></div>
+                        <div class="btn-group btn-wigdet pull-right visible-lg">
+                            <div class="btn">
+                                Widget
+                            </div>
+                            <button data-toggle="dropdown" class="btn dropdown-toggle" type="button">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul role="menu" class="dropdown-menu">
+                                <li>
+                                    <a href="#">
+                                        <span class="entypo-plus-circled margin-iconic"></span>Add New
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#">
+                                        <span class="entypo-heart margin-iconic"></span>Favorite
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="entypo-cog margin-iconic"></span>Setting
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 标题 -->
+
+            <!-- 主要页面内容 -->
+            @RenderBody()
+            <!-- 主要页面内容 -->
+
+            <!-- 底部版权 -->
+            <div class="footer-space"></div>
+            <div id="footer">
+                <div class="devider-footer-left"></div>
+                <div class="time">
+                    <p id="spanDate">
+                    <p id="clock">
+                </div>
+                <div class="copyright">
+                    Make with Love
+                    <span class="entypo-heart"></span>2014 <a href="#">(Themesmile) Purchase This Item</a> All Rights Reserved
+                </div>
+                <div class="devider-footer"></div>
+            </div>
+
+            <!-- 底部版权 -->
+        </div>
+    </div>
+    <!-- END 主要内容 -->
+
+    <!-- 右边导航栏 -->
+    <div class="sb-slidebar sb-right">
+        <!-- 区块 -->
+        <div style="margin-top: 0;" class="right-wrapper">
+            <div class="row">
+                <h3>
+                    <span><i class="entypo-chat"></i>&nbsp;&nbsp;CHAT</span>
+                </h3>
+                <div class="col-sm-12">
+                    <span class="label label-warning label-chat">Online</span>
+                    <ul class="chat">
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-circle" src="~/Content/img/user.png">
+                                </span><b>Dave Junior</b>
+                                <br><i>Last seen : 08:00 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-circle" src="~/Content/img/user.png">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-circle" src="~/Content/img/user.png">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="label label-chat">Offline</span>
+                    <ul class="chat">
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-offline img-circle" src="~/Content/img/user.png">
+                                </span><b>Dave Junior</b>
+                                <br><i>Last seen : 08:00 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-offline img-circle" src="~/Content/img/user.png">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-offline img-circle" src="~/Content/img/user.png">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-offline img-circle" src="~/Content/img/user.png">
+                                </span><b>Kenneth Lucas</b>
+                                <br><i>Last seen : 07:21 PM</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>
+                                <img alt="" class="img-chat img-offline img-circle" src="~/Content/img/user.png">
+                                </span><b>Heidi Perez</b>
+                                <br><i>Last seen : 05:43 PM</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 区块 -->
+    </div>
+    <!-- END 右边导航栏 -->
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        //CHECKBOX PRETTYFY
+        $('.skin-flat input').iCheck({
+            checkboxClass: 'icheckbox_flat-red',
+            radioClass: 'iradio_flat-red'
+        });
+        $('.skin-line input').each(function () {
+            var self = $(this),
+            label = self.next(),
+            label_text = label.text();
+            label.remove();
+            self.iCheck({
+                checkboxClass: 'icheckbox_line-blue',
+                radioClass: 'iradio_line-blue',
+                insert: '<div class="icheck_line-icon"></div>' + label_text
+            });
+        });
+        //Switch Button
+        $('.make-switch').bootstrapSwitch('setSizeClass', 'switch-small');
+    });
+    function ResetSize() {
+        $("#mainPager").height($(window).height() - 80);
+        $("#mainPager").css("max-height", $(window).height() - 80);
+    }
+</script>
+@*<script type="text/javascript">
+    /* &lt;![CDATA[ */
+    (function () {
+        try {
+            var s, a, i, j, r, c, l, b = document.getElementsByTagName("script");
+            l = b[b.length - 1].previousSibling;
+            a = l.getAttribute('data-cfemail');
+            if (a) {
+                s = '';
+                r = parseInt(a.substr(0, 2), 16);
+                for (j = 2; a.length - j; j += 2) {
+                    c = parseInt(a.substr(j, 2), 16) ^ r;
+                    s += String.fromCharCode(c);
+                }
+                s = document.createTextNode(s);
+                l.parentNode.replaceChild(s, l);
+            }
+        } catch (e) { }
+    })();
+    /* ]]&gt; */
+</script>*@
