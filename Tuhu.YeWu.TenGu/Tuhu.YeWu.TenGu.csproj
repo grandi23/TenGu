@@ -140,6 +140,8 @@
     <Content Include="Content\css\social.css" />
     <Content Include="Content\css\style.css" />
     <Content Include="Content\css\weather-icons.min.css" />
+    <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\font\BebasNeue-webfont.svg" />
     <Content Include="Content\font\dripicons.svg" />
     <Content Include="Content\font\weathericons-regular-webfont.svg" />
@@ -161,6 +163,7 @@
     <Content Include="Content\img\credit\paypal2.png" />
     <Content Include="Content\img\credit\visa.png" />
     <Content Include="Content\img\giftly.png" />
+    <Content Include="Content\img\girl.jpg" />
     <Content Include="Content\img\insta-pic.jpg" />
     <Content Include="Content\img\insta-pic2.jpg" />
     <Content Include="Content\img\minus.png" />
@@ -370,6 +373,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -403,6 +407,17 @@
     <Content Include="Content\js\footable\css\fonts\footable.eot" />
     <Content Include="Content\js\footable\css\fonts\footable.ttf" />
     <Content Include="Content\js\footable\css\fonts\footable.woff" />
+    <Content Include="Views\Account\LogOn.cshtml" />
+    <Content Include="Content\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular %281%29.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\open-sans-light.woff" />
+    <Content Include="Content\fonts\open-sans-bold.woff" />
+    <Content Include="Content\fonts\open-sans-normal.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
