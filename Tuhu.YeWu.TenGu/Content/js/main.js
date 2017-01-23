@@ -18,7 +18,30 @@ head.js("Content/js/newsticker/jquery.newsTicker.js", function () {
         pauseOnHover: 0
     });
 
-
+    $.ajax({
+        url: "http://wthrcdn.etouch.cn/weather_mini",
+        data: { "citykey": 101020100 },
+        dataType: 'jsonp',
+        crossDomain: true,
+        success: function (result) {
+            if (result.data.forecast.length > 0) {
+                var weater = "";
+                for (var i = 0; i < result.data.forecast.length; i++) {
+                    var forecast = result.data.forecast[i];
+                    weater +=
+                        "<li>&nbsp;上海&nbsp;&nbsp;" + forecast.date +
+                        "&nbsp;&nbsp;<b>" + forecast.type +
+                        "</b>&nbsp;&nbsp;" + forecast.high +
+                        "&nbsp;&nbsp;" + forecast.low +
+                        "&nbsp;&nbsp;" + forecast.fengxiang + "&nbsp;&nbsp;</li>";
+                }
+                $("#nt-title").html(weater);
+            }
+        },
+        error: function () {
+            alert("查询天气错误！");
+        }
+    });
 });
 
 //------------------------------------------------------------- 
@@ -279,7 +302,7 @@ head.js("Content/js/clock/jquery.clock.js", function () {
 
     //clock
     $('#digital-clock').clock({
-        offset: '+5',
+        offset: '+8',//正东，负西；北京时区：东八区
         type: 'digital'
     });
 
