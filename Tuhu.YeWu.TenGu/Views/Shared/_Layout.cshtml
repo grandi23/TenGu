@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Tuhu.YeWu.TenGu.Models
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -26,6 +27,7 @@
     <script type="text/javascript" src="../../Content/js/main.js" charset="gbk"></script>
     <script type="text/javascript" src="../../Content/js/iCheck/jquery.icheck.js"></script>
     <script type="text/javascript" src="../../Content/js/switch/bootstrap-switch.js"></script>
+    <script type="text/javascript" src="../../Content/js/layer/layer.js"></script>
 </head>
 <body onresize="ResetSize()" onload="ResetSize()">
     <!-- 加载条 -->
@@ -253,191 +255,38 @@
         <div class="skin-part">
             <div id="tree-wrap">
             <div class="side-bar">
-            <!-- 导航列表 -->
-            <ul class="topnav menu-left-nest">
-                <!-- 一级导航 常展开 -->
-                <li>
-                    <a href="#" style="border-left: 0px solid !important;" class="title-menu-left">
-                        <span>采购下单</span> 
-                    </a>
-                </li>
-                <!-- 二级导航 默认关闭-->
-                <li>
-                    <a class="tooltip-tip ajax-load" href="#" title="销售订单采购">
-                        <i class="icon-document-edit"></i>
-                        <span>销售订单采购</span>
-                    </a>
-                    <!-- 三级导航 -->
-                   <!-- <ul>
-                        <li>
-                            <a class="tooltip-tip2 ajax-load" href="blog-list.html" title="Blog List"><i class="entypo-doc-text"></i><span>Blog List</span></a>
-                        </li>
-                        <li>
-                            <a class="tooltip-tip2 ajax-load" href="blog-detail.html" title="Blog Detail"><i class="entypo-newspaper"></i><span>Blog Details</span></a>
-                        </li>
-                    </ul>-->
-                </li>
-                <li>
-                    <a class="tooltip-tip ajax-load" href="social.html" title="采购订货列表">
-                        <i class="icon-feed"></i>
-                        <span>采购订货列表</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="tooltip-tip ajax-load" href="media.html" title="采购任务化">
-                        <i class="icon-camera"></i>
-                        <span>采购任务化</span>
-                    </a>
-                </li>
-            </ul>
-            <ul class="topnav menu-left-nest">
-                <li>
-                    <a href="#" style="border-left: 0px solid !important;" class="title-menu-left" title="采购信息查询"> 
-                        <span>采购信息查询</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="tooltip-tip ajax-load" href="index.html" title="采购订单列表">
-                        <i class="icon-window"></i>
-                        <span>采购订单列表</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="tooltip-tip ajax-load" href="mail.html" title="采购改仓库列表">
-                        <i class="icon-mail"></i>
-                        <span>采购改仓库列表</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="tooltip-tip ajax-load" href="icon.html" title="入库批次">
-                        <i class="icon-preview"></i>
-                        <span>入库批次</span>
-                    </a>
-                </li>
-                <li>
-                    <a class="tooltip-tip" href="#" title="供应商管理">
-                        <i class="icon-document-new"></i>
-                        <span>供应商管理</span>
-                    </a>
-
-                </li>
-            </ul>
+                <!-- 导航列表 -->
                 <ul class="topnav menu-left-nest">
-                    <li>
-                        <a href="#" style="border-left: 0px solid !important;" class="title-menu-left" title="采购审核">
-                            <span>采购审核</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="index.html" title="采购单零采审核">
-                            <i class="icon-window"></i>
-                            <span>采购单零采审核</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="mail.html" title="批量采购审核">
-                            <i class="icon-mail"></i>
-                            <span>批量采购审核</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="icon.html" title="采购调价审核">
-                            <i class="icon-preview"></i>
-                            <span>采购调价审核</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="供应商资质审核">
-                            <i class="icon-document-new"></i>
-                            <span>供应商资质审核</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="topnav menu-left-nest">
-                    <li>
-                        <a href="#" style="border-left: 0px solid !important;" class="title-menu-left" title="系统配置">
-                            <span>系统配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="index.html" title="采购任务分配配置">
-                            <i class="icon-window"></i>
-                            <span>采购任务分配配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="mail.html" title="订单更改仓库配置">
-                            <i class="icon-mail"></i>
-                            <span>订单更改仓库配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="icon.html" title="采购信息配置">
-                            <i class="icon-window"></i>
-                            <span>采购信息配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="订单可用周期配置">
-                            <i class="icon-document-new"></i>
-                            <span>订单可用周期配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="邀约产品配置">
-                            <i class="icon-document-new"></i>
-                            <span>邀约产品配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="保养包装数配置">
-                            <i class="icon-document-new"></i>
-                            <span>保养包装数配置</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="topnav menu-left-nest">
-                    <li>
-                        <a href="#" style="border-left: 0px solid !important;" class="title-menu-left" title="流程监控">
-                            <span >流程监控</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="index.html" title="采购红冲监控">
-                            <i class="icon-window"></i>
-                            <span>采购红冲监控</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="mail.html" title="采购取货跟踪">
-                            <i class="icon-mail"></i>
-                            <span>采购取货跟踪</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip ajax-load" href="icon.html" title="采购到货跟踪">
-                            <i class="icon-preview"></i>
-                            <span>采购到货跟踪</span>                            
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="采购用款审核">
-                            <i class="icon-document-new"></i>
-                            <span>采购用款审核</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="邀约产品配置">
-                            <i class="icon-document-new"></i>
-                            <span>邀约产品配置</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="tooltip-tip" href="#" title="采购任务跟踪">
-                            <i class="icon-document-new"></i>
-                            <span>采购任务跟踪</span>
-                        </a>
-                    </li>
+                    @if (Session["MenuList"] != null)
+                    {
+                        var menuList = (List<MenuNode>)Session["MenuList"];
+                        if (menuList.Any())
+                        {
+                            <!-- 一级导航 默认关闭 -->
+                            foreach (var prent in menuList.GroupBy(x => x.ParentName))
+                            {
+                                var parMenus = prent.ToList();
+                                <li>
+                                    <a class="tooltip-tip ajax-load" title="@parMenus.First().ParentName">
+                                        <i class="@parMenus.First().ParentIcon"></i>
+                                        <span>@parMenus.First().ParentName</span>
+                                    </a>
+                                    <ul>
+                                        <!-- 二级导航 默认关闭-->
+                                        @foreach (var node in parMenus)
+                                        {
+                                            <li>
+                                                <a class="tooltip-tip2 ajax-load" title="@node.DisplayName" onclick="iframhref('@node.Url');">
+                                                    <i class="@node.Icon"></i>
+                                                    <span>@node.DisplayName</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    }
                 </ul>
             </div>
             </div>
@@ -451,55 +300,14 @@
             <!-- 标题 -->
             <div class="row">
                 <div id="paper-top">
-                    <!-- 左边 页面标题 -->
-                    <div class="col-sm-3">
-                        <h2 class="tittle-content-header">
-                            <i class="icon-document-edit"></i>
-                            <span style="font-size: 21px;">
-                                @ViewBag.Title
-                            </span>
-                        </h2>
-                    </div>
                     <!-- 中间 提醒说明 -->
-                    <div class="col-sm-7">
-                        <div class="devider-vertical visible-lg"></div>
+                    <div class="col-sm-10" style="margin-left: 3%;">
+                        <div class="visible-lg"></div>
                         <div class="tittle-middle-header">
-                            <div class="alert">
+                            <div class="alert" style="padding: 5px; font-size: 20px;">
                                 <span class="tittle-alert entypo-info-circled"></span>
-                                欢迎使用&nbsp;
-                                <strong>途虎采购系统采购系统!</strong>&nbsp;&nbsp;
+                                <strong style="color: #FFA500;">公告：</strong>&nbsp;明天(2月15号)下午三点将发布系统，请提前做好准备！
                             </div>
-                        </div>
-                    </div>
-                    <!-- 右间 其他 -->
-                    <div class="col-sm-2">
-                        <div class="devider-vertical visible-lg"></div>
-                        <div class="btn-group btn-wigdet pull-right visible-lg">
-                            <div class="btn">
-                                Widget
-                            </div>
-                            <button data-toggle="dropdown" class="btn dropdown-toggle" type="button">
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul role="menu" class="dropdown-menu">
-                                <li>
-                                    <a href="#">
-                                        <span class="entypo-plus-circled margin-iconic"></span>Add New
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="#">
-                                        <span class="entypo-heart margin-iconic"></span>Favorite
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <span class="entypo-cog margin-iconic"></span>Setting
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -507,7 +315,7 @@
             <!-- 标题 -->
 
             <!-- 主要页面内容 -->
-            @RenderBody()
+            <iframe id="iframMain" name="iframMain" src="/InfoList/PurchaseOrderIndex" style="width: 100%" frameborder="0">@RenderBody()</iframe>
             <!-- 主要页面内容 -->
 
             <!-- 底部版权 -->
@@ -611,6 +419,7 @@
 </body>
 </html>
 <script>
+    var layoutLoad;
     $(document).ready(function () {
         //CHECKBOX PRETTYFY
         $('.skin-flat input').iCheck({
@@ -619,8 +428,8 @@
         });
         $('.skin-line input').each(function () {
             var self = $(this),
-            label = self.next(),
-            label_text = label.text();
+                label = self.next(),
+                label_text = label.text();
             label.remove();
             self.iCheck({
                 checkboxClass: 'icheckbox_line-blue',
@@ -630,30 +439,15 @@
         });
         //Switch Button
         $('.make-switch').bootstrapSwitch('setSizeClass', 'switch-small');
+        //iframe加载完成
+        $("#iframMain").load(function () {
+            layer.close(layoutLoad);
+        });
     });
-    function ResetSize() {
-        $("#mainPager").height($(window).height() - 80);
-        $("#mainPager").css("max-height", $(window).height() - 80);
+    function iframhref(url) {
+        layoutLoad = layer.load(1);
+        if (url !== "") {
+            document.getElementById('iframMain').src = url;
+        };
     }
 </script>
-@*<script type="text/javascript">
-    /* &lt;![CDATA[ */
-    (function () {
-        try {
-            var s, a, i, j, r, c, l, b = document.getElementsByTagName("script");
-            l = b[b.length - 1].previousSibling;
-            a = l.getAttribute('data-cfemail');
-            if (a) {
-                s = '';
-                r = parseInt(a.substr(0, 2), 16);
-                for (j = 2; a.length - j; j += 2) {
-                    c = parseInt(a.substr(j, 2), 16) ^ r;
-                    s += String.fromCharCode(c);
-                }
-                s = document.createTextNode(s);
-                l.parentNode.replaceChild(s, l);
-            }
-        } catch (e) { }
-    })();
-    /* ]]&gt; */
-</script>*@

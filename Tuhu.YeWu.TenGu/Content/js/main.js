@@ -2,15 +2,8 @@
 head.js("Content/js/skin-select/jquery.cookie.js");
 head.js("Content/js/skin-select/skin-select.js");
 
-//Showing Date
-//head.js("Content/js/clock/date.js");
-
-//Bootstrap
-//head.js("assets/js/bootstrap.js");
-
-//NEWS STICKER
+//---------------------天气信息查询--------------------------------- 
 head.js("Content/js/newsticker/jquery.newsTicker.js", function () {
-
     var nt_title = $('#nt-title').newsTicker({
         row_height: 18,
         max_rows: 1,
@@ -43,12 +36,7 @@ head.js("Content/js/newsticker/jquery.newsTicker.js", function () {
         }
     });
 });
-
-//------------------------------------------------------------- 
-
-
-////Acordion and Sliding menu
-
+//---------------------导航菜单--------------------------------- 
 head.js("Content/js/custom/scriptbreaker-multiple-accordion-1.js", function () {
 
     $(".topnav").accordionze({
@@ -60,9 +48,8 @@ head.js("Content/js/custom/scriptbreaker-multiple-accordion-1.js", function () {
 
 });
 
-////Right Sliding menu
-
-head.js("Content/js/slidebars/slidebars.min.js", "http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js", function () {
+//---------------------导航菜单打开关闭--------------------------------- 
+head.js("Content/js/slidebars/slidebars.min.js", "Content/js/slidebars/jquery.easing.min.js", function () {
 
     $(document).ready(function() {
         var mySlidebars = new $.slidebars();
@@ -73,73 +60,12 @@ head.js("Content/js/slidebars/slidebars.min.js", "http://cdnjs.cloudflare.com/aj
     });
 });
 
-//-------------------------------------------------------------
-
-//SEARCH MENU
+//---------------------导航检索--------------------------------- 
 head.js("Content/js/search/jquery.quicksearch.js", function () {
-
     $('input.id_search').quicksearch('#menu-showhide li, .menu-left-nest li');
-   
-   
-
 });
-//-------------------------------------------------------------
 
-
-
-//EASY PIE CHART
-head.js("Content/js/gage/jquery.easypiechart.min.js", function () {
-
-    $(function() {
-
-
-        $('.chart').easyPieChart({
-            easing: 'easeOutBounce',
-            trackColor: '#ffffff',
-            scaleColor: '#ffffff',
-            barColor: '#FF0064',
-            onStep: function(from, to, percent) {
-                $(this.el).find('.percent').text(Math.round(percent));
-            }
-        });
-        var chart = window.chart = $('.chart').data('easyPieChart');
-        $('.js_update').on('click', function() {
-            chart.update(Math.random() * 100);
-        });
-
-        $('.speed-car').easyPieChart({
-            easing: 'easeOutBounce',
-            trackColor: 'rgba(0,0,0,0.3)',
-            scaleColor: 'transparent',
-            barColor: '#0085DF',
-
-            lineWidth: 8,
-            onStep: function(from, to, percent) {
-                $(this.el).find('.percent2').text(Math.round(percent));
-            }
-        });
-        var chart = window.chart = $('.chart2').data('easyPieChart');
-        $('.js_update').on('click', function() {
-            chart.update(Math.random() * 100);
-        });
-        $('.overall').easyPieChart({
-            easing: 'easeOutBounce',
-            trackColor: 'rgba(0,0,0,0.3)',
-            scaleColor: '#323A45',
-            lineWidth: 35,
-            lineCap: 'butt',
-            barColor: '#FFB900',
-            onStep: function(from, to, percent) {
-                $(this.el).find('.percent3').text(Math.round(percent));
-            }
-        });
-    });
-
-});
-//-------------------------------------------------------------
-
-//TOOL TIP
-
+//---------------------二级导航打开关闭---------------------------
 head.js("Content/js/tip/jquery.tooltipster.js", function () {
 
     $('.tooltip-tip-x').tooltipster({
@@ -191,113 +117,8 @@ head.js("Content/js/tip/jquery.tooltipster.js", function () {
 
 
 });
-//------------------------------------------------------------- 
 
-//NICE SCROLL
-
-head.js("Content/js/nano/jquery.nanoscroller.js", function () {
-
-    $(".nano").nanoScroller({
-        //stop: true 
-        scroll: 'top',
-        scrollTop: 0,
-        sliderMinHeight: 40,
-        preventPageScrolling: true
-        //alwaysVisible: false
-
-    });
-
-});
-//------------------------------------------------------------- 
-
-
-
-
-
-
-//------------------------------------------------------------- 
-//PAGE LOADER
-head.js("Content/js/pace/pace.js", function () {
-
-    paceOptions = {
-        ajax: false, // disabled
-        document: false, // disabled
-        eventLag: false, // disabled
-        elements: {
-            selectors: ['.my-page']
-        }
-    };
-
-});
-
-//------------------------------------------------------------- 
-
-//SPARKLINE CHART
-head.js("Content/js/chart/jquery.sparkline.js", function () {
-
-    $(function() {
-        $('.inlinebar').sparkline('html', {
-            type: 'bar',
-            barWidth: '8px',
-            height: '30px',
-            barSpacing: '2px',
-            barColor: '#A8BDCF'
-        });
-        $('.linebar').sparkline('html', {
-            type: 'bar',
-            barWidth: '5px',
-            height: '30px',
-            barSpacing: '2px',
-            barColor: '#44BBC1'
-        });
-        $('.linebar2').sparkline('html', {
-            type: 'bar',
-            barWidth: '5px',
-            height: '30px',
-            barSpacing: '2px',
-            barColor: '#AB6DB0'
-        });
-        $('.linebar3').sparkline('html', {
-            type: 'bar',
-            barWidth: '5px',
-            height: '30px',
-            barSpacing: '2px',
-            barColor: '#19A1F9'
-        });
-    });
-
-    $(function() {
-        var sparklineLogin = function() {
-            $('#sparkline').sparkline(
-                [5, 6, 7, 9, 9, 5, 3, 2, 2, 4, 6, 7], {
-                    type: 'line',
-                    width: '100%',
-                    height: '25',
-                    lineColor: '#ffffff',
-                    fillColor: '#0DB8DF',
-                    lineWidth: 1,
-                    spotColor: '#ffffff',
-                    minSpotColor: '#ffffff',
-                    maxSpotColor: '#ffffff',
-                    highlightSpotColor: '#ffffff',
-                    highlightLineColor: '#ffffff'
-                }
-            );
-        }
-        var sparkResize;
-        $(window).resize(function(e) {
-            clearTimeout(sparkResize);
-            sparkResize = setTimeout(sparklineLogin, 500);
-        });
-        sparklineLogin();
-    });
-
-
-});
-
-//------------------------------------------------------------- 
-
-//DIGITAL CLOCK
+//---------------------当前时间信息---------------------------
 head.js("Content/js/clock/jquery.clock.js", function () {
 
     //clock
@@ -306,8 +127,10 @@ head.js("Content/js/clock/jquery.clock.js", function () {
         type: 'digital'
     });
 
-
 });
+//---------------------ifram高度---------------------------
+function ResetSize() {
+    $("#iframMain").height($(window).height() - 135);
+    $("#iframMain").css("max-height", $(window).height() - 135);
+}
 
-
-//------------------------------------------------------------- 

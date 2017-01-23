@@ -286,6 +286,15 @@
     <Content Include="Content\js\jhere-custom.js" />
     <Content Include="Content\js\jquery.js" />
     <Content Include="Content\js\jquery.min.js" />
+    <Content Include="Content\js\layer\layer.js" />
+    <Content Include="Content\js\layer\mobile\layer.js" />
+    <Content Include="Content\js\layer\mobile\need\layer.css" />
+    <Content Include="Content\js\layer\skin\default\icon-ext.png" />
+    <Content Include="Content\js\layer\skin\default\icon.png" />
+    <Content Include="Content\js\layer\skin\default\layer.css" />
+    <Content Include="Content\js\layer\skin\default\loading-0.gif" />
+    <Content Include="Content\js\layer\skin\default\loading-1.gif" />
+    <Content Include="Content\js\layer\skin\default\loading-2.gif" />
     <Content Include="Content\js\load.js" />
     <Content Include="Content\js\main.js" />
     <Content Include="Content\js\map\gmap3.js" />
@@ -304,6 +313,7 @@
     <Content Include="Content\js\skin-select\jquery.cookie.js" />
     <Content Include="Content\js\skin-select\skin-select.css" />
     <Content Include="Content\js\skin-select\skin-select.js" />
+    <Content Include="Content\js\slidebars\jquery.easing.min.js" />
     <Content Include="Content\js\slidebars\slidebars.css" />
     <Content Include="Content\js\slidebars\slidebars.min.js" />
     <Content Include="Content\js\speed\canvasgauge-coustom.js" />
@@ -375,9 +385,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InfoListController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\LayoutMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +430,9 @@
     <Content Include="Content\fonts\open-sans-light.woff" />
     <Content Include="Content\fonts\open-sans-bold.woff" />
     <Content Include="Content\fonts\open-sans-normal.woff" />
+    <Content Include="Views\InfoList\PurchaseOrderIndex.cshtml" />
+    <Content Include="Views\Home\Show.cshtml" />
+    <Content Include="Views\Shared\_Inner.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -428,7 +443,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\js\gage\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
