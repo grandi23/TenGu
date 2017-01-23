@@ -2765,14 +2765,14 @@ b#speed {
     margin-top: 60px;
 }
 .footer-space {
-    height: 60px;
+    height: 10px;
     width: 100%;
 }
 #footer {
     background: none repeat scroll 0 0 #f8f8f8;
     border-top: 1px solid #DDDDDD;
     bottom: 0;
-    height: 50px;
+    height: 40px;
     left: 0;
     position: absolute;
     width: 100%;
@@ -2792,9 +2792,11 @@ b#speed {
 .copyright {
     bottom: 0;
     color: #666666;
-    float: right;
+    text-align: center;
+    line-height: 40px;
+    /*float: right;*/
     font-size: 12px !important;
-    padding: 5px 15px;
+    /*padding: 5px 15px;*/
     position: relative;
 }
 .devider-footer {

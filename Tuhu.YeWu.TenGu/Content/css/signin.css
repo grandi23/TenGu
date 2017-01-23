@@ -19,7 +19,7 @@ body {
     min-height: 100%;
     z-index: -2;
     margin: 0px !important;
-    background: url('../img/bg.jpg') no-repeat top center fixed;
+    background: url('../img/bg5.jpg') no-repeat top center fixed;
     -moz-background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
@@ -31,11 +31,12 @@ body {
     z-index: 5;
 }
 #logo-login {
-    background: rgba(48, 65, 96, 0.8);
+    /*background: rgba(48, 65, 96, 0.8);*/
+    background: #4AC4BC;
+    text-align: center;
     border-radius: 3px 3px 0 0;
     color: #FFFFFF;
     padding: 1px 0 14px 25px;
-    ;
 }
 #logo-login h1 {
     color: #FFFFFF;
