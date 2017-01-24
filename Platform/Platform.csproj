@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{486D1C4C-7887-4460-AA78-03BBA26B726E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Platform</RootNamespace>
+    <AssemblyName>Platform</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MessageInspector\AttachThreadIdentityEndPointBehavior.cs" />
+    <Compile Include="MessageInspector\AttachThreadIdentityMessageInspector.cs" />
+    <Compile Include="MessageInspector\GetThreadIdentityEndPointBehavior.cs" />
+    <Compile Include="MessageInspector\GetThreadIdentityMessageInspector.cs" />
+    <Compile Include="MessageInspector\WatchServerThresholdConfig.cs" />
+    <Compile Include="MessageInspector\WatchServerThresholdEndpointBehavior.cs" />
+    <Compile Include="MessageInspector\WatchServerThresholdMessageInspector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\CachingClientCredentials.cs" />
+    <Compile Include="Security\SecurityCredentials.cs" />
+    <Compile Include="Security\TokenCache.cs" />
+    <Compile Include="Security\UserNamePasswordValidator.cs" />
+    <Compile Include="Security\WCFInvoker.cs" />
+    <Compile Include="StartUp\AggregateStartUp.cs" />
+    <Compile Include="StartUp\IAggregateStartUp.cs" />
+    <Compile Include="StartUp\IStartUp.cs" />
+    <Compile Include="StartUp\LoopStartUp.cs" />
+    <Compile Include="StartUp\SequentialAggregrateStartUp.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Yewu.Purchase\ThBiz.Contracts\ThBiz.Contracts.csproj">
+      <Project>{6676EC29-9C6E-4E7E-A037-D695C6E638F5}</Project>
+      <Name>ThBiz.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\Tuhu.Component.Framework\Tuhu.Component.Framework.csproj">
+      <Project>{e575a091-5cdb-4df4-bae7-4f16f3ed8815}</Project>
+      <Name>Tuhu.Component.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

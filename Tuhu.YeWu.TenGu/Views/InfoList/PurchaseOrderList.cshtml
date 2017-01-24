@@ -1,0 +1,697 @@
+﻿@model List<ThBiz.Common.Entity.PurchaseOrderModel>
+@using ThBiz.Common.Configurations
+@{
+    Layout = null;
+    var user = User.Identity.Name;
+    var downloadUsers = new List<string>() { "caixuepu@tuhu.cn", "chenpei@tuhu.cn", "cuihuanhuan@tuhu.cn", "lujinlei@tuhu.cn", "liyaqi@tuhu.cn", "jiting@tuhu.cn", "yangyanyan@tuhu.cn", "dilingling@tuhu.cn", "yangpeipei@tuhu.cn", "brantgu@tuhu.cn", "yuanyuhao@tuhu.cn", "baoli@tuhu.cn", "wanghuaizeng@tuhu.cn", "xiajinhui@tuhu.cn", "huqi@tuhu.cn" };
+    var finishedReceiptUsers = new List<string>() { "brantgu@tuhu.cn","renyutao@tuhu.cn", "yangpeipei@tuhu.cn", "yangtingting2@tuhu.cn", "wuzuhong@tuhu.cn", "chenyixin@tuhu.cn","jiangxiaoling@tuhu.cn","huqi@tuhu.cn", "liyaqi@tuhu.cn", "taoxinjian@tuhu.cn", "daiyuzhen@tuhu.cn", "zhuyuxia@tuhu.cn", "huyue@tuhu.cn", "zhangxiaowen@tuhu.cn" , "dilingling@tuhu.cn" };
+    var auditReverseUser = new List<string>() { "yangyanyan@tuhu.cn", "brantgu@tuhu.cn", "wangminyou@tuhu.cn", "renyutao@tuhu.cn", "wanghuaizeng@tuhu.cn", "baoli@tuhu.cn", "yangpeipei@tuhu.cn", "xiajinhui@tuhu.cn", "huqi@tuhu.cn", "zenglin@tuhu.cn", "zhangxiaowen@tuhu.cn" };
+    const string purchaseStatus = "待修改,已驳回,已取消,待审核,进一步审核";
+    var diffPriceUser = new List<string> { "dilingling@tuhu.cn", "yuanyuhao@tuhu.cn", "liyaqi@tuhu.cn", "zhonghaibin@tuhu.cn", "brantgu@tuhu.cn", "yangpeipei@tuhu.cn", "wanghuaizeng@tuhu.cn", "baoli@tuhu.cn", "jiangxiaoling@tuhu.cn", "renyutao@tuhu.cn", "xiajinhui@tuhu.cn", "huqi@tuhu.cn" };
+    var deletePower = new List<string> {"fanzhou@tuhu.cn", "zhangxiaowen@tuhu.cn", "huqi@tuhu.cn", "jiangxiaoling@tuhu.cn"};
+}
+<style type="text/css">
+    .purchaseorder-wrapper {
+        font-family: "Microsoft Yahei";
+        margin: 7px 0;
+        border: 1px solid #E5E5E5;
+        min-width: 1240px;
+        background: #fff;
+        border-radius: 4px;
+    }
+
+    .purchaseorder-info {
+        border-bottom: 1px solid #E5E5E5;
+        background: #F7F7F7;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 4px;
+    }
+
+    .head-info {
+        border-bottom: 1px solid #E5E5E5;
+        background: #31b0d5;
+        color: #FFFFFF;
+        min-width: 1240px;
+        border-radius: 4px;
+    }
+
+    .purchaseorder-info p {
+        margin-top: 6px;
+    }
+
+    .purchaseorder-right {
+        float: left;
+        width: 97%;
+        height: 30px;
+    }
+
+        .purchaseorder-right p {
+            float: left;
+        }
+
+    .purchaseorder-item {
+        padding: 10px;
+        display: none;
+    }
+
+    .even {
+        background: #F9F8F8;
+    }
+
+    .odd {
+        background: #ffffff;
+    }
+
+    .over {
+        background: #eee;
+    }
+
+    .click {
+        background: #eae9e9;
+    }
+
+    #difference_dialog table {
+        border: none;
+    }
+
+        #difference_dialog table td {
+            border: none;
+        }
+
+    .head-text {
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+@if (Model != null && Model.Any())
+{
+    <div class="head-info">
+        <table style="width:100%;">
+            <tr>
+                <td style="width: 20px;" title="全选">
+                    <input id="currentpage-checkbox" type="checkbox" onclick="CheckCurrentPageCheckBox(this);" />
+                </td>
+                <td style="width: 90px;" class="head-text">订单号</td>
+                <td style="width: 100px;" class="head-text">仓库名称</td>
+                <td style="width:12%;" class="head-text">供应商</td>
+                <td style="width:80px;" class="head-text">采购方式</td>
+                <td style="width:80px;" class="head-text">提货方式</td>
+                <td style="width:80px;" class="head-text">采购总额</td>
+                <td style="width:80px;" class="head-text">采购总数</td>
+                <td style="width:80px;" class="head-text">入库总额</td>
+                <td style="width:80px;" class="head-text">运费总额</td>
+                @*<td style="width:80px;" class="head-text">成本总额</td>*@
+                <td style="width:90px;" class="head-text">入库数</td>
+                <td style="width:8%;" class="head-text">采购人</td>
+                <td style="width:140px;" class="head-text">创建时间</td>
+                <td style="width: 55px;" class="head-text">操作</td>
+            </tr>
+        </table>
+    </div>
+    foreach (var item in Model)
+    {
+         <div class="purchaseorder-wrapper">
+             <div class="purchaseorder-info" onclick="ExpandedAndPackup(this)" tag-status="unfold">
+                 <table style="width:100%;">
+                     <tr>
+                         <td style="width: 20px;">
+                             <input type="checkbox" onclick="SelectDivCheckBox(this) "/>
+                         </td>
+                         <td style="width: 90px;">
+                             <span style="font-weight: bold; color: #d43f3a;">@item.PurchaseOrder.Id</span>
+                         </td>
+                         <td style="width: 100px;">
+                             <span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.WareHouseName</span>
+                         </td>
+                         <td style="width:12%;"><span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.VendorName</span></td>
+                         <td style="width:80px;"><span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.PurchaseModeText</span></td>
+                         <td style="width:80px;">
+                            <span style="color: #337ab7; font-weight: bold;">@(string.IsNullOrWhiteSpace(item.PurchaseOrder.ShipmentType) ? "" : item.PurchaseOrder.ShipmentType.Substring(1))</span>
+                         </td>
+                         <td style="width:80px;">
+                            <span style="color: #337ab7; font-weight: bold;">
+                                @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new {_.PurchaseId, _.TotalPrice}).Distinct().Sum(_ => _.TotalPrice), 2)
+                            </span>
+                         </td>
+                         <td style="width:80px;">
+                            <span style="color: #337ab7; font-weight: bold;">
+                                @(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")&&_.Pid!= "TS-TransportSupplies|1" && _.Pid != "T-TransportSupplies|1")
+                                    .Select(_ => new { _.PurchaseId, _.Num }).Distinct().Sum(_ => _.Num))
+                            </span>
+                         </td>
+                         <td style="width: 80px;">
+                             <span style="color: #337ab7; font-weight: bold;">
+                                 @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new {_.PurchaseId, _.InstockTotalPrice}).Distinct().Sum(_ => _.InstockTotalPrice), 2)
+                             </span>
+                         </td>
+                         <td style="width: 80px;">
+                             <span style="color: #337ab7; font-weight: bold;">
+                                 @Math.Round(item.PoItemList.FirstOrDefault(_ => !_.Status.StartsWith("已取消")) == null ? 0 : item.PoItemList.FirstOrDefault(_ => !_.Status.StartsWith("已取消")).ProductTotalFreight, 2)
+                             </span>
+                         </td>
+                         @*<td style="width: 80px;">
+                             <span style="color: #337ab7; font-weight: bold;">
+                                 @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new { _.PurchaseId, _.NoTaxCost, _.Num}).Sum(_ => _.NoTaxCost * _.Num), 2)
+                             </span>
+                         </td>*@
+                         <td style="width:90px;">
+                            <span style="color: #337ab7; font-weight: bold;">
+                                 @(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消") && _.Pid != "TS-TransportSupplies|1" && _.Pid != "T-TransportSupplies|1")
+                                     .Select(_ => new { _.PurchaseId, _.InstockNum }).Distinct().Sum(_ => _.InstockNum))
+                             </span>
+                         </td>
+                         <td  style="width:8%;">
+                            <span style="color: #337ab7; font-weight: bold;">
+                                @(item.PurchaseOrder.CreatedByName != "VenderSys"? item.PurchaseOrder.CreatedByName :"供应商")
+                            </span>
+                         </td>
+                         <td style="width: 140px;">
+                            <span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.CreatedDateTime.ToString("yyyy-MM-dd HH:mm")</span>
+                         </td>
+                         <td style="width:55px;">
+                             <span>
+                                 @Html.ActionLink("导出", "ExportDataToPdf", "InfoList", new { purchaseId = item.PurchaseOrder.Id }, new { btnkey = "ExportPdf", istuhuverify = "1" })
+                             </span>
+                             <span><a href="javascript:void(0)" btnkey="DeletePurchaseOrder" istuhuverify="1" onclick="DeletePurchaseOrderForPurchaseList(this, @item.PurchaseOrder.Id)">删除</a></span>
+                         </td>
+                     </tr>
+                 </table>
+             </div>
+             <div class="purchaseorder-item">
+                 @if (item.PoItemList != null && item.PoItemList.Any())
+                 {
+                     <table id="List" class="tableContainer data-table" style="width: 100%;">
+                         <thead>
+                             <tr>
+                                 <th style="width: 20px;">
+                                     <input type="checkbox" onclick="SelectAll(this) " />
+                                 </th>
+                                 <th style="width: 60px;">
+                                     产品单号
+                                 </th>
+                                 <th style="width: 240px;">
+                                     产品名称
+                                 </th>
+                                 <th style="width: 130px;">
+                                     产品编号
+                                 </th>
+                                 <th>
+                                     采购数量
+                                 </th>
+                                 <th>
+                                     已入库
+                                 </th>
+                                 <th style="width: 60px;">
+                                     采购单价
+                                 </th>
+                                 <th style="width: 60px;">
+                                     采购总价
+                                 </th>
+                                 @*<th style="width: 60px;">
+                                     入库总价
+                                 </th>*@
+                                 @*<th>
+                                     税率
+                                 </th>
+                                 <th style="width: 60px;">
+                                     含税成本价
+                                 </th>
+                                 <th style="width: 60px;">
+                                     成本单价
+                                 </th>
+                                 <th style="width: 60px;">
+                                     成本总价
+                                 </th>*@
+                                 <th style="width: 60px;">
+                                     运费单价
+                                 </th>
+                                 <th style="width: 80px;">
+                                     运费记账类型
+                                 </th>
+                                 <th>
+                                     备注
+                                 </th>
+                                 <th style="width: 55px;">
+                                     凭证
+                                 </th>
+                                 @*<th>
+                                     相关订单
+                                 </th>*@
+                                 <th>
+                                     申请状态
+                                 </th>
+                                 <th>
+                                     支付状态
+                                 </th>
+
+                                 @*<th>物流信息</th>*@
+
+                                 <th style="width: 110px;">
+                                     入库信息
+                                 </th>
+                                 <th colspan="2" style="text-align: center;">
+                                     操作
+                                 </th>
+                             </tr>
+                         </thead>
+                         <tbody id="tbody">
+                             @foreach (var poItems in item.PoItemList.GroupBy(p => p.PurchaseId))
+                             {
+                                 var poItem = poItems.ToList()[0];
+                                 <tr>
+                                     <td id='@("chk_" + poItem.PurchaseId)'>
+                                         @if (poItem.CreatedDateTime > Convert.ToDateTime("2015-03-01") && !purchaseStatus.Contains(poItem.Status) && poItem.Num >= 0 && poItem.PurchaseMode != 11)
+                                         {
+                                             if ((poItem.PayStatus == "0UnPaid" && (poItem.AuditStatus == -1 || poItem.IsApplyRejected || poItem.IsTurnDown) || poItem.PayStatus == "2PartPaid" && (poItem.ApplyPayStatus || poItem.IsApplyRejected))
+                                                 && (poItem.AccountPeriod == "0" || (poItem.AccountPeriod != "0" && (poItem.Status == "已收货"|| poItem.Status == "部分收货"))))
+                                             {
+                                                 if ((poItem.Pid != "T-TransportSupplies|1"&& poItem.Pid != "TS-TransportSupplies|1")||
+                                                     poItem.Status== "已收货" && (poItem.Pid == "T-TransportSupplies|1" || poItem.Pid == "TS-TransportSupplies|1"))
+                                                 {
+                                                     if (user == poItem.CreatedBy)
+                                                     {
+                                                        <input type="checkbox" onclick="SelectPurchaseId(this) " name="chk_confirm" id="chk_confirm" value="@poItem.PurchaseId" />
+                                                     }
+                                                     else
+                                                     {
+                                                        <input type="checkbox" onclick="SelectPurchaseId(this) " name="chk_confirm" id="chk_confirm" value="@poItem.PurchaseId" btnkey="ApplyPaymentCheckBox" istuhuverify="1" />
+                                                     }
+                                                 }
+                                             }
+                                         }
+                                     </td>
+                                     <td>
+                                         @poItem.PurchaseId
+                                         @if (poItem.Reverse != 0)
+                                         {
+                                             if (poItem.DataType == "Return")
+                                             {
+                                                 <br />
+                                                 <span id='@("relatedPKID_" + poItem.PurchaseId)' style="color: blue">(@poItem.Reverse)</span>
+                                             }
+                                             else if (poItem.Reverse != 0)
+                                             {
+                                                 <br />
+                                                 <span id='@("relatedPKID_" + poItem.PurchaseId)' style="color: red">(@poItem.Reverse)</span>
+                                             }
+                                         }
+                                         @if (poItem.Status.StartsWith("新建"))
+                                         {
+                                             <br />
+                                             <span id='@("status_" + poItem.PurchaseId)'>@poItem.Status</span>
+                                         }
+                                         else if (poItem.IsAuditingReverse && poItem.Num < 0 && poItem.Status == "待审核")
+                                         {
+                                             <br />
+                                             <span id='@("status_" + poItem.PurchaseId)' class='error'>@(poItem.DataType == "Reverse" ? "红冲待审" : "退货待审")</span>
+                                         }
+                                         else
+                                         {
+                                             <br />
+                                             <span id='@("status_" + poItem.PurchaseId)' class='error'>@poItem.Status</span>
+                                         }
+                                     </td>
+                                     <td>
+                                         @poItem.Name
+                                     </td>
+                                     <td>
+                                         @poItem.Pid
+                                     </td>
+                                     <td>
+                                         @poItem.Num
+                                     </td>
+                                     <td>
+                                         @poItem.InstockNum
+                                     </td>
+                                     <td>
+                                        @(Math.Round(poItem.PurchasePrice, 2))<br/>
+                                        @if (poItem.DiffAuditStatus == 1)
+                                        {
+                                        <span style="color:red;">@(poItem.DiffPrice == 0 ? "" : "补：" + poItem.DiffPrice.ToString("F"))</span>
+                                        }
+                                        else if (poItem.IsRejected)
+                                        {
+                                            <span><a id="diff_rejected_reason" style="color:red;cursor: pointer;" onclick="ViewPurchaseDiffPrice('@item.PurchaseOrder.Id','@poItem.PurchaseId')">被驳回</a></span>
+                                        }
+                                     </td>
+                                     <td>
+                                         @Math.Round(poItem.TotalPrice, 2)
+                                     </td>
+                                     @*<td>
+                                         @Math.Round(poItem.InstockTotalPrice, 2)
+                                     </td>*@
+                                     @*<td>
+                                         @(poItem.TaxPoint < 1 && poItem.TaxPoint > 0 ? Convert.ToInt32(poItem.TaxPoint*100)+"%" : "无")*@
+                                         @*@Math.Round(poItem.Rebate1, 2)<br/>
+                                         @Math.Round(poItem.Rebate2, 2)<br/>
+                                         @Math.Round(poItem.Rebate3, 2)*@
+                                     @*</td>*@
+                                     @*<td>
+                                         @Math.Round(poItem.CostPrice, 2)
+                                     </td>
+                                     <td>
+                                         @Math.Round(poItem.NoTaxCost, 2)
+                                     </td>
+                                     <td>
+                                         @Math.Round(poItem.Num*poItem.NoTaxCost, 2)
+                                     </td>*@
+                                     <td>
+                                         @Math.Round(poItem.ProductFreight, 2)
+                                     </td>
+                                     <td>
+                                         @(string.IsNullOrEmpty(poItem.FreightTpye) ? "无" : poItem.FreightTpye)
+                                     </td>
+                                     <td style="width: 50px; word-break: break-all;" title="@poItem.Remark">
+                                         @if (!string.IsNullOrWhiteSpace(poItem.Remark) && poItem.Remark.Length > 20)
+                                         {
+                                             @poItem.Remark.Substring(0, 20)<span>...</span>
+                                         }
+                                         else
+                                         {
+                                             @poItem.Remark
+                                         }
+                                     </td>
+                                     <td>
+                                         @if (!string.IsNullOrWhiteSpace(poItem.VoucherUrl) || poItem.NewByteCount == 1)
+                                         {
+                                             if (downloadUsers.Contains(User.Identity.Name) || poItem.CreatedBy == User.Identity.Name)
+                                             {
+                                                <a onclick="ViewVoucherImg(@poItem.PurchaseId) " style="cursor: pointer; color: #008080">查看凭证</a>
+                                             }
+                                             else
+                                             {
+                                                <a onclick="ViewVoucherImg(@poItem.PurchaseId) " style="cursor: pointer; color: #008080" btnkey="ViewVoucher" istuhuverify="1">查看凭证</a>
+                                             }
+                                            <br />
+                                         }
+                                         @if (poItem.Status.StartsWith("已收货"))
+                                         {
+                                             if (poItem.HasVoucher.Equals(true))
+                                             {
+                                                <a href="@YewuDomainConfig.YewuSite/Logistic/CreateVoucher/@poItem.PurchaseId?PId=@poItem.Pid&returnUrl=%2FPurchaseOrder%2FPurchaseIndex%2F1" target="_blank">查看应付</a>
+                                                 <br />
+                                                <a href="@YewuDomainConfig.YewuSite/Logistic/UpdateVoucher/@poItem.PurchaseId?PId=@poItem.Pid&returnUrl=%2FPurchaseOrder%2FPurchaseIndex%2F1" target="_blank">重做应付</a>
+                                             }
+                                             else
+                                             {
+                                                <a href="@YewuDomainConfig.YewuSite/Logistic/CreateVoucher/@poItem.PurchaseId?PId=@poItem.Pid&returnUrl=%2FPurchaseOrder%2FPurchaseIndex%2F1" target="_blank">查看应付</a>
+                                             }
+                                         }
+                                     </td>
+                                     @*<td>
+                                         @foreach (var od in poItems.Where(p => p.OrderId.HasValue && p.OrderId != 0))
+                                         {
+                                             <a href="@YewuDomainConfig.YewuOrderSite/Order/Details/@od.OrderId" target="_blank">@od.OrderId</a>
+                                             <br />
+                                         }
+                                     </td>*@
+                                     <td id='@("audit_status_" + poItem.PurchaseId)'>
+                                         @if (!purchaseStatus.Contains(poItem.Status))
+                                        {
+                                            if (poItem.AuditStatus == 0 && !poItem.IsApplyRejected)
+                                            {
+                                                <span style="color: #f4a460;">待财务初审</span>
+                                            }
+                                            else if (poItem.AuditStatus == 1)
+                                            {
+                                                <span style="color: #00ced1;">待财务终审</span>
+                                            }
+                                            else if (poItem.AuditStatus == 2 && poItem.PayStatus != "2Paid" && poItem.PayStatus != "2PartPaid")
+                                            {
+                                                <span style="color: #6b8e23;">待出纳付款</span>
+                                            }
+                                            else if (poItem.AuditStatus == 2 && poItem.PayStatus == "2PartPaid")
+                                            {
+                                                <span style="color: firebrick;">部分申请</span>
+                                            }
+                                            else if (poItem.AuditStatus == -1)
+                                            {
+                                                <span style="color: firebrick;">未申请</span>
+                                            }
+                                            else if (poItem.IsApplyRejected)
+                                            {
+                                                <a onclick="GetTurnDownReason('@poItem.PurchaseId') " style="color: red; cursor: pointer;">被驳回</a>
+                                             }
+                                             else if (poItem.AuditStatus == -2 && !poItem.IsTurnDown)
+                                             {
+                                                <span style="color: red;">对账中</span>
+                                             }
+                                         }
+                                     </td>
+                                     <td>
+                                         @{
+                                             if (poItem.PayStatus == "0UnPaid")
+                                             {
+                                                 <span style="color: red;">未付款</span>
+                                             }
+                                             else if (poItem.PayStatus == "2PartPaid")
+                                             {
+                                                <span style="color: green;">部分付款</span>
+                                             }
+                                             else if (poItem.PayStatus == "2Paid")
+                                             {
+                                                 <span style="color: green;">已付款</span>
+                                             }
+                                         }
+                                     </td>
+                                     @*<td >
+                                      <a href="#" class="logistic" purchaseId="@poItem.PurchaseId" venderId="@item.PurchaseOrder.VendorId">物流详情</a>
+                                     </td>*@
+                                     <td title="@(poItem.InstockDate.ToString() != "0001/1/1 0:00:00" ? poItem.InstockDate.ToString() : "")">
+                                         <label>@poItem.PlanedInstockDate.ToShortDateString()</label><span>(计划)</span><br />
+                                         @if (poItem.Status.StartsWith("已收货") || poItem.Status.StartsWith("部分收货"))
+                                         {
+                                             @poItem.InstockDate.ToShortDateString()<span>(实际)</span>
+                                             <br />
+                                         }
+                                         @if (poItem.Pid == "T-TransportSupplies|1" || poItem.Pid == "TS-TransportSupplies|1")
+                                         {
+                                             if (poItem.Status.StartsWith("新建"))
+                                             {
+                                                <a onclick="ConfirmationFreight(this, @poItem.PurchaseId);" style="cursor: pointer;">确认运费耗材</a>
+                                             }
+                                         }
+                                         else
+                                         {
+                                             if (User.Identity.Name == "renyutao@tuhu.cn" && (poItem.Status.StartsWith("新建") || poItem.Status.StartsWith("部分收货") || poItem.Status.StartsWith("已发货")) && poItem.PurchaseMode != 6)
+                                             {
+                                                @Html.ActionLink("入库", "PoInstock", "InfoList", new { id = poItem.PurchaseId, returnUrl = "/PurchaseOrder/PurchaseIndex" },
+                                             new { @btnkey = "PutInStorage", @istuhuverify = "1" })
+                                             }
+                                            if ((finishedReceiptUsers.Contains(user) || User.Identity.Name.Equals(poItem.CreatedBy)) && poItem.Status.StartsWith("部分收货") && (poItem.AuditStatus == -1 || poItem.IsApplyRejected || poItem.PayStatus == "2Paid" || poItem.PayStatus == "2PartPaid"))
+                                            {
+                                                var flag = item.PoItemList.Exists(_ => _.DataType == "Reverse" && _.IsAuditingReverse && _.Num < 0 && _.Status == "待审核" && _.Reverse == poItem.PurchaseId);
+                                                if (!flag)
+                                                {
+                                                    <a onclick="FinishedGoodsReceipt(this, @poItem.PurchaseId) " style="cursor: pointer;">结束收货</a>
+                                                 }
+                                             }
+                                             if (poItem.Status == "已收货" && poItem.Num > 0)
+                                             {
+                                                 if (poItem.AuditStatus != 0 && poItem.AuditStatus != 1&& poItem.AuditStatus != -2&&!poItem.IsTurnDown || poItem.AuditStatus == 0 && poItem.IsTurnDown)
+                                                 {
+                                                    <a id='@("reverse_" + poItem.PurchaseId)' style="cursor: pointer;" onclick="CreatePurchaseReturnGoods(@poItem.PurchaseId) ">创建退货</a>
+                                                 }
+                                             }
+                                         }
+                                     </td>
+                                     <td style="width: 55px;">
+                                         <a onclick="EditPoItem1(this, @poItem.PurchaseId,'@poItem.Status') " style="cursor: pointer;">编辑</a>
+                                         @if ((!poItem.IsFromVenderSys && poItem.DataType != "Reverse" && poItem.DataType != "Return") || poItem.IsFromVenderSys || User.Identity.Name == "brantgu@tuhu.cn" || User.Identity.Name == "renyutao@tuhu.cn")
+                                         {
+                                             if ((!poItem.Status.StartsWith("已发货")|| poItem.Status.StartsWith("已发货") && deletePower.Contains(User.Identity.Name)) && !poItem.Status.StartsWith("部分收货") && !poItem.Status.StartsWith("已收货") && !poItem.Status.StartsWith("已取消") && (poItem.PayStatus != "2Paid" || poItem.InstockNum==0&&poItem.PayStatus == "2PartPaid" || poItem.AuditStatus == -1))
+                                             {
+                                                 <a onclick="DeletePoItem(this,'@item.PurchaseOrder.Id','@poItem.Pid',@poItem.PurchaseId) " style="cursor: pointer;word-break:keep-all;" btnkey="DeletePurchaseOrderItem" istuhuverify="1">删除</a>
+                                             }
+                                         }
+                                         @if ((poItem.Status == "新建" || poItem.Status == "已发货") && (poItem.PayStatus == "2Paid" || poItem.PayStatus == "2PartPaid") && poItem.Num >= 0 && !poItem.IsAuditingReverse)
+                                         {
+                                             <br />
+                                             <a id='@("reverse_" + poItem.PurchaseId)' style="cursor: pointer;" onclick="CreatePurchaseReverse(@poItem.PurchaseId) ">创建红冲</a>
+                                         }
+                                         @if (poItem.Status == "待审核" && poItem.DataType == "Reverse" && auditReverseUser.Contains(User.Identity.Name))
+                                         {
+                                             <br />
+                                             <a id='@("auditReverse_" + poItem.PurchaseId)' style="cursor: pointer;" onclick="AuditPurchaseReverse(@poItem.PurchaseId) ">审核</a>
+                                         }
+                                         @if (poItem.Num >= 0&& poItem.Pid != "T-TransportSupplies|1" && poItem.Pid != "TS-TransportSupplies|1")
+                                         {
+                                            <br /><a onclick="ShowUsedDetail(@poItem.PurchaseId)" style="cursor:pointer;">占用明细</a>
+                                         }
+                                         <a href="#" class="logistic" purchaseId="@poItem.PurchaseId" venderId="@item.PurchaseOrder.VendorId">物流信息</a>
+                                     </td>
+                                     <td style="width: 60px;">
+                                         <span id='@("applymentOperate_" + poItem.PurchaseId)'>
+                                            @if (poItem.CreatedDateTime > Convert.ToDateTime("2015-03-01"))
+                                            { 
+                                                if (!purchaseStatus.Contains(poItem.Status) && (poItem.AccountPeriod == "0" || (poItem.AccountPeriod != "0" && poItem.Status == "已收货")))
+                                                {
+                                                    if (poItem.AuditStatus == 0 && !poItem.IsApplyRejected)
+                                                    {
+                                                        <a id="applyPayment" style="color: darkmagenta; cursor: pointer;">已申请</a>
+                                                        <br/>
+                                                    }
+                                                    else if (poItem.IsApplyRejected)
+                                                    {
+                                                        <input type="hidden" id='@("hidden_rejectionReason_" + poItem.PurchaseId)' value="@poItem.ApplyRejectionReason" />
+                                                    }
+                                                    else if (poItem.AuditStatus > 0)
+                                                    {
+                                                        <span></span>
+                                                    }
+                                                }
+                                            }
+                                         </span>
+                                         <span>
+                                             @{
+                                                 if (poItem.Status == "已收货" && (poItem.DiffAuditStatus == -1 || poItem.IsRejected) && (diffPriceUser.Contains(User.Identity.Name) || poItem.CreatedBy == User.Identity.Name||poItem.IsFromVenderSys))
+                                                 {
+                                                     <a class="makeUpDifference" id="@("makeUpDiffPrice_" + poItem.PurchaseId)" style="cursor: pointer;" onclick="MakeUpDifference('@item.PurchaseOrder.Id', '@poItem.PurchaseId',@poItem.PurchasePrice)">调整价格</a>
+                                                 }
+                                                 else if ((poItem.DiffAuditStatus == 0 ||poItem.DiffAuditStatus == 2)&& !poItem.IsRejected)
+                                                 {
+                                                     <span style="color: red" >调价待审</span>
+                                                 }
+                                             }
+                                         </span>
+                                         <br />
+                                         @*<a href="#" onclick="CreateLogistic(@poItem.PurchaseId,this) ">新增物流信息</a><br />*@
+                                         <a href="#" onclick="CreatePurchaseTask(@poItem.PurchaseId) ">创建任务</a><br />
+                                         @Html.ActionLink("查看历史", "ShowModifiedHistory", "InfoList", new {purchaseId = poItem.PurchaseId}, new {target = "_blank"})
+                                     </td>
+                                 </tr>
+                             }
+                         </tbody>
+                     </table>
+                 }
+             </div>
+         </div>
+     }
+}
+else
+{
+    <div style="border: 1px solid #ccc;padding:10px;margin:10px 0;width: 99%;">没有相关信息！</div>
+}
+<div class="logisticnformation" id="logisticnformation" style="display:none">
+    <table class="data-table">
+        <thead>
+            <tr id="headerTr">
+                <th>物流单号</th>
+                <th>物流公司</th>
+                <th><a href='#' class='addRow' id='addRow'>添加一行</a></th>
+            </tr>
+        </thead>
+        <tbody class="addLogistic"></tbody>
+    </table>
+</div>
+@*@Html.Pager(Model.Pager, pageNumber => Url.Action("PurchaseOrderList", new { pageNumber }))*@
+
+<div id="window" style="display: none">
+    <table style="margin-top: 2px; margin-left: 20px;">
+        <tr>
+            <td>类型</td>
+            <td>
+                <select id="category" name="category">
+                    <option value="">-请选择-</option>
+                    <option value="未到货">未到货</option>
+                    <option value="送取货异常">送取货异常</option>
+                    <option value="产品异常">产品异常</option>
+                    <option value="其他">其他</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td><textarea rows="1" cols="30" id="txtRemark"></textarea></td>
+        </tr>
+    </table>
+</div> 
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#PoItemList #List tr").mouseover(function () {
+            $(this).addClass("over");
+        }).mouseout(function () {
+            $(this).removeClass("over");
+        });
+        //为表格的奇偶行设定不同的颜色
+        $("#tbody tr:even").addClass("even");
+        $("#tbody tr:odd").addClass("odd");
+        //鼠标点击事件
+        $("#PoItemList #List tr:gt(0)").bind("click", function () {
+            $("#PoItemList  #List  tr:gt(0)").removeClass("click");
+            $(this).addClass("click");
+        });
+
+        $(".logistic").each(function () {
+            $(this).click(function () {
+                var elems = $("#logisticnformation");
+                elems.find(".addLogistic").html("");
+                var vId = $(this).attr("venderId");
+                var purchaseId = $(this).attr("purchaseId");
+                $.ajax({
+                    type: 'post',
+                    url: '/PurchaseOrder/GetLogisticInformation',
+                    data: { "venderId": vId, "purchaseId": purchaseId },
+                    success: function (date) {
+                        if (date.length > 0) {
+                            var dt = eval(date);
+                            $.each(dt, function (item, val) {
+                                elems.find(".addLogistic").append("<tr><td><input  style='width:100%' value='" + dt[item].LogisticCode + "' type='text' class='txtCode'/></td><td><input  style='width:100%' value='" + dt[item].LogisticCompany + "' class='txtCompany' type='text'/></td><td><a href='#' class='deleteRow'>删除该行</a></td></tr>");
+                            });
+                        }
+                    }
+                });
+                var arrObj = new Array();
+                dialog({
+                    title: "物流信息",
+                    width: 450,
+                    height: 200,
+                    fixed: true,
+                    content: elems,
+                    button: [{
+                        value: "保存",
+                        autofocus: true,
+                        callback: function () {
+                            var $tr = elems.find(".addLogistic").find("tr");
+                            var jsonStr = null;
+                            $.each($tr, function (index, item) {
+                                var jsonObj = { "LogisticCode": "", "LogisticCompany": "" };
+                                var $self = $(item);
+                                debugger;
+                                var code = $self.find(".txtCode").val().trim();
+                                var company = $self.find(".txtCompany").val().trim();
+                                jsonObj.LogisticCode = code;
+                                jsonObj.LogisticCompany = company;
+                                arrObj[index] = jsonObj;
+                            });
+                            jsonStr = JSON.stringify(arrObj);
+                            $.ajax({
+                                type: 'post',
+                                url: '/PurchaseOrder/CreateLogistic',
+                                data: { "objJson": jsonStr, "venderId": vId, "purchaseId": purchaseId },
+                                success: function (result) {
+                                    alert(result);
+                                    $(".logisticnformation").dialog("close");
+                                }
+                            });
+                        }
+                    }, {
+                        value: "取消",
+                        callback: function () {
+                        }
+                    }]
+                }).showModal();
+
+                elems.find("#addRow").unbind("click").click(function () {
+                    elems.find(".addLogistic").append("<tr><td><input type='text' style='width:100%' class='txtCode'/></td><td><input style='width:100%' class='txtCompany' type='text'/></td><td><a href='#' class='deleteRow'>删除该行</a></td></tr>");
+                });
+                $(".deleteRow").live("click", function () {
+                    $(this).parent().parent().remove();
+                });
+            });
+        });
+    });
+
+</script>

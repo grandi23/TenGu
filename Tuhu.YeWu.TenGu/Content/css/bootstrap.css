@@ -1934,6 +1934,8 @@ select[multiple].input-lg {
     display: inline-block;
     width: auto;
     vertical-align: middle;
+    height: 30px;
+    margin-bottom: 5px;
   }
   .form-inline .control-label {
     margin-bottom: 0;

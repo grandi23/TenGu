@@ -1,0 +1,624 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.75, 18.625" name="Gungnir">
+  <DataContextMoniker Name="/GungnirDataContext" />
+  <nestedChildShapes>
+    <classShape Id="b5dbec2e-fa7c-4ef3-a1e1-ffe14b0a61dc" isExpanded="false" absoluteBounds="0.5, 2.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/OrderAddress" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5b4fe0ca-b9d3-497a-a5c2-0858572039f1" absoluteBounds="0.51500000000000012, 2.96, 1.9700000000000002, 3.112762451171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1768fd39-69a4-4f51-8ab8-b6d9b8607a01" isExpanded="false" absoluteBounds="0.5, 3, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/EmailProcess" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2e0d533b-8581-409c-b6a8-240c20f444e0" absoluteBounds="0.51500000000000057, 3.46, 1.9700000000000002, 3.112762451171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d2c0e337-5b9a-494b-a836-4a536ef0dcb8" isExpanded="false" absoluteBounds="3, 3, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/KeyPair" />
+      <nestedChildShapes>
+        <elementListCompartment Id="75951276-bc6c-48e7-962d-ad0a47c675e9" absoluteBounds="3.0150000000000006, 3.4600000000000009, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fccb5a1a-aa6b-46eb-bb22-cac1e82d4991" isExpanded="false" absoluteBounds="3, 0.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Users" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8af33e40-9f76-4340-a4d5-fe807692650c" absoluteBounds="3.0150000000000006, 0.96, 1.9700000000000002, 11.135589599609375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bd2d3ead-3634-472c-9aa2-614b483f5e68" isExpanded="false" absoluteBounds="3, 1, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/UserCase" />
+      <nestedChildShapes>
+        <elementListCompartment Id="93d710da-6a88-46f5-afae-3cdeb9fa9511" absoluteBounds="3.0150000000000006, 1.46, 1.9700000000000002, 4.831939697265625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7636ade6-6fe4-4c15-a31f-5a6c6c07e3f4" isExpanded="false" absoluteBounds="5.5, 2.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/AccCategoryLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="78c5aca1-8dd5-4534-b854-488e0a9ca9dc" absoluteBounds="5.5150000000000006, 2.7100000000000009, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6621f8b2-0cd5-4105-b476-88f6452d648c" isExpanded="false" absoluteBounds="5.5, 1.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/AccountLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6aa7a130-fcf6-42c9-8975-448a9d1373c7" absoluteBounds="5.515, 2.0850000000000009, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c3847d41-9e17-4038-b273-3a8b58133878" isExpanded="false" absoluteBounds="3, 4, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/VoucherTransaction" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3dd2d67a-3475-4d41-8ead-e2a10539a4ac" absoluteBounds="3.0150000000000006, 4.4600000000000009, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4ae21ff2-9814-450e-be92-31893ab3c617" isExpanded="false" absoluteBounds="3, 1.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Quotation" />
+      <nestedChildShapes>
+        <elementListCompartment Id="34f6c975-73de-4f68-91ee-751bd387a3a6" absoluteBounds="3.0150000000000006, 1.9600000000000009, 1.9700000000000002, 3.685821533203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b96971f0-661f-4dbf-b004-2dd3fd0aabcb" isExpanded="false" absoluteBounds="5.5, 3.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/VoucherTemplate" />
+      <nestedChildShapes>
+        <elementListCompartment Id="631ae7af-acb8-4722-8179-e6191fdbecf0" absoluteBounds="5.515, 4.335, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7809ab70-c55a-4aa7-84da-8c3fde6b2533" isExpanded="false" absoluteBounds="5.5, 2.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Voucher" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2b124f99-db68-47de-94ea-4af2573c25ae" absoluteBounds="5.515, 3.335, 1.9700000000000002, 2.7307230631510415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b6b6f7bb-b5d5-4804-b92f-37ad36c6e44c" isExpanded="false" absoluteBounds="5.5, 3.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/VoucherItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="63125fac-7a21-4048-82cf-4ebfc1bb4b21" absoluteBounds="5.515, 3.835, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b55f8c37-800c-40f7-9258-25f4d10a3012" isExpanded="false" absoluteBounds="5.5, 0.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Account" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6f5fc331-05de-40b6-bf52-e943b08db019" absoluteBounds="5.515, 0.96, 1.9700000000000002, 1.7756245930989583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d99ac71c-4194-490e-bbf4-940480c89f66" isExpanded="false" absoluteBounds="3, 2, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/QuotationItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="999fd49e-7217-4a02-a1d2-3fd679cacaf8" absoluteBounds="3.015, 2.46, 1.9700000000000002, 3.8768412272135415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b4a6afda-9fa5-4d12-b27f-ed9bda921220" isExpanded="false" absoluteBounds="0.5, 0.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/GetMonthlyReportByDicValue" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a4b4dd40-d03a-4157-b122-bf7e318089ba" absoluteBounds="0.51500000000000057, 0.96, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e99ce052-5bdf-4d7f-b231-8cf1f4a9d2b0" isExpanded="false" absoluteBounds="8, 1.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_LogisticLoad" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1b991b86-5137-4965-8dbd-ee4f763a2bfa" absoluteBounds="8.015, 1.585, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="574b58bb-b627-47b7-9444-b9d1b567165f" isExpanded="false" absoluteBounds="10.25, 4.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_BaoyangStock" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bdd5db7b-d100-4a39-b6f1-0473fc7b4477" absoluteBounds="10.265, 4.71, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6bb4f1fa-9eca-4070-ab39-59bc5c8c6051" isExpanded="false" absoluteBounds="5.5, 1, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/AccCategory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="243a77c9-404e-49e6-8620-b8bfae4c80c7" absoluteBounds="5.515, 1.46, 1.9700000000000002, 1.7756245930989583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="07242706-9ba9-440f-be18-b3e6228b0497" isExpanded="false" absoluteBounds="8, 4.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_ProvinceDistrict" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b098a670-3b18-4acf-9a7d-1261da2b71a3" absoluteBounds="8.015, 5.21, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1c73a86b-b737-47f7-95e3-56965cb0ab24" isExpanded="false" absoluteBounds="10.25, 3.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_ProvinceCity" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5ccb1e01-dace-41a4-9727-e20dc6a8747c" absoluteBounds="10.265, 4.21, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="17b9698f-097f-48a7-bd7c-f5069e68590b" isExpanded="false" absoluteBounds="8, 3.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_ShopCancelReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1f3e7e04-8c6c-4d31-8020-0d1a50a83087" absoluteBounds="8.015, 4.085, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d5d08e6d-769b-434e-ab92-dbc07c76e2af" isExpanded="false" absoluteBounds="8, 3.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_EmployeeCancelReport" />
+      <nestedChildShapes>
+        <elementListCompartment Id="511a7eaa-ee20-48c7-acc1-7d4d631e008e" absoluteBounds="8.015, 3.585, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="23542012-1486-410b-b90e-5e2698c8309e" isExpanded="false" absoluteBounds="8, 5.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_DayAccount" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fe82d3a6-ba50-45ba-90e7-b2936d5ce4c7" absoluteBounds="8.015, 5.835, 1.9700000000000002, 3.112762451171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="076c67d5-9513-40b5-b2b8-694191fd9322" isExpanded="false" absoluteBounds="0.5, 6.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Tbl_TrackReceivedLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5bcf8371-5a9d-4e49-815f-8cb31e23abd9" absoluteBounds="0.51500000000000012, 6.9600000000000009, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="33d0390e-8329-4fca-821e-ce0c5ab8db60" isExpanded="false" absoluteBounds="0.5, 0.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_My_Center_New" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b2556e46-9223-440e-a85c-26e03b5a1463" absoluteBounds="0.515, 0.96, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="87e9832a-a0be-4eec-bd96-0680bc86bde7" isExpanded="false" absoluteBounds="0.5, 5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_StockProduct" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d90f07fa-779e-476c-a4eb-bdced07fc84f" absoluteBounds="0.51500000000000012, 5.46, 1.9700000000000002, 2.539703369140625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d13201dd-9a3c-462e-ab56-affd3f74c509" isExpanded="false" absoluteBounds="8, 5.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_PayOffOrderList" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6f15c707-e348-4efd-a513-ed21cbe06092" absoluteBounds="8.015, 6.335, 1.9700000000000002, 5.787038167317708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2bf240f9-c11f-4536-8afa-e98c5d81086f" isExpanded="false" absoluteBounds="5.5, 6.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_UserShare" />
+      <nestedChildShapes>
+        <elementListCompartment Id="101931a5-0a56-474a-aa60-382fb71008e6" absoluteBounds="5.5150000000000006, 6.9600000000000009, 1.9700000000000002, 3.8768412272135415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0f0a2e8c-0acd-477e-b2bf-b6ac6ea97f24" isExpanded="false" absoluteBounds="5.5, 7.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_line" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4db34454-3787-4de1-a315-d2c7474ab51b" absoluteBounds="5.5150000000000006, 8.21, 1.9700000000000002, 1.7756245930989583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6bd97243-2e45-488f-bd1c-94e488129a1f" isExpanded="false" absoluteBounds="0.5, 4, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tb1_wx_Cwz" />
+      <nestedChildShapes>
+        <elementListCompartment Id="836b6853-f212-49a8-be8a-ef56c6d0639e" absoluteBounds="0.51500000000000012, 4.46, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="970fb0de-6dfa-4026-81c6-7884730680b7" isExpanded="false" absoluteBounds="0.5, 5.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_LogisticTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="994e2a57-0a7d-44b7-88c1-955244124726" absoluteBounds="0.51500000000000012, 5.96, 1.9700000000000002, 6.7421366373697911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7d66909d-db68-4bc1-8506-07fa665803c3" isExpanded="false" absoluteBounds="0.5, 4.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_LogisticTaskStock" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6aae44e8-6730-4ebc-8a1c-54af86f8fafa" absoluteBounds="0.51500000000000012, 4.96, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7f63ce79-b308-4a46-8c9e-5db2698c2ee2" isExpanded="false" absoluteBounds="5.5, 7.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/TireStock" />
+      <nestedChildShapes>
+        <elementListCompartment Id="737dd4f5-3cef-47a9-a04b-5a210088ad7e" absoluteBounds="5.5150000000000006, 7.5850000000000009, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="06a245ca-d842-4fc9-99b4-6484ec1ea897" isExpanded="false" absoluteBounds="3, 6.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_LogisticTaskReceivedLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e7fbef48-9d77-4468-8aad-d5d3cc9eea01" absoluteBounds="3.0149999999999997, 7.2100000000000009, 1.9700000000000002, 2.348683675130208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f4acc2c9-d31b-451d-9250-7cb4906b7acb" isExpanded="false" absoluteBounds="0.5, 1.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Dictionaries" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1b1fd650-3e41-4fca-8f1a-aedd6ccab33f" absoluteBounds="0.51500000000000012, 1.96, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="20bc3ac5-2f66-443c-a935-631b7cda6115" isExpanded="false" absoluteBounds="10.25, 4.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/ProductCommission" />
+      <nestedChildShapes>
+        <elementListCompartment Id="975b6037-5b92-420e-a806-b8327b449e72" absoluteBounds="10.265, 5.21, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b053bbc5-be93-409e-87b6-2d37c3d3026b" isExpanded="false" absoluteBounds="5.5, 5.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_StockProCommission" />
+      <nestedChildShapes>
+        <elementListCompartment Id="30a5bec5-d457-42ab-b45e-d907553004ef" absoluteBounds="5.515, 5.835, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="16c5a352-ac43-4d61-b5d4-db0dbe8264a8" isExpanded="false" absoluteBounds="3, 2.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_MobileUserObject" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1a03064a-e5ad-4e84-afb5-b0bb7c60147f" absoluteBounds="3.015, 2.96, 1.9700000000000002, 2.921742757161458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a3fbfff4-c07b-4f1c-8cc3-d7ddc14ed896" isExpanded="false" absoluteBounds="3, 4.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_GetMonthlyReportByRegion" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a0b4755c-9f0d-4532-ac5f-9e154c941380" absoluteBounds="3.015, 4.96, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8c96409a-b810-49e7-b172-80f297cccb0b" isExpanded="false" absoluteBounds="8, 1.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/DetectionTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1bcdc0ee-4d89-4145-b3aa-3c9bf9efc99f" absoluteBounds="8.015, 2.085, 1.9700000000000002, 4.258880615234375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b2ebed03-70c7-44f0-89a4-3ffba7d9d2fa" isExpanded="false" absoluteBounds="3, 5.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/GetMonthlyReportByDicValue1" />
+      <nestedChildShapes>
+        <elementListCompartment Id="44f4d6fe-3f31-4061-a021-6cd4697dcf9e" absoluteBounds="3.015, 5.585, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f4a3f3c2-e921-4dbe-8908-31b8f03f86f6" isExpanded="false" absoluteBounds="3, 7.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_GetMonthlyReportByType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="27b96aef-7ba9-4048-8924-10158c289493" absoluteBounds="3.015, 7.7100000000000009, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="57d99c9b-6125-4caa-912a-cb9d34ba8237" isExpanded="false" absoluteBounds="0.5, 8, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_BaoYang" />
+      <nestedChildShapes>
+        <elementListCompartment Id="77f90421-cd05-44e3-8e23-139a2dbb8b5b" absoluteBounds="0.51500000000000012, 8.46, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="35a3b0e8-46ee-4e28-88c2-e8c4de75524c" isExpanded="false" absoluteBounds="3, 8.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_Vehicle_Type_LiYang" />
+      <nestedChildShapes>
+        <elementListCompartment Id="59c3c02c-d62d-403c-8e72-6194b5cb0d42" absoluteBounds="3.015, 9.21, 1.9700000000000002, 4.4499003092447911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6230155c-deaf-4861-bc1e-32e7da6aa78e" isExpanded="false" absoluteBounds="8, 2.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/TaskSearchCondition" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5f63872d-cb91-4b8e-9999-00a2194aa444" absoluteBounds="8.015, 3.085, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="51814e1b-c78d-42fb-b9f3-ca26154391e9" isExpanded="false" absoluteBounds="5.5, 4.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_Task" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5d539cfe-9c0f-49bf-8787-2601f825df40" absoluteBounds="5.515, 5.335, 1.9700000000000002, 5.978057861328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="239b88de-5293-405e-b1c2-4294e414d549" isExpanded="false" absoluteBounds="3, 7.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_BaoYang_ProductRef" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2fc9b01d-8364-4ab2-8360-06643bb84498" absoluteBounds="3.015, 8.21, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="db1c5ba5-15a2-496a-9bf0-cd295678e4e2" isExpanded="false" absoluteBounds="12.5, 1.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_ReasonCategory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8e410116-5e2b-4f7a-81b1-9b1ee73a81d0" absoluteBounds="12.515, 2.085, 1.9700000000000002, 1.393585205078125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="729ac366-a10b-4da9-8e62-f5d2de3ef94c" isExpanded="false" absoluteBounds="0.5, 2, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_EndUserCase" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f2141d41-c489-4416-af09-52e4f866dfa8" absoluteBounds="0.51500000000000012, 2.46, 1.9700000000000002, 5.0229593912760411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="07cf3581-511d-4aa7-8c27-008922c8066a" isExpanded="false" absoluteBounds="8, 0.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_PotentialForm" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d6c5bfbc-147a-4ae8-8e84-9644aaf6e746" absoluteBounds="8.015, 0.96, 1.9700000000000002, 4.831939697265625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1cfbf2ff-4acc-4234-b034-32eb28f8dd32" isExpanded="false" absoluteBounds="0.5, 1, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/PurchaseRebate" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a6c1912c-15b5-41ed-9bfd-5ea0287e822f" absoluteBounds="0.51499999999999968, 1.46, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e7037b91-de9e-4c7e-97dd-926e584666b0" isExpanded="false" absoluteBounds="10.25, 3.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_YouXinPai" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d540d50f-9b2b-4578-ac9c-56beb447e0a1" absoluteBounds="10.265, 3.71, 1.9700000000000002, 5.787038167317708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cce1c793-c5ec-4369-ad13-f5515e10192b" isExpanded="false" absoluteBounds="8, 2.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_OrderCancelTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2dea758c-fcb9-4dd0-ae53-aec7ba2b6d2c" absoluteBounds="8.015, 2.585, 1.9700000000000002, 8.4613138834635411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b0d70ee-3b31-4f2f-b9c8-83a74f0d1103" isExpanded="false" absoluteBounds="0.5, 7.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_Region" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2a6da335-f62d-45a5-822c-02ae79c1a324" absoluteBounds="0.51500000000000012, 7.9600000000000009, 1.9700000000000002, 3.8768412272135415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8af9258b-d392-4f7e-a4c4-0ff5e39e705d" isExpanded="false" absoluteBounds="12.5, 2.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/ServiceDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="62e59236-931c-4899-914d-d83bdc98e31d" absoluteBounds="12.515, 2.71, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d0d626e2-ee62-4355-a834-0519ffd317d8" isExpanded="false" absoluteBounds="5.5, 8.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_DictDeliveryType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ac8d824b-36b4-4a35-a831-c11c80a495e3" absoluteBounds="5.515, 9.335, 1.9700000000000002, 0.62950642903645826" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9888c1ca-a3a8-452c-8ac5-8cbd4c337ef7" isExpanded="false" absoluteBounds="8, 7.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_OrderAbnormal" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c2212ca6-6be8-44d2-ac98-25b85808460a" absoluteBounds="8.015, 8.335, 1.9700000000000002, 1.7756245930989583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f96618c0-5753-4a60-af3f-03871e1bba2e" isExpanded="false" absoluteBounds="10.25, 6.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_OrderCashBackActivity" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1b7126d8-90d8-4871-8d61-8cff28ef1752" absoluteBounds="10.265, 7.2100000000000009, 1.9700000000000002, 3.112762451171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="27f277a5-d5c5-4bc7-a8fb-0d03c23a1ac1" isExpanded="false" absoluteBounds="5.5, 4.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/OrderList" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7196ea60-b434-48ff-a95a-0646eee2ece2" absoluteBounds="5.515, 4.835, 1.9700000000000002, 6.7421366373697911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2ec18c85-3732-4721-b3e6-95d922959c23" isExpanded="false" absoluteBounds="10.25, 2.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_HCOrderRelation" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d29e6800-7749-455a-aa0b-c739c3b1ed1b" absoluteBounds="10.265, 3.085, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="655bf58b-97da-4e3b-8234-4c1e3f91634c" isExpanded="false" absoluteBounds="10.25, 5.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_OrderCancelReason" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8197eb61-7ed8-43f9-9cc6-14b9ca2c2cf6" absoluteBounds="10.265, 5.7100000000000009, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e43c44b0-044d-4dca-87b5-2ec26c9d6d8d" isExpanded="false" absoluteBounds="8, 6.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_LogisticTask" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8d4d6c2f-6b2a-4d8f-93e1-2d9100dac752" absoluteBounds="8.015, 6.8350000000000009, 1.9700000000000002, 6.1690775553385411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="00ff11ea-bf7c-4ad1-a67e-b968ba31d05d" isExpanded="false" absoluteBounds="3, 3.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tb_Stores" />
+      <nestedChildShapes>
+        <elementListCompartment Id="da39778f-da7d-4769-944d-443cb2ad8a73" absoluteBounds="3.0149999999999997, 3.96, 1.9700000000000002, 2.539703369140625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ebdfca98-f7ca-4e79-a1e5-3e47095a1f8a" isExpanded="false" absoluteBounds="0.5, 7, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_TrackReceived" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d8667883-b589-402e-a0e7-eb8e50a7958d" absoluteBounds="0.51500000000000012, 7.4600000000000009, 1.9700000000000002, 4.4499003092447911" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cdab0d37-afd8-41ba-91a5-39b7dea5c4bd" isExpanded="false" absoluteBounds="10.25, 2.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_ShoppingCode" />
+      <nestedChildShapes>
+        <elementListCompartment Id="5e1318ad-6033-4790-ae86-1e5672d7fff5" absoluteBounds="10.265, 2.585, 1.9700000000000002, 2.539703369140625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="047bb4e6-967d-48c1-84c7-82761b8f9625" isExpanded="false" absoluteBounds="8, 4.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/SfexpressOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="632583c9-0fcb-45d2-8641-e8e5b648e180" absoluteBounds="8.015, 4.71, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b3cfd24e-5d88-4c27-987e-35f817921282" isExpanded="false" absoluteBounds="0.5, 9.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_ShopServer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="654db994-48ac-4aa6-a572-860beabb5c03" absoluteBounds="0.51499999999999968, 9.96, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="69f72bc5-3f2d-4771-b3dd-6795b095359c" isExpanded="false" absoluteBounds="0.5, 9, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_ForcedAssignOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e1a871d1-85f2-4c48-b688-ab8510967d33" absoluteBounds="0.51499999999999968, 9.46, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c1c17250-aa29-470c-a3be-968bf600d0e8" isExpanded="false" absoluteBounds="8, 6.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Order" />
+      <nestedChildShapes>
+        <elementListCompartment Id="77f68ae3-1f83-45a4-8b00-119d73783f3e" absoluteBounds="8.015, 7.3350000000000009, 1.9700000000000002, 18.394337972005207" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="1d51469d-facc-4a21-bf2f-0a51979bf10c" isExpanded="false" absoluteBounds="8, 7.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/OrderV" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0fd14af5-3b5b-4992-bc12-6284a5e8c962" absoluteBounds="8.015, 7.8350000000000009, 1.9700000000000002, 19.922495524088539" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d9f6503d-c450-4de3-ac64-78fb85e40af6" isExpanded="false" absoluteBounds="8, 8.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_NotAssignOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="0804192c-89d3-4b14-b2ac-97f87e497f4a" absoluteBounds="8.015, 9.335, 1.9700000000000002, 2.921742757161458" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6aff3bf5-565a-4a87-b77c-8f3220b77189" isExpanded="false" absoluteBounds="10.25, 5.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/InvoiceAddress" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ec97bfc6-fd9c-49a3-be6f-ad89a88cc773" absoluteBounds="10.265, 6.2100000000000009, 1.9700000000000002, 0.820526123046875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="53747ac0-4c32-4f50-ac79-7226908e3003" isExpanded="false" absoluteBounds="5.5, 9.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Abnormal" />
+      <nestedChildShapes>
+        <elementListCompartment Id="34b09613-e4e4-488c-8ac8-5647069feea1" absoluteBounds="5.5150000000000006, 9.96, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8edd8bae-cec8-451b-b0a7-c647c18b2253" isExpanded="false" absoluteBounds="8, 9.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_AccountingPurchase" />
+      <nestedChildShapes>
+        <elementListCompartment Id="71ae1c0b-de85-4b27-adac-7cd4be8d587d" absoluteBounds="8.015, 9.835, 1.9700000000000002, 3.685821533203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="08a4d068-d3bc-42b5-8f29-e1bfaa93194e" isExpanded="false" absoluteBounds="8, 9.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/OrderProcessingTime" />
+      <nestedChildShapes>
+        <elementListCompartment Id="baa808ce-5f17-49c2-9819-fb475f9e4d98" absoluteBounds="8.015, 10.335, 1.9700000000000002, 3.8768412272135415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="46fab694-5e87-41ed-aa6c-c611b145c9bf" isExpanded="false" absoluteBounds="10.25, 7.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_RechieveWuliu" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e03aab8f-55f6-4cb2-a7ce-55ae1173b6f6" absoluteBounds="10.265, 7.7100000000000009, 1.9700000000000002, 1.0115458170572915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f32d0ca6-d9de-493d-b87d-435bbb8b109c" isExpanded="false" absoluteBounds="10.25, 8.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_PurchaseStatistic" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c1c07cb5-5b78-4e50-afd8-5d7f445b376e" absoluteBounds="10.265, 9.21, 1.9700000000000002, 1.966644287109375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f5246d3d-68db-408e-9017-7c64f980e754" isExpanded="false" absoluteBounds="3, 8.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_RechieveWaidi" />
+      <nestedChildShapes>
+        <elementListCompartment Id="9c726be6-7ff5-43c5-a77a-5a3e220ad2eb" absoluteBounds="3.015, 8.71, 1.9700000000000002, 1.5846048990885415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a948ec1e-53db-4618-bf4f-f38167eeef52" isExpanded="false" absoluteBounds="10.25, 1.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/OprLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d1560bc3-540b-4e32-9425-7aaeaef8f730" absoluteBounds="10.265, 1.96, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d7dc6794-9ec7-4e99-9cf5-982f34ad926b" isExpanded="false" absoluteBounds="12.5, 0.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Shop" />
+      <nestedChildShapes>
+        <elementListCompartment Id="20b84dd3-c84c-4dc7-853f-3e78d55ae4ed" absoluteBounds="12.515, 1.085, 1.9700000000000002, 11.899668375651041" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e10ce3fb-b634-41ec-be44-6079ae19e586" isExpanded="false" absoluteBounds="10.25, 6.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/vw_OrderCashBackActivity" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ed851c0a-e0aa-43ad-bc6c-b45a5b774dcf" absoluteBounds="10.265, 6.7100000000000009, 1.9700000000000002, 5.0229593912760411" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d6095900-81e0-4bd2-84bd-b40cb027971a" isExpanded="false" absoluteBounds="0.5, 3.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/CommentStatistics" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7b95a514-ab0a-4e54-b1ec-005cface7a77" absoluteBounds="0.51500000000000012, 3.96, 1.9700000000000002, 2.1576639811197915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="eb7b338e-a138-4877-a50e-5a73a9e4a56b" isExpanded="false" absoluteBounds="8, 8.375, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/GoodsSearchRecord" />
+      <nestedChildShapes>
+        <elementListCompartment Id="15dca3b7-8ade-4f47-8d80-13b63dac954f" absoluteBounds="8.015, 8.835, 1.9700000000000002, 4.067860921223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9efa055c-4346-462a-a52c-a388704f3005" isExpanded="false" absoluteBounds="12.5, 1.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/PurchasePrice" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a5db1da3-758f-48f9-ab94-367392b84e89" isExpanded="false" absoluteBounds="12.515, 1.585, 1.9700000000000002, 0.247467041015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c6c52c8b-2dc2-4938-bb78-3e6e9f47318d" isExpanded="false" absoluteBounds="10.25, 0.5, 2, 0.807467041015625">
+      <DataClassMoniker Name="/GungnirDataContext/PurchasePrice" />
+      <nestedChildShapes>
+        <elementListCompartment Id="52f77626-5e42-43f6-bf2d-d8a7dfc0c1ee" isExpanded="false" absoluteBounds="10.265, 0.96, 1.7972222222222225, 0.247467041015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5f9f4086-2f92-483a-9097-2cea5acce5ca" isExpanded="false" absoluteBounds="0.5, 6, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/GetMonthlyReportByEmployeeName" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f6ada000-8232-42ad-9b58-ad1691966918" absoluteBounds="0.51500000000000012, 6.4600000000000009, 1.9700000000000002, 1.7756245930989583" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bc3a659e-2877-474d-8f1b-793ac4d678f9" isExpanded="false" absoluteBounds="0.5, 8.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/Order_InvoiceTasks" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c51208c2-db60-4e1e-91b7-ee1eed0389b8" absoluteBounds="0.51500000000000012, 8.96, 1.9700000000000002, 3.685821533203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="943d8762-918e-4029-8f7d-6460751afd6a" isExpanded="false" absoluteBounds="12.5, 2.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/PurchaseFareConfig" />
+      <nestedChildShapes>
+        <elementListCompartment Id="96a5671d-b359-40a1-b470-e2ecde1ad3e7" absoluteBounds="12.515, 3.21, 1.9700000000000002, 3.3037821451822915" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0391bf1d-881e-435e-8b85-6d2d8b3c4db6" isExpanded="false" absoluteBounds="0.5, 10.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/BaiShiInstock" />
+      <nestedChildShapes>
+        <elementListCompartment Id="501535f5-12fc-4c94-bf2b-2e520ee8d7ad" absoluteBounds="0.515, 10.585, 1.9700000000000002, 5.404998779296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ea854404-ac70-4294-9afb-1074035a77e6" isExpanded="false" absoluteBounds="3, 9.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/view_GetBaiShiReportData" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4e2290ab-7d1c-40e8-bb25-a5cf1914bbd9" absoluteBounds="3.015, 9.71, 1.9700000000000002, 4.067860921223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="920f9574-49e3-4bb5-b584-227803f34668" isExpanded="false" absoluteBounds="3.125, 10.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/shopWithdrawalOrderInfor" />
+      <nestedChildShapes>
+        <elementListCompartment Id="da1c16b9-6065-4aea-be54-5321582ef6c6" absoluteBounds="3.14, 10.71, 1.9700000000000002, 2.7307230631510415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="8261af55-3dd3-458c-9603-87636d466484" isExpanded="false" absoluteBounds="5.5, 10.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/WithdrawalBills" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6c755287-5236-424c-81d0-4c9056a89b35" absoluteBounds="5.515, 10.585, 1.9700000000000002, 4.067860921223958" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="5df09788-6ac5-4f0a-970f-f16af90bc599" absoluteBounds="8.375, 10.875, 2, 0.8074670410156255">
+      <DataClassMoniker Name="/GungnirDataContext/TousuNew" />
+      <nestedChildShapes>
+        <elementListCompartment Id="12c719cb-409c-493d-a9bc-ca0341dd2cb2" isExpanded="false" absoluteBounds="8.39, 11.335, 1.9700000000000002, 0.247467041015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b0181b9b-4fb3-45a3-baea-b80a1874d4ef" absoluteBounds="6, 11.375, 2, 0.8074670410156255">
+      <DataClassMoniker Name="/GungnirDataContext/TousuType" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bd7d4c15-03a4-4f0c-8845-b43f28842d26" isExpanded="false" absoluteBounds="6.015, 11.835, 1.9700000000000002, 0.247467041015625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2865bae9-bff6-4f9b-8775-99b9e5c5b2ab" isExpanded="false" absoluteBounds="3, 5.625, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/ForbiddenWord" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f03e9c75-7439-447f-8771-7ea2d2d6418e" absoluteBounds="3.015, 6.085, 1.9700000000000002, 1.2025655110677083" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e613b691-8880-4272-8ee9-6ecab1060898" isExpanded="false" absoluteBounds="11.125, 10.5, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/TransferPrice" />
+      <nestedChildShapes>
+        <elementListCompartment Id="57298ff1-9a0c-4237-9942-693bd59d8b03" absoluteBounds="11.14, 10.96, 1.9700000000000002, 3.494801839192708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a33b883c-2245-484e-bc9a-598a64de9f35" absoluteBounds="8.25, 10.875, 2, 7.4931563313802094">
+      <DataClassMoniker Name="/GungnirDataContext/TousuNew" />
+      <nestedChildShapes>
+        <elementListCompartment Id="634a7ff7-73e6-489e-8de9-bb692aff090b" absoluteBounds="8.265, 11.335, 1.9700000000000002, 6.933156331380208" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b4e30945-792a-40f8-9991-a78c0d0584fe" isExpanded="false" absoluteBounds="3, 6.125, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_LogisticTaskProduct" />
+      <nestedChildShapes>
+        <elementListCompartment Id="1116ebe9-a2a9-476f-942c-550c7f307d42" absoluteBounds="3.015, 6.585, 1.9700000000000002, 3.8768412272135415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="fc650fc0-42eb-4736-a4af-1a3b22c7be64" absoluteBounds="5.375, 11.875, 2, 4.0548018391927076">
+      <DataClassMoniker Name="/GungnirDataContext/PromotionConfigure" />
+      <nestedChildShapes>
+        <elementListCompartment Id="680728f7-8a22-4a0c-8453-710ee8db1b08" absoluteBounds="5.39, 12.335, 1.9700000000000002, 3.494801839192708" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="83939fc2-3092-4456-924e-2870592fd45e" isExpanded="false" absoluteBounds="10.625, 9.75, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/BatchPurchasePrice" />
+      <nestedChildShapes>
+        <elementListCompartment Id="33722d75-6c0d-49c1-9197-f867833eee66" absoluteBounds="10.64, 10.21, 1.9700000000000002, 3.685821533203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cc75a73d-eaa8-445e-82b4-8fa3e68915d0" isExpanded="false" absoluteBounds="5.5, 6, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_Comment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="041dcee6-e50a-45b3-a306-dceb049d8f9f" absoluteBounds="5.515, 6.46, 1.9700000000000002, 5.978057861328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2999469a-fa46-43d0-b7e7-8f34a214f36e" isExpanded="false" absoluteBounds="10.25, 7.875, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_PurchaseOrderItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8e5c01c0-22bd-49e9-b6cf-2eba70db576f" absoluteBounds="10.265, 8.335, 1.9700000000000002, 10.562530517578125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="98fe399c-548f-4a29-aedc-b4bbf85a086c" isExpanded="false" absoluteBounds="5.5, 8.25, 2, 0.45">
+      <DataClassMoniker Name="/GungnirDataContext/tbl_OrderAutoAssigne" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e9abb6f9-a212-4594-b5cd-9f54fa3ecb47" absoluteBounds="5.515, 8.71, 1.9700000000000002, 3.112762451171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

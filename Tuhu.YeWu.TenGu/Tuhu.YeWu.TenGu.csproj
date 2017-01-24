@@ -43,39 +43,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.6\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.2.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.2.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.2.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.Web, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.2.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AI.WindowsServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.2.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationInsights, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.2.2.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="itextsharp">
+      <HintPath>..\DLL\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MVC3ControlsToolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=b6277d1c804403e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\MVC3ControlsToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.0.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.0.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.0.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.0.6.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -92,6 +91,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Tuhu.Component.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Tuhu.Component.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -124,6 +127,7 @@
     <Content Include="Content\css\extra-pages.css" />
     <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\icons-style.css" />
+    <Content Include="Content\css\innerStyle.css" />
     <Content Include="Content\css\loader-style.css" />
     <Content Include="Content\css\mail.css" />
     <Content Include="Content\css\maki-icons.css" />
@@ -284,6 +288,7 @@
     <Content Include="Content\js\idealform\jquery.idealforms.js" />
     <Content Include="Content\js\inputMask\jquery.maskedinput.js" />
     <Content Include="Content\js\jhere-custom.js" />
+    <Content Include="Content\js\jquery.form.js" />
     <Content Include="Content\js\jquery.js" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="Content\js\layer\layer.js" />
@@ -298,6 +303,37 @@
     <Content Include="Content\js\load.js" />
     <Content Include="Content\js\main.js" />
     <Content Include="Content\js\map\gmap3.js" />
+    <Content Include="Content\js\My97DatePicker\calendar.js" />
+    <Content Include="Content\js\My97DatePicker\lang\en.js" />
+    <Content Include="Content\js\My97DatePicker\lang\zh-cn.js" />
+    <Content Include="Content\js\My97DatePicker\lang\zh-tw.js" />
+    <Content Include="Content\js\My97DatePicker\skin\blueFresh\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\skin\blueFresh\img.gif" />
+    <Content Include="Content\js\My97DatePicker\skin\datePicker.gif" />
+    <Content Include="Content\js\My97DatePicker\skin\default\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\skin\default\img.gif" />
+    <Content Include="Content\js\My97DatePicker\skin\twoer\datepicker-dev.css" />
+    <Content Include="Content\js\My97DatePicker\skin\twoer\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\skin\twoer\img.gif" />
+    <Content Include="Content\js\My97DatePicker\skin\twoer\img.png" />
+    <Content Include="Content\js\My97DatePicker\skin\WdatePicker.css" />
+    <Content Include="Content\js\My97DatePicker\skin\whyGreen\bg.jpg" />
+    <Content Include="Content\js\My97DatePicker\skin\whyGreen\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\skin\whyGreen\img.gif" />
+    <Content Include="Content\js\My97DatePicker\WdatePicker.js" />
+    <Content Include="Content\js\My97DatePicker\开发包\lang\en.js" />
+    <Content Include="Content\js\My97DatePicker\开发包\lang\zh-cn.js" />
+    <Content Include="Content\js\My97DatePicker\开发包\lang\zh-tw.js" />
+    <Content Include="Content\js\My97DatePicker\开发包\readme.txt" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\blueFresh\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\blueFresh\img.gif" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\datePicker.gif" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\default\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\default\img.gif" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\WdatePicker.css" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\whyGreen\bg.jpg" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\whyGreen\datepicker.css" />
+    <Content Include="Content\js\My97DatePicker\开发包\skin\whyGreen\img.gif" />
     <Content Include="Content\js\nano\jquery.nanoscroller.js" />
     <Content Include="Content\js\newsticker\jquery.newsTicker.js" />
     <Content Include="Content\js\pace\pace.js" />
@@ -310,6 +346,8 @@
     <Content Include="Content\js\progress-bar\progress-app.js" />
     <Content Include="Content\js\progress-bar\src\jquery.velocity.min.js" />
     <Content Include="Content\js\search\jquery.quicksearch.js" />
+    <Content Include="Content\css\select2.min.css" />
+    <Content Include="Content\js\select2\select2.min.js" />
     <Content Include="Content\js\skin-select\jquery.cookie.js" />
     <Content Include="Content\js\skin-select\skin-select.css" />
     <Content Include="Content\js\skin-select\skin-select.js" />
@@ -389,7 +427,25 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Gungnir.cs">
+      <DependentUpon>Gungnir.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Gungnir.designer.cs">
+      <DependentUpon>Gungnir.dbml</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Models\LayoutMenu.cs" />
+    <Compile Include="Models\PublicFunction.cs" />
+    <Compile Include="Models\PurchaseOccupyModel.cs" />
+    <Compile Include="Models\StockLocation.cs" />
+    <Compile Include="Models\StockLocationView.cs" />
+    <Compile Include="Models\TuhuBiz.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TuhuBiz.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -433,6 +489,23 @@
     <Content Include="Views\InfoList\PurchaseOrderIndex.cshtml" />
     <Content Include="Views\Home\Show.cshtml" />
     <Content Include="Views\Shared\_Inner.cshtml" />
+    <Content Include="Models\Gungnir.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Gungnir.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\InfoList\PurchaseOrderList.cshtml" />
+    <Content Include="Content\export\送货预约单.pdf" />
+    <Content Include="Content\export\SIMHEI.TTF" />
+    <Content Include="Views\InfoList\PoInstock.cshtml" />
+    <Content Include="Views\InfoList\ShowModifiedHistory.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
+    <EntityDeploy Include="Models\TuhuBiz.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TuhuBiz.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Site.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -443,6 +516,60 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\js\gage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Yewu.Purchase\ThBiz.Business\ThBiz.Business.csproj">
+      <Project>{5cf7ff1e-2800-4802-acc0-53e0d38b0fd7}</Project>
+      <Name>ThBiz.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\ThBiz.Contracts\ThBiz.Contracts.csproj">
+      <Project>{6676ec29-9c6e-4e7e-a037-d695c6e638f5}</Project>
+      <Name>ThBiz.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\ThBiz.DataAccess\ThBiz.DataAccess.csproj">
+      <Project>{70d6059c-6654-43cc-90d4-18faf533416b}</Project>
+      <Name>ThBiz.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\ThBiz.Logistics\WMS.Logistic.csproj">
+      <Project>{65d97027-390d-4090-8f75-5be3911b97ef}</Project>
+      <Name>WMS.Logistic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\TheBiz.Common\ThBiz.Common.csproj">
+      <Project>{8f6b09dc-0ab6-41a1-ad55-7e7a20083b6a}</Project>
+      <Name>ThBiz.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\Tuhu.Component.Framework\Tuhu.Component.Framework.csproj">
+      <Project>{e575a091-5cdb-4df4-bae7-4f16f3ed8815}</Project>
+      <Name>Tuhu.Component.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\WMS.Business\WMS.Business.csproj">
+      <Project>{ad99e16f-88fc-4df4-8b51-d1efb3aa7a3a}</Project>
+      <Name>WMS.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\WMS.DataAccess\WMS.DataAccess.csproj">
+      <Project>{f7993287-efe1-494e-9c3a-7e23e17d00ce}</Project>
+      <Name>WMS.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yewu.Purchase\WMS.Stock\WMS.Stock.csproj">
+      <Project>{cb7bcdd2-150d-4e57-b143-28447f832bd8}</Project>
+      <Name>WMS.Stock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pager\MvcPager.csproj">
+      <Project>{4ba9f10c-67b7-4cd6-87b1-0519adbca2a1}</Project>
+      <Name>MvcPager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Platform\Platform.csproj">
+      <Project>{486d1c4c-7887-4460-aa78-03bba26b726e}</Project>
+      <Name>Platform</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\Gungnir.dbml.layout">
+      <DependentUpon>Gungnir.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

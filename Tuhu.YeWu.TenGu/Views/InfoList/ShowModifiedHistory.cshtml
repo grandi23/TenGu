@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ThBiz.Common.Entity.PurchaseMonitorLog>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<div>
+    <table style="width: 60%;">
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>修改人</th>
+                <th>操作类型</th>
+                <th>修改时间</th>
+                <th>前后对比</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var oprLog in Model)
+            {
+                <tr>
+                    <td>@oprLog.PKID</td>
+                    <td>@oprLog.CreateUser</td>
+                    <td>@oprLog.Operation</td>
+                    <td>@(oprLog.CreateDatetime != null?oprLog.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss"):"")</td>
+                    <td><a target="_blank" href="/PurchaseOrder/CompareDifferent?oprLogId=@oprLog.PKID" style="cursor: pointer;">详情</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

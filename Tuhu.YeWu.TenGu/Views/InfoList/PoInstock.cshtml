@@ -1,0 +1,134 @@
+﻿@model Tuhu.YeWu.TenGu.Models.StockLocationView
+@{
+    ViewBag.Title = "入库";
+}
+<h2>
+    订单入库</h2>
+@if (Model != null)
+{ 
+    using (Html.BeginForm("PoInstock", "InfoList", Model.PKID, FormMethod.Post, new { @onsubmit = "return SubmitCheck()" }))
+    {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>新建库存</legend>
+        <br/>
+        <table>
+            <tr>
+                <th>产品名称：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @Style = "width: 300px" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </td>
+                <th>产品编号：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.PID, new { @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.PID)
+                </td>
+                <th>生产日期：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.WeekYear)<span>(周周年年)</span>
+                    @Html.ValidationMessageFor(model => model.WeekYear)
+                    <div id="WeekYearErr" style="display: none; color: Red">
+                        必填
+                    </div>
+                </td>
+                <th>入库日期：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.UpdatedTime)
+                    @Html.ValidationMessageFor(model => model.UpdatedTime)
+                </td>
+            </tr>
+            <tr>
+                <th>入库仓库</th>
+                <td>
+                    <input id="returnUrl" name="returnUrl" type="hidden" value="@ViewBag.returnUrl" />
+                    @Html.HiddenFor(model => model.Location)
+                    @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Location as System.Collections.IEnumerable, "PKID", "SimpleName"), "请选择", new { @onchange = "LocationChanged()" })
+                    @Html.ValidationMessageFor(model => model.LocationId)
+                </td>
+                <th>入库数量：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.Num, new { onchange = "EditQuantity(this);" })
+                    @Html.ValidationMessageFor(model => model.Num)
+                </td>
+                <th>成本单价：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.CostPrice, new { @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.CostPrice)
+                </td>
+                <th>成本总价：</th>
+                <td>
+                    @Html.TextBoxFor(model => model.TotalCost, new { @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.TotalCost)
+                </td>
+            </tr>
+            <tr>
+                <th>入库人：</th>
+                <td>
+                    <label>@User.Identity.Name</label>
+                </td>
+                <th>备注：</th>
+                <td colspan="5">
+                    @Html.TextBoxFor(model => model.Remark,new{@style="width: 100%;"})
+                    @Html.ValidationMessageFor(model => model.Remark)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8"><input type="submit" id="instock" value="入库" /></td>
+            </tr>
+        </table>
+    </fieldset>
+    }
+    <div>
+        @Html.ActionLink("Back to List", "PurchaseOrderIndex")
+    </div>
+
+}
+else
+{
+    <div class="Warning">
+        已经入库，请勿重复入库。</div>
+    <p>
+        <a href='@ViewBag.returnURL'>返回</a></p>
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript" language="javascript">
+    $(function () {
+        $("#UpdatedTime").datepicker();
+    });
+    function LocationChanged() {
+        if (document.getElementById("LocationId").value >= 0) {
+            var ddlReport = document.getElementById("LocationId");
+            document.getElementById("Location").value = ddlReport.options[ddlReport.selectedIndex].text;
+        }
+        else {
+            document.getElementById("Location").value = "";
+            $("#WareHouseID").val("-100");
+            $("#WareHouse").val("");
+        }
+    }
+    function SubmitCheck() {
+        if (document.getElementById("WeekYear").value == "") {
+            document.getElementById("WeekYearErr").style.display = "inline";
+            return false;
+        }
+        $("#instock").attr("disabled", "disabled");
+        return true;
+    }
+
+    function EditQuantity(target) {
+        var oldQuantity = '@(Model!=null?Model.Num:0)';
+        var temp = $(target).val();
+        if (!/^\d+$/.test(temp)) {
+            return false;
+        }
+        if (parseInt(temp) > parseInt(oldQuantity)) {
+            alert("入库数量不能大于" + oldQuantity);
+            $(target).val(oldQuantity).focus();
+            return false;
+        }
+        $("#TotalCost").val(temp*'@(Model!=null?Model.CostPrice:0)');
+    }
+</script> 

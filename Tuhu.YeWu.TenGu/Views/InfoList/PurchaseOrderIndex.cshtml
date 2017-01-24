@@ -1,15 +1,1596 @@
-﻿@{
+﻿@using ThBiz.Common.Configurations
+@{
     Layout = "../Shared/_Inner.cshtml";
 }
-
-<table class="table table-bordered">
-    @for (int i = 0; i < 49; i++)
+<div class="row">
+    @using (Html.BeginForm("ExportPurchaseOrNew", "InfoList", FormMethod.Get, new { id = "SearchForm", @class = "col-lg-12 form-inline" }))
     {
-        <tr>
-            <td>名称</td>
-            <td>编号</td>
-            <td>大家爱看</td>
-            <td>挖几十块</td>
-        </tr>
+        <div class="form-group">
+            <label class="control-label">订单号</label>
+            @Html.TextBox("purchaseOrderId", null, new { @type = "number", @class = "form-control", @style = "width: 140px;" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">产品单号</label>
+            @Html.TextBox("purchaseId", null, new { @type = "number", @class = "form-control", @style = "width: 140px;" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">仓库</label>
+            @Html.DropDownList("wareHouseId", new SelectList(ViewBag.WareHourse as System.Collections.IEnumerable, "PKID", "SimpleName"), "所有", new {@class="form-control", @style="width: 160px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">供应商</label>
+            @Html.DropDownList("vendorId", new SelectList(ViewBag.VendorList as System.Collections.IEnumerable, "PKID", "SimpleName"), "所有", new { @class = "form-control", @style = "width: 160px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">产品名称</label>
+            @Html.TextBox("productName", null, new { @placeholder = "请输入名称或编号", @class = "form-control", @style = "width: 180px;" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">状态</label>
+            <select id="status" name="status" class="form-control" style="width: 90px;">
+                <option value="">所有</option>
+                <option value="新建">新建</option>
+                <option value="预约中">预约中</option>
+                <option value="已发货">已发货</option>
+                <option value="已收货">已收货</option>
+                <option value="部分收货">部分收货</option>
+                <option value="待审核">待审核</option>
+                <option value="已驳回">已驳回</option>
+                <option value="待修改">待修改</option>
+                <option value="待取消">待取消</option>
+                <option value="已取消">已取消</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">采购人</label>
+            @Html.DropDownList("employee", new SelectList(ViewBag.Employee as System.Collections.IEnumerable, "EmailAddress", "EmployeeName"), "所有", new {@class = "form-control", @style = "width: 160px;"})
+        </div>
+        <div class="form-group">
+            <button type="button" id="more-search-condition" class="btn btn-sm btn-primary" onclick="ShowSearchCondition(this);">更多查询条件</button>
+        </div><br/>
+        <div id="moresearchcondition" style="display: none;">
+            <div class="form-group">
+                <label class="control-label">采购方式</label>
+                <select id="purchaseMode" name="purchaseMode" class="form-control" style="width: 100px;">
+                    <option value="">-请选择-</option>
+                    <option value="0">正常</option>
+                    <option value="1">补货</option>
+                    <option value="2">专项</option>
+                    <option value="3">扫货</option>
+                    <option value="4">零采</option>
+                    <option value="7">汽配龙</option>
+                    <option value="8">预约采购</option>
+                    <option value="9">活动备货</option>
+                    <option value="10">大客户</option>
+                    <option value="11">门店外采</option>
+                    <option value="12">货权转移</option>
+                    <option value="13">即采即销</option>
+                    <option value="5">退货</option>
+                    <option value="6">红冲</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">申请状态</label>
+                <select id="auditStatus" name="auditStatus" class="form-control" style="width: 120px;">
+                    <option value="-1">所有</option>
+                    <option value="5">未请款</option>
+                    <option value="0">待财务初审</option>
+                    <option value="1">待财务终审</option>
+                    <option value="2">待出纳付款</option>
+                    <option value="4">被驳回</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">创建日期</label>
+                <input name="startDate" id="startDate" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'endDate\')}' })" /> 至
+                <input name="endDate" id="endDate" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', minDate: '#F{$dp.$D(\'startDate\')}' })" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">预计到货时间</label>
+                <input name="planStartDate" id="planStartDate" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'planEndDate\')}' })" /> 至
+                <input name="planEndDate" id="planEndDate" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', minDate: '#F{$dp.$D(\'planStartDate\')}' })" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" style="color:#4AC4AB">支付状态</label>
+                <label><input type="radio" name="payStatus" class="form-control" value="" checked="checked" />所有</label>
+                <label><input type="radio" name="payStatus" class="form-control" value="0UnPaid" />未付款</label>
+                <label><input type="radio" name="payStatus" class="form-control" value="2PartPaid" />部分付款</label>
+                <label><input type="radio" name="payStatus" class="form-control" value="2Paid" />已付款</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label" style="color: #FF8247">是否到票</label>
+                <label><input type="radio" name="receiptInvoice" class="form-control" value="" checked="checked" />所有</label>
+                <label><input type="radio" name="receiptInvoice" class="form-control" value="0" />否</label>
+                <label><input type="radio" name="receiptInvoice" class="form-control" value="1" />是</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label" style="color: #9F79EE">邀货单</label>
+                <label><input type="radio" name="isBookingOrder" class="form-control" checked="checked" value="" />所有</label>
+                <label><input type="radio" name="isBookingOrder" class="form-control" value="0" />否</label>
+                <label><input type="radio" name="isBookingOrder" class="form-control" value="1" />是</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label" style="color: #8B7500">报价抢单</label>
+                <label><input type="radio" name="isBookingOrdered" class="form-control" checked="checked" value="" />所有</label>
+                <label><input type="radio" name="isBookingOrdered" class="form-control" value="1" />抢单成功</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label" style="color: #71C671">门店采购单</label>
+                <label><input type="radio" name="isShopPurchaseOrder" class="form-control" value="-1" />所有</label>
+                <label><input type="radio" name="isShopPurchaseOrder" class="form-control" checked="checked" value="0" />否</label>
+                <label><input type="radio" name="isShopPurchaseOrder" class="form-control" value="1" />是</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="button" id="Subsearch" class="btn btn-sm btn-success" value="查询" onclick="SubsearchShopPosIndexTable()" />
+        </div>
+        <div class="form-group">
+            <input type="submit" id="ExportPurchaseOr" class="btn btn-sm btn-warning" value="导出" btnkey="ExportPurchaseOrder" istuhuverify="1" />
+        </div>
+        <div class="form-group">
+            <input type="button" value="批量请款" class="btn btn-sm btn-danger" onclick="BatchApplyPayment();" btnkey="BatchPayment" istuhuverify="1" />
+        </div>
+        <input type="hidden" name="pageNumber" id="pageNumber" value="1" />
     }
-</table>
+</div><br/>
+<div id="PoItemList">
+    @Html.Partial("PurchaseOrderList")
+</div>
+
+<div>
+    <span>当前页：</span>  <input type="text" readonly="readonly" id="PageNumber" name="PageNumber" value="1" style="width:50px;" />
+    <span onclick="SearchTotalCount()" style="color:cornflowerblue;cursor:pointer;">总页数：</span>
+    <span id="TotalPageNum" style="color:red"></span>
+</div>
+<div class="Pager" style="margin-top:10px;">
+    <input id="FirstPage" type="button" value="首页" class="btn btn-sm btn-primary" />
+    <input id="PrevPage" type="button" value="上一页" class="btn btn-sm btn-success" />
+    <input id="NextPage" type="button" value="下一页" class="btn btn-sm btn-success" />
+    <span>页数：</span>
+    <input id="ManalePageNum" type="text" value="" style="width:50px;">
+    <input id="LastPage" type="button" value="跳转" class="btn btn-sm btn-primary">
+</div>
+<div id="EditPoItem" style="display: none;"></div>
+<input type="hidden" id="purchaseId_cache"/>
+
+<script type="text/javascript">
+    var operationCount = 1;
+    var loading;
+    $(function() {
+        $("select").select2();
+        $("#status").val('@ViewBag.Status');
+        //加载数据
+        SubmitData();
+        //首页点击
+        $("#FirstPage").click(function () {
+            $("#PageNumber").val(1);
+            $("#pageNumber").val(1);
+
+            $("#PrevPage").attr("disabled", "disabled");
+            $("#FirstPage").attr("disabled", "disabled");
+            $("#SearchForm").ajaxSubmit({
+                url: '/InfoList/PurchaseOrderList',
+                beforeSend: function () {
+                    loading = layer.load(2);
+                },
+                success: function (html) {
+                    layer.close(loading);
+                    $("#PoItemList").empty().html(html);
+                    $("#purchaseId_cache").val("");
+                    showChecked();
+                }
+            });
+        });
+        //上一页
+        $("#PrevPage").click(function () {
+            var pageNumber = new Number($("#PageNumber").val());
+            //当点击下一页时，首页和上一页可以点击
+            pageNumber -= 1;
+            if (pageNumber == 1) {
+                $("#PrevPage").attr("disabled", "disabled");
+                $("#FirstPage").attr("disabled", "disabled");
+            }
+            //alert(pageNumber);
+            $("#PageNumber").val(pageNumber);
+
+            $("#pageNumber").val(pageNumber);
+
+            $("#SearchForm").ajaxSubmit({
+                url: '/InfoList/PurchaseOrderList',
+                beforeSend: function () {
+                    loading = layer.load(2);
+                },
+                success: function (html) {
+                    layer.close(loading);
+
+                    $("#PoItemList").empty().html(html);
+                    showChecked();
+                }
+            });
+        });
+        //下一页
+        $("#NextPage").click(function () {
+            //行数小于16，下一页没有数据
+            if ($('#PoItemList').find('table').length < 33) {
+                return false;
+            }
+            var pageNumber = new Number($("#PageNumber").val());
+            //当点击下一页时，首页和上一页可以点击
+            if (pageNumber == 1) {
+                $("#PrevPage").removeAttr("disabled");
+                $("#FirstPage").removeAttr("disabled");
+            }
+            pageNumber += 1;
+            //alert(pageNumber);
+            $("#PageNumber").val(pageNumber);
+
+            $("#pageNumber").val(pageNumber);
+
+            $("#SearchForm").ajaxSubmit({
+                url: '/InfoList/PurchaseOrderList',
+                beforeSend: function () {
+                    loading = layer.load(2);
+                },
+                success: function (html) {
+                    layer.close(loading);
+
+                    $("#PoItemList").empty().html(html);
+                    showChecked();
+                }
+            });
+        });
+        //尾页
+        $("#LastPage").click(function () {
+            var re = /^[0-9]*[1-9][0-9]*$/;
+            if (!re.test($("#ManalePageNum").val())) {
+                alert("跳转页数必须是大于0的正整数");
+                return false;
+            }
+            var pageNumber = new Number($("#ManalePageNum").val());
+            if (pageNumber > 1) {
+
+                $("#PrevPage").removeAttr("disabled");
+                $("#FirstPage").removeAttr("disabled");
+
+            }
+            else {
+                $("#PrevPage").attr("disabled", "disabled");
+                $("#FirstPage").attr("disabled", "disabled");
+            }
+            $("#ManalePageNum").attr("value", "");
+            $("#PageNumber").val(pageNumber);
+            $("#pageNumber").val(pageNumber);
+
+            $("#SearchForm").ajaxSubmit({
+                url: '/InfoList/PurchaseOrderList',
+                beforeSend: function () {
+                    loading = layer.load(2);
+                },
+
+                success: function (html) {
+                    layer.close(loading);
+                    $("#PoItemList").empty().html(html);
+                    showChecked();
+                }
+            });
+        });
+    });
+    //数据查询
+    function SubmitData()
+    {
+        $("#PageNumber").val(1);
+        $("#pageNumber").val(1);
+
+        $("#PrevPage").attr("disabled", "disabled");
+        $("#FirstPage").attr("disabled", "disabled");
+
+        $("#SearchForm").ajaxSubmit({
+            url: '/InfoList/PurchaseOrderList',
+            beforeSend: function () {
+                loading = layer.load(2);
+            },
+            success: function (html)
+            {
+                layer.close(loading);
+
+                $("#PoItemList").empty().append(html);
+                $("#purchaseId_cache").val("");
+            }
+        });
+    }
+    //展开或收缩额外检索项
+    function ShowSearchCondition(target) {
+        $("#moresearchcondition").slideToggle("slow");
+        if ($(target).text() === "更多查询条件") {
+            $(target).text("收起查询条件");
+        } else {
+            $(target).text("更多查询条件");
+        }
+    }
+    function EditPoItem1(target, purchaseId, status) {
+        var $target = $(target).closest("tr").children();
+        var $tds = $(target).closest("div").prev().find('td');
+        var d = dialog({
+            title: "编辑采购订单",
+            width: 850,
+            height: 500,
+            fixed: false,
+            okValue: "修改",
+            ok: function () {
+                var remark = $('#Remark').val();
+                var shipType = $('#ShipmentType').find('option:selected').text();
+                var reg = new RegExp("-", "g");//g,表示全部替换。
+                var instockDate = $('#PlanedInstockDate').val().replace(reg, '/');
+
+                $("#editForm").ajaxSubmit({
+                    url: this.href,
+                    success: function (result) //返回的是Json类型的
+                    {
+                        if (result != false) {
+                            $target.eq(10).text(remark);
+                            $target.eq(14).find('label').text(instockDate);
+                            $tds.eq(5).find('span').text(shipType);
+                            //$target.eq(4).text(result.Num);
+                            ////$target.eq(6).html(Math.round(result.PurchasePrice, 2));
+                            //$target.eq(7).html(Math.round(result.TotalPrice, 2));
+                            ////$target.eq(9).html(Math.round(result.Rebate1, 2) + '/' + Math.round(result.Rebate2, 2) + '/' + Math.round(result.Rebate3, 2));
+                            //$target.eq(10).html(Math.round(result.TotalCost, 2));
+                            //$target.eq(13).text(result.Remark);
+
+                            $('#EditPoItem').dialog("close");
+                            alert("编辑采购单成功！");
+                            //SubmitData();
+                        } else {
+                            alert("采购单已被占用,仅能修改备注！");
+                        }
+                    },
+                    error: function () {
+                        alert('修改失败！');
+                    }
+                });
+            },
+            cancelValue: "取消",
+            cancel: function () {
+
+            }
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/EditPoItem",
+            data: { "purchaseId": purchaseId, "status": status },
+            type: "Get",
+            success: function (html) {
+                d.content(html);
+                d.showModal();
+                $("#oldPlanedInstockDate").val($("#PlanedInstockDate").val().substring(0, 10));
+                $("#oldPurchaseQuantity").val($("#Num").val());
+            }
+        });
+    }
+    function DeletePoItem(target, orderNo, pid, purchaseId) {
+        var d = dialog({
+            title: "删除采购订单",
+            width: 300,
+            height: 250,
+            fixed: false,
+            okValue: "删除",
+            ok: function () {
+                debugger;
+                var deleteReason = $("#otherreason").val();
+                if (deleteReason.trim() !== "") {
+                    $.ajax({
+                        type: 'post',
+                        url: '/PurchaseOrder/DeletePoItem',
+                        data: { "purchaseId": purchaseId, "orderNo": orderNo, "pid": pid, "deleteReason": deleteReason },
+                        async: false,
+                        success: function (result) {
+                            var tips = dialog();
+                            switch (result.trim()) {
+                                case "Success":
+                                    tips.content("删除成功！");
+                                    $(target).closest("tr").remove();
+                                    break;
+                                case "Forbid":
+                                    tips.content("已请款/付款的收货采购单，禁止删除！");
+                                    break;
+                                case "Occupy":
+                                    tips.content("删除采购单前，请先释放占用！");
+                                    break;
+                                case "2Paid":
+                                    tips.content("已付款的采购订单不能删除！");
+                                    break;
+                                case "2PartPaid":
+                                    tips.content("部分请款的采购单删除前，请先创建完全红冲并抵扣！");
+                                    break;
+                                default:
+                                    tips.content(result.trim().replace("false", "") + "的采购订单不能删除！");
+                                    break;
+                            }
+                            tips.showModal();
+                            setTimeout(function () {
+                                tips.close().remove();
+                            }, 2000);
+                        },
+                        error: function () {
+                            var tips = dialog();
+                            tips.content("删除失败！！！");
+                            tips.showModal();
+                            setTimeout(function () {
+                                tips.close().remove();
+                            }, 2000);
+                        }
+                    });
+                } else {
+                    var tips = dialog();
+                    tips.content("删除原因不能为空！");
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                    return false;
+                }
+            },
+            cancelValue: "取消",
+            cancel: true
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/PurchaseOrderCause",
+            data: { "purchaseId": purchaseId, "orderNo": orderNo, "pid": pid },
+            type: "Get",
+            success: function (html) {
+                var alertText = "";
+                var tips = dialog();
+                switch (html.trim()) {
+                    case "Success":
+                        alertText = "删除成功！";
+                        $(target).closest("tr").remove();
+                        break;
+                    case "Forbid":
+                        alertText = "已请款/付款的收货采购单，禁止删除！";
+                        break;
+                    case "Occupy":
+                        alertText = "删除采购单前，请先释放占用！";
+                        break;
+                    case "2Paid":
+                        alertText = "已付款的采购订单不能删除！";
+                        break;
+                    case "2PartPaid":
+                        alertText = "部分请款的采购单删除前，请先创建完全红冲并抵扣！";
+                        break;
+                    default:
+                        if (html.trim().startsWith("false")) {
+                            alertText = html.trim().replace("false", "") + "的采购订单不能删除！";
+                        }
+                        break;
+                }
+                if (alertText === "") {
+                    d.content(html);
+                    d.showModal();
+                } else {
+                    tips.showModal();
+                    tips.content(alertText);
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                }
+            }
+        });
+    }
+
+    //判断日期，时间大小 
+    function compareTime(startDate, endDate) {
+        if (startDate.length > 0 && endDate.length > 0) {
+            var startDateTemp = startDate.split(" ");
+            var endDateTemp = endDate.split(" ");
+
+            var arrStartDate = startDateTemp[0].split("-");
+            var arrEndDate = endDateTemp[0].split("-");
+
+            var allStartDate = new Date(arrStartDate[0], arrStartDate[1], arrStartDate[2]);
+            var allEndDate = new Date(arrEndDate[0], arrEndDate[1], arrEndDate[2]);
+
+            if (allStartDate.getTime() >= allEndDate.getTime()) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            alert("时间不能为空");
+            return false;
+        }
+    }
+
+    //结束收货
+    function FinishedGoodsReceipt(target, poItemId) {
+        if (confirm("确认结束收货？")) {
+            $.ajax({
+                type: 'post',
+                async: false,
+                data: { "poItemId": poItemId },
+                url: '/PurchaseOrder/FinishedGoodsReceipt',
+                success: function (result) {
+                    if (result==true) {
+                        $(target).closest("tr").remove();
+                    } else if (result==false) {
+                        alert("存在未付款的请款单，不能结束收货！");
+                    }else {
+                        alert(result);
+                    }
+                },
+                error: function () {
+                    alert("结束收货出错！");
+                }
+            });
+        }
+    }
+    //采购
+    function SubsearchShopPosIndexTable() {
+        event.preventDefault();
+
+        if ($("#purchaseId").val().trim() !== "" && !/^\d+$/.test($("#purchaseId").val().trim())) {
+            alert("采购单号输入有误，请重新输入！");
+            return false;
+        }
+        $("#PageNumber").val(1);
+        $("#pageNumber").val(1);
+        $("#SearchForm").ajaxSubmit({
+            url: '/PurchaseOrder/PurchaseOrderList',
+            beforeSend: function () {
+                loading.showModal();
+            },
+            success: function (html) {
+                $("#PoItemList").empty().append(html);
+                $("#purchaseId_cache").val("");
+                $("#currentpage-checkbox").prop("checked", false);
+                operationCount = 1;
+                loading.close();
+
+                $("#PageNumber").val(1);
+
+                $("#pageNumber").val(1);
+
+                $("#TotalPageNum").text("");
+            },
+            error: function () {
+                loading.close();
+            }
+        });
+        $("#loading").dialog('close');
+    }
+
+    //补差价
+    function MakeUpDifference(orderId, itemId,purchasePrice) {
+        var d = dialog({
+            height: 270,
+            width: 400,
+            title: "补差价申请",
+            button: [
+            {
+                value: "申请",
+                autofocus: true,
+                callback: function () {
+                    debugger;
+                    var diffPrice = $("#txtDifference").val().trim();
+                    var reason = $("#txtReason").val().trim();
+
+                    var flag = false;
+
+                    $.ajax({
+                        url: "/PurchaseOrder/IsMakedUpDiffPrice",
+                        data: { "orderId": orderId, "itemId": itemId },
+                        type: "POST",
+                        async:false,
+                        success:function(data) {
+                            if (data == "true") {
+                                flag = true;
+                            }
+                        }
+                    });
+
+                    if (flag) {
+                        var msg = "该采购订单已经调整差价,请刷新页面!";
+                        $.notify(msg, {
+                            className: "error",
+                            position:"top center"
+                        });
+                        return false;
+                    }
+
+                    if (diffPrice == "") {
+                        var msg = " 请填写采购差价!";
+                        $.notify(msg, {
+                            globalPosition: 'top center',
+                            className: 'error'
+                        });
+                        return false;
+                    }
+
+                    var reg = /^-?\d+\.?\d*$/;
+                    if (!reg.test(diffPrice)) {
+                        var msg = " 填写的差价必须是数字!";
+                        $.notify(msg, {
+                            globalPosition: 'top center',
+                            className: 'error'
+                        });
+                        return false;
+                    }
+
+                    if (reason == "") {
+                        var msg = " 请填写补采购差价原因!";
+                        $.notify(msg, {
+                            globalPosition: 'top center',
+                            className: 'error'
+                        });
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "/PurchaseOrder/PurchaseMakeUpDiffPrice",
+                        data: { "orderId": orderId, "itemId": itemId,"diffPrice": diffPrice,"reason": reason },
+                        type: "POST",
+                        success: function (data) {
+                            debugger;
+                            if (data == "true") {
+                                $.notify("申请成功!", {
+                                    globalPosition: 'top center',
+                                    className: 'success'
+                                });
+                                var elemId = "#makeUpDiffPrice_" + itemId;
+                                $(elemId).parent().html("<span style='color:red;'>调价待审</span>");
+                            } else if (data == "只有已收货的采购订单才能调整价格！") {
+                                $.notify(data, {
+                                    globalPosition: 'top center',
+                                    className: 'success'
+                                });
+                            }
+                        }
+                    });
+                    this.close();
+                    this.remove();
+                }
+            }, {
+                value: "关闭",
+            }]
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/MakeUpDiffPrice",
+            data:{"purchasePrice":purchasePrice},
+            type: "POST",
+            success: function (data) {
+                d.content(data);
+                d.showModal();
+            }
+        });
+    }
+    //全选当前页的所有复选框
+    function CheckCurrentPageCheckBox(target) {
+        event.stopPropagation();
+        if (operationCount == 1) {
+            var tips1 = dialog();
+            tips1.content("请注意被选中采购单付款状态！");
+            tips1.showModal();
+            setTimeout(function () {
+                tips1.close().remove();
+            }, 2000);
+            operationCount++;
+        }
+        var id = $("#purchaseId_cache").val();
+        var $tbodyCheckBox = $("#PoItemList #tbody").find("input[type='checkbox']");
+        if ($(target).prop("checked")) {
+            if (id !== "") {
+                var idArray = id.split(',');
+                if (idArray.length > 90) {
+                    $("#currentpage-checkbox").prop("checked", false);
+                    var tips = dialog();
+                    tips.content("你请款的采购单过多，请提交后继续请款！");
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                    return false;
+                }
+            }
+            $tbodyCheckBox.each(function () {
+                if ($(this).prop("checked") === false) {
+                    id += $(this).attr("value") + ",";
+                }
+            });
+            $("#PoItemList").find("input[type='checkbox']").prop("checked", true);
+        } else {
+            $tbodyCheckBox.each(function () {
+                if ($(this).prop("checked") === true) {
+                    id = id.replace($(this).attr("value") + ",", "");
+                }
+            });
+            $("#PoItemList").find("input[type='checkbox']").prop("checked", false);
+        }
+        $("#purchaseId_cache").val(id);
+    }
+
+    function ConfirmationFreight(target, poItemId) {
+        var tips = dialog();
+        var d = dialog({
+            height: 30,
+            width: 100,
+            content: "确认运费耗材？",
+            button: [{
+                value: '确定',
+                callback: function () {
+                    $.ajax({
+                        type: 'post',
+                        url: '/PurchaseOrder/ConfirmationFreight',
+                        data: { "poItemId": poItemId },
+                        beforeSend: function () {
+                            loading.showModal();
+                        },
+                        success: function (result) {
+                            loading.close();
+                            var $target = $(target).closest("tr").children();
+                            $("#status_" + poItemId).text(result.Status);
+                            $target.eq(5).html(result.Num);
+                            //$target.eq(8).html(result.InstockTotalPrice.toFixed(2));
+                            $(target).remove();
+                            tips.content("确认运费耗材成功！");
+                            tips.showModal();
+                            setTimeout(function () { tips.close().remove(); }, 2000);
+                        },
+                        error: function (jqXhr, textStatus, errorThrown) {
+                            loading.close();
+                            tips.content("确认运费耗材失败！" + errorThrown);
+                            tips.showModal();
+                            setTimeout(function () { tips.close().remove(); }, 3000);
+                        }
+                    });
+                },
+                autofocus: true
+            }, {
+                value: '取消',
+                callback: true
+            }]
+        });
+        d.showModal();
+    }
+
+    //展开收起子产品
+    function ExpandedAndPackup(target) {
+        var $self = $(target);
+        var status = $self.attr("tag-status");
+        if (status === "unfold") {
+            $self.next().slideDown("slow");
+            $self.attr("tag-status", "merge");
+        } else {
+            $self.next().slideUp("slow");
+            $self.attr("tag-status", "unfold");
+        }
+    }
+    //创建采购任务
+    function CreatePurchaseTask(taskId) {
+        $("#window").append("<div id=\"taskLink\"></div>");
+        $("#taskLink").load("/PurchaseOrder/QuhuoTaskLink?id=" + taskId + "&type=caigou");
+        var elems = $("#window");
+        dialog({
+            title: "给物流创建任务，请详细说明问题",
+            width: 800,
+            height: 350,
+            fixed: false,
+            content: elems,
+            button: [
+            {
+                value: "确定",
+                autofocus: true,
+                callback: function () {
+                    var category = $("#category").val();
+                    if (category === "") {
+                        alert("请选择类型！");
+                        return false;
+                    }
+                    var remark = $("#txtRemark").val().replace(/(^\s+)|(\s+$)/g, "").replace(/\s/g, "");
+                    if (remark === "" || remark == null) {
+                        return false;
+                    }
+                    $.ajax({
+                        type: 'post',
+                        url: '/PurchaseOrder/CreateTask',
+                        data: { "pkId": taskId, "category": category, "remark": remark, "type": "caigou" },
+                        success: function (result) {
+                            confirm(result);
+                            $('#window').dialog("close");
+                        }
+                    });
+                }
+            }, {
+                value: "取消",
+                callback: true
+            }
+            ]
+        }).showModal();
+    }
+    //批量申请付款
+    function BatchApplyPayment() {
+        var flag = false;
+        var id = $("#purchaseId_cache").val();
+        var tips = dialog({ title: '提示' });
+        if (id === "") {
+            tips.content("请选择需要申请付款的数据!");
+            tips.showModal();
+            setTimeout(function () {
+                tips.close().remove();
+            }, 2000);
+            return false;
+        }
+        $.ajax({
+            url: "/PurchaseOrder/IsNotOneVendor",
+            data: { "purchaseId": id },
+            type: "POST",
+            async: false,
+            success: function (result) {
+                if (result === "YES") {
+                    flag = true;
+                    return false;
+                }
+            }
+        });
+        if (flag) {
+            tips.content("选择的采购订单中有多个供应商!");
+            tips.showModal();
+            setTimeout(function () {
+                tips.close().remove();
+            }, 2000);
+            return false;
+        }
+
+        $.ajax({
+            url: "/PurchaseOrder/ApplyPaymentPurchaseOrder",
+            data: { "id": id },
+            type: "GET",
+            async: false,
+            success: function (html) {
+                var needPaymentDialog = dialog({
+                    title: "请款采购单信息",
+                    width: 900,
+                    height: 500,
+                    content: html,
+                    fixed: true,
+                    onclose: function () {
+                        $("#purchaseId_cache").val("");
+                        operationCount = 1;
+                        $(".purchaseorder-wrapper").find("input[type='checkbox']:checked").prop("checked", false);
+                        $("div[tabindex='-1']'").remove();
+                    },
+                    button: [
+                        {
+                            value: "请款",
+                            callback: function () {
+                                var array = new Array();
+                                var i = 0;
+                                $("#payment-message tr").each(function () {
+
+                                    var purchaseId = $(this).attr("data-id");
+                                    var quantity = $(this).find("input[type='number']").val();
+                                    if (quantity != "0") {
+                                        var cartList = { "PKID": purchaseId, "Num": quantity };
+                                        array[i++] = cartList;
+                                    }
+                                });
+                                if (array.length > 0) {
+                                    $.ajax({
+                                        url: "/PurchaseOrder/ApplyPayment",
+                                        data: { "purchaseOrderList": JSON.stringify(array), "id": id },
+                                        type: "Post",
+                                        async: false,
+                                        success: function (html1) {
+                                            dialog({
+                                                title: "申请付款",
+                                                width: 850,
+                                                height: 450,
+                                                content: html1,
+                                                fixed: true,
+                                                okValue: "提交",
+                                                ok: function () {
+                                                    $("#purchaseId_cache").val("");
+                                                    operationCount = 1;
+                                                    GetPaymentInfo(JSON.stringify(array), id);
+                                                    $(".purchaseorder-wrapper").find("input[type='checkbox']:checked").prop("checked", false);
+                                                    needPaymentDialog.close();
+                                                },
+                                                cancelValue: "取消",
+                                                cancel: true
+                                            }).showModal();
+                                            $("#purchaseId_cache").val("");
+                                            operationCount = 1;
+                                        }
+                                    });
+                                } else {
+                                    tips.content("请选择有效的采购单进行请款!");
+                                    tips.showModal();
+                                    setTimeout(function () {
+                                        tips.close().remove();
+                                    }, 2000);
+                                }
+                                return false;
+                            },
+                            autofocus: true
+                        },
+                        {
+                            value: "关闭",
+                            callback: function () {
+                                $("#purchaseId_cache").val("");
+                                operationCount = 1;
+                                $(".purchaseorder-wrapper").find("input[type='checkbox']:checked").prop("checked", false);
+                                $("div[tabindex='-1']'").remove();
+                            }
+                        }
+                    ]
+                }).showModal();
+            }
+        });
+    }
+    //获取采购详细信息
+    function GetPaymentInfo(purchaseOrderList, purchaseId) {
+        var dataArr = new Array();
+        var payer = $("#department").text().trim();
+        var payee = $("#payee").find("div.cell_value").text().trim();
+        var account = $("#account").find("div.cell_value").text().trim();
+        var depositBank = $("#deposit_bank").find("div").text().trim();
+        var chineseSumAmount = $("#chinese_sum_amount").text().trim();
+        var sumAmount = $("#sum_amount").text().trim();
+        var remark = $("#remark").find("input").val();
+        var rebateAmount = $("#TaxRebate").find("input").val();
+        var venderId = $("#hidden_venderId").val();
+        var i = 0;
+        $(".tr_purchase_info").each(function () {
+            var $self = $(this);
+            var tagValue = $self.attr("tag-value");
+            if (tagValue === "apply") {
+                console.log(tagValue);
+                var columns = $self.children();
+                var jsonData = {
+                    "Payer": "",
+                    "Payee": "",
+                    "Account": "",
+                    "Bank": "",
+                    "PoId": "",
+                    "ProductName": "",
+                    "Amount": "",
+                    "FreightAmount": "",
+                    "IsPlainInvoice": "",
+                    "Is17TaxInvoice": "",
+                    "Is6TaxInvoice": "",
+                    "IsOtherInvoice": "",
+                    "IsTakedInvoice": "",
+                    "IsGoodsArrival": "",
+                    "ChineseSumAmount": "",
+                    "SumAmount": "",
+                    "Remark": "",
+                    "DataType": "",
+                    "VenderId": "",
+                    "RebateAmount": "",
+                    "NetAdvance": ""
+                };
+                jsonData.Payer = payer;
+                jsonData.Payee = payee;
+                jsonData.Account = account;
+                jsonData.Bank = depositBank;
+                jsonData.ChineseSumAmount = chineseSumAmount;
+                jsonData.SumAmount = sumAmount;
+                jsonData.PoId = columns.eq(0).find("span#poid").text().trim();
+                jsonData.DataType = columns.eq(0).find("span#poid").attr("data-type").trim();
+                jsonData.VenderId = venderId;
+                jsonData.RebateAmount = rebateAmount;
+                jsonData.NetAdvance = 0;
+                jsonData.ProductName = columns.eq(1).text().trim();
+                jsonData.Amount = columns.eq(3).text().trim();
+                if (columns.eq(4).text().trim() === "") {
+                    jsonData.FreightAmount = 0;
+                } else {
+                    jsonData.FreightAmount = columns.eq(4).text().trim();
+                }
+                jsonData.Remark = remark;
+                jsonData.IsPlainInvoice = columns.eq(5).find('input:checkbox:first').prop("checked");
+                jsonData.Is17TaxInvoice = columns.eq(6).find('input:checkbox:first').prop("checked");
+                jsonData.Is6TaxInvoice = columns.eq(7).find('input:checkbox:first').prop("checked");
+                jsonData.IsOtherInvoice = columns.eq(8).find('input:checkbox:first').prop("checked");
+                jsonData.IsTakedInvoice = columns.eq(9).find('input:checkbox:first').prop("checked");
+                jsonData.IsGoodsArrival = columns.eq(10).find('input:checkbox:first').prop("checked");
+                dataArr[i] = jsonData;
+                i++;
+            }
+        });
+
+        var dataList = JSON.stringify(dataArr);
+        var moneyall = $('#td_money').html();
+        if (moneyall === '') {
+            moneyall = 0;
+        }
+        $.ajax({
+            url: "/PurchaseOrder/SaveApplyPayment",
+            data: { "purchaseOrderList": purchaseOrderList, "data": dataList, "storedMoney": moneyall },
+            type: "Post",
+            success: function (result) {
+                $("#purchaseId_cache").val("");
+                operationCount = 1;
+                var tips = dialog({ title: '提示' });
+                if (result !== -1) {
+                    tips.content("成功申请" + result + "条数据!");
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                    var arrPoId = purchaseId.split(",");
+                    $.each(arrPoId, function (index, item) {
+                        var auditStatus = "<span style=\"color:#f4a460;\">待财务初审</span>";
+                        $("#audit_status_" + item).html(auditStatus);
+                        $("#applymentOperate_" + item).text("");
+                        $("#chk_" + item).text("");
+                    });
+                } else if (result === -1) {
+                    tips.content("请款的采购单中，有错误数据，请刷新页面重新请款!");
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                } else {
+                    tips.content("存在采购单总请款数量超过有效请款数量，请联系研发!");
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                }
+            },
+            error: function () {
+                $("#purchaseId_cache").val("");
+                operationCount = 1;
+                tips.content("申请失败,请联系系统负责人!");
+                tips.showModal();
+                setTimeout(function () {
+                    tips.close().remove();
+                }, 2000);
+            }
+        });
+    }
+
+    //获取申请单被驳回原因
+    function GetTurnDownReason(purchaseId) {
+        var d = dialog({
+            title: "申请用款驳回理由",
+            height: 200,
+            width: 300,
+            okValue: "确定",
+            ok: true
+        });
+
+        var rejectionReason = $("#hidden_rejectionReason_" + purchaseId).val();
+        d.content(rejectionReason);
+        d.showModal();
+
+    }
+    //创建红冲
+    function CreatePurchaseReverse(purchaseId) {
+        var d = dialog({
+            title: "创建红冲",
+            fixed: true,
+            height: 350,
+            width: 700,
+            button: [ {
+                value: "确定",
+                autofocus: true,
+                callback: function () {
+                    $("#reverseForm").ajaxSubmit({
+                        url: this.url,
+                        type: "GET",
+                        success: function (result) {
+                            if (result === "SUCCESS") {
+                                var msg = "创建成功!";
+                                $.notify(msg, {
+                                    globalPosition: 'top center',
+                                    className: 'success'
+                                });
+                                $("#reverse_" + purchaseId).text("");
+                            }
+                        }
+                    });
+                }
+            },
+            {
+                value: "取消",
+                callback:true
+            }]
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/GetPurchaseReverseData",
+            data: { "purchaseId": purchaseId, "type": "create" },
+            type: "GET",
+            success: function (result) {
+                if (result === "只有新建或已发货且已付款的采购订单才能创建红冲！") {
+                    alert(result);
+                } else {
+                    d.content(result);
+                    d.showModal();
+                }
+            }
+        });
+    }
+    //创建退货
+    function CreatePurchaseReturnGoods(purchaseId) {
+        var d = dialog({
+            height: 400,
+            width: 820,
+            title: "申请退货",
+            button: [{
+                value: "关闭"
+            }]
+        });
+        $.ajax({
+            url: "/PurchaseOrder/IsCanReturnGoods",
+            data: { "purchaseId": purchaseId },
+            type: "POST",
+            async: false,
+            success: function (data) {
+                var tips = dialog({ title: '提示' });
+                if (data === "FALSE") {
+                    var msg = "该采购单已经进入审核流程，禁止退货操作!";
+                    tips.content(msg);
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                }
+                else if (data === "已收货的采购单才能进行退货，请刷新页面！") {
+                    tips.content(data);
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                } else {
+                    $.ajax({
+                        url: "/PurchaseOrder/GetPurchaseReturnGoods",
+                        data: { "purchaseId": purchaseId },
+                        type: "GET",
+                        success: function (result) {
+                            d.content("<div id='returnGoodsList'>" + result + "</div>");
+                            d.showModal();
+                        }
+                    });
+                }
+            }
+        });
+    }
+    //审核红冲
+    function AuditPurchaseReverse(purchaseId) {
+        var d = dialog({
+            title: "审核红冲",
+            fixed: true,
+            height: 350,
+            width: 700,
+            button: [
+            {
+                value: "驳回",
+                callback: function () {
+                    var reason = $("#Remark").val().trim();
+                    var relatedPoId = $("#Reverse").val().trim();
+                    $.ajax({
+                        url: "/PurchaseOrder/AuditOrTurnDownReverseOrTurnedGoods",
+                        data: { "purchaseId": purchaseId, "reason": reason, "operateType": "Rejection", "relatedPoItemId": relatedPoId },
+                        type: "GET",
+                        success: function (result) {
+                            if (result === "SUCCESS") {
+                                var msg = "驳回成功!";
+                                $.notify(msg, {
+                                    globalPosition: 'top center',
+                                    className: 'success'
+                                });
+                                $("#relatedPKID_" + purchaseId).text("");
+                                $("#status_" + purchaseId).text("已取消");
+                                $("#reverse_" + purchaseId).text("");
+                            }
+                        }
+                    });
+                }
+            }, {
+                value: "确定",
+                autofocus: true,
+                callback: function () {
+                    var relatedPoId = $("#Reverse").val().trim();
+                    $.ajax({
+                        url: "/PurchaseOrder/AuditOrTurnDownReverseOrTurnedGoods",
+                        data: { "purchaseId": purchaseId, "reason": "", "operateType": "AuditData", "relatedPoItemId": relatedPoId },
+                        type: "GET",
+                        success: function (result) {
+                            if (result === "SUCCESS") {
+                                var msg = "审核成功!";
+                                $.notify(msg, {
+                                    globalPosition: 'top center',
+                                    className: 'success'
+                                });
+
+                                $("#status_" + purchaseId).text("新建").removeClass("error");
+                                $("#auditReverse_" + purchaseId).text("");
+                            }
+                        }
+                    });
+                }
+            }
+            ]
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/GetPurchaseReverseData",
+            data: { "purchaseId": purchaseId, "type": "audit" },
+            type: "GET",
+            success: function (result) {
+                d.content(result);
+                d.showModal();
+            }
+        });
+    }
+    //查看凭证
+    function ViewVoucherImg(purchaseId) {
+        var existResult = '';
+        var d = dialog({
+            title: "凭证截图",
+            height: 500,
+            width: 700,
+            fixed: true,
+            button: [
+            {
+                value: "下载",
+                autofocus: true,
+                callback: function () {
+                    var callBackResult = '';
+                    if (existResult !== '' && existResult != null) {
+                        callBackResult = existResult;
+                    }
+                    else {
+                        $.ajax({
+                            url: "/PurchaseOrder/CheckPurchasePaymentVoucherExist",
+                            data: { "purchaseId": purchaseId, "billNo": "", "flag": 2 },
+                            type: "POST",
+                            success: function (result) {
+                                callBackResult = result;
+                            }
+                        });
+                    }
+                    if (callBackResult === 'Yes') {
+                        location.href = "/PurchaseOrder/DownloadVoucherFromByteTable?purchaseId=" + purchaseId;
+                    }
+                    else {
+                        location.href = "/PurchaseOrder/DownloadVoucher?purchaseId=" + purchaseId;
+                    }
+                }
+            }, {
+                value: "确定",
+                callback: true
+            }]
+        });
+
+        //判断是否在新表中存在  PurchasePaymentVoucherInfo
+        $.ajax({
+            url: "/PurchaseOrder/CheckPurchasePaymentVoucherExist",
+            data: { "purchaseId": purchaseId, "billNo": "", "flag": 2 },
+            type: "POST",
+            success: function (result) {
+                //在新表中存在
+                if (result === 'Yes') {
+                    var imgUrl = "<img src='/PurchaseOrder/GetVoucherImgFromByteTable?purchaseId=" + purchaseId + "'/>";
+                    d.content(imgUrl);
+                    d.showModal();
+                }
+                else {
+                    $.ajax({
+                        url: "/PurchaseOrder/GetVoucherImg",
+                        data: { "purchaseId": purchaseId },
+                        type: "POST",
+                        success: function (result) {
+                            debugger;
+
+                            if (result != null && result !== '') {
+                                var imgUrl = "<img src='@FileUrlConfig.VoucherDownloadUrl" + result + "'/>";
+                                d.content(imgUrl);
+                            }
+                            else {
+                                d.content("<p style='color:#888;margin-top:25px;border:1px solid #eee;text-align:center;padding:10px;'>此申请单没有凭证截图</p>");
+                            }
+
+                            d.showModal();
+                        }
+                    });
+                }
+                existResult = result;
+            }
+        });
+    }
+
+    //选中需要申请的数据并把数据存到页面缓存中
+    function SelectPurchaseId(obj) {
+        var cachedValue = $("#purchaseId_cache").val();
+        var purchaseId = $(obj).attr("value");
+        if (obj.checked) {
+            cachedValue += purchaseId + ",";
+
+        } else {
+            cachedValue = cachedValue.replace(purchaseId + ",", "");
+        }
+        $("#purchaseId_cache").val(cachedValue);
+    }
+    //复选框全选
+    function SelectDivCheckBox(target) {
+        event.stopPropagation();
+        if (operationCount == 1) {
+            var tips = dialog();
+            tips.content("请注意被选中采购单付款状态！");
+            tips.showModal();
+            setTimeout(function () {
+                tips.close().remove();
+            }, 2000);
+            operationCount++;
+        }
+        var id = $("#purchaseId_cache").val();
+        var $div = $(target).closest("div").next().find("table");
+        if ($(target).prop("checked")) {
+            $div.find("#tbody tr").each(function () {
+                var columns = $(this).children();
+                var checkbox = columns.eq(0).find("input");
+                if (checkbox.prop("checked") === false) {
+                    id += checkbox.attr("value") + ",";
+                }
+            });
+            $div.find("input[type='checkbox']").prop("checked", true);
+        } else {
+            $div.find("#tbody tr").each(function () {
+                var columns = $(this).children();
+                var checkbox = columns.eq(0).find("input");
+                if (checkbox.prop("checked") === true) {
+                    id = id.replace(checkbox.attr("value") + ",", "");
+                }
+            });
+            $div.find("input[type='checkbox']").prop("checked", false);
+        }
+        $("#purchaseId_cache").val(id);
+    };
+    function SelectAll(target) {
+        var id = $("#purchaseId_cache").val();
+        if ($(target).prop("checked") == true) {
+            $(target).closest("table").find("#tbody tr").each(function () {
+                var columns = $(this).children();
+                var checkbox = columns.eq(0).find("input");
+                if (checkbox.prop("checked") === false) {
+                    id += checkbox.attr("value") + ",";
+                }
+            });
+            $(target).closest("table").find("input[type='checkbox']").prop("checked", true);
+        } else {
+            $(target).closest("table").find("#tbody tr").each(function () {
+                var columns = $(this).children();
+                var checkbox = columns.eq(0).find("input");
+                if (checkbox.prop("checked") === true) {
+                    id = id.replace(checkbox.attr("value") + ",", "");
+                }
+            });
+            $(target).closest("table").find("input[type='checkbox']").prop("checked", false);
+        }
+        $("#purchaseId_cache").val(id);
+    };
+    function ViewPurchaseDiffPrice(orderId, itemId) {
+        var d = dialog({
+            height: 200,
+            width: 300,
+            title: "调价驳回原因",
+            okValue: "关闭",
+            ok: function () {
+
+            }
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/GetPurchaseDiffPriceRejectReason",
+            data: { "orderId": orderId, "itemId": itemId },
+            type: "POST",
+            success: function (data) {
+                if (data !== "") {
+                    d.content(data);
+                    d.showModal();
+                }
+            }
+        });
+    }
+    function DeletePurchaseOrderForPurchaseList(obj, purchaserOrderId) {
+        event.stopPropagation();
+        var d = dialog({
+            title: "删除采购订单",
+            width: 300,
+            height: 250,
+            fixed: false,
+            okValue: "删除",
+            ok: function () {
+                debugger;
+                var deleteReason = $("#otherreason").val();
+                if (deleteReason !== "" && deleteReason != null) {
+
+                    var arr = new Array();
+                    var tbody = $(obj).closest(".purchaseorder-wrapper").find("#tbody");
+                    for (var j = 0; j < tbody[0].children.length; j++) {
+                        var purchaseItemJson = { "PurchaseId": "", PurchaseOrderId: "", "Pid": "", "RejectReason": "" };
+
+                        var td = tbody[0].children[j].children[0];
+                        var pItemOrderId = $(td).attr("id").split("_")[1];
+                        var pid = $.trim(tbody[0].children[j].children[3].innerText);
+
+                        purchaseItemJson.PurchaseId = purchaserOrderId;
+                        purchaseItemJson.PurchaseOrderId = pItemOrderId;
+                        purchaseItemJson.Pid = pid;
+                        purchaseItemJson.RejectReason = $.trim(deleteReason);
+                        arr[j] = purchaseItemJson;
+                    }
+                    if (arr.length > 0) {
+                        $.ajax({
+                            url: "/PurchaseOrder/DeletePurchaseOrderForPurchaseList",
+                            data: { "purchaseOrderJson": JSON.stringify(arr) },
+                            type: "POST",
+                            success: function (result) {
+                                //取得所有为Success的订单
+                                var tbody = $(obj).closest(".purchaseorder-wrapper").find("#tbody");
+                                var deleteSuccessCount = 0;
+                                for (var i = 0; i < result.length; i++) {
+                                    if (result[i].Value === "Success") {
+                                        deleteSuccessCount++;
+                                    }
+                                }
+                                //如果都删除成功后,那么直接将这个div给移除掉
+                                if (deleteSuccessCount == tbody[0].children.length) {
+                                    // 取得purchaseorder-wrapper div
+                                    var div = $(obj).closest(".purchaseorder-wrapper");
+                                    div.hide();
+                                }
+                                    //该采购单下多个Item还有其他的状态    只能删除部分的采购订单
+                                else {
+
+                                    var forbitId = '';
+                                    var occuptId = '';
+                                    var paid = '';
+                                    var otherId = '';
+                                    var outputMessage = '';
+
+                                    for (var i = 0; i < result.length; i++) {
+                                        var resultData = result[i];
+                                        //如果该PurchaseOrderItem 为可删除状态,从采购单下移除
+                                        if (resultData.Value === "Success") {
+                                            // var orderIdArr = result.split(",");
+                                            for (var j = 0; j < tbody[0].children.length; j++) {
+                                                var td = tbody[0].children[j].children[0];
+                                                var purchaseOrderId = $(td).attr("id").split("_")[1];
+
+                                                if (purchaseOrderId == resultData.Name) {
+                                                    tbody[0].children[j].remove();
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else if (resultData.Value === "Forbid") {
+                                            forbitId += resultData.Name + ',';
+                                        }
+                                        else if (resultData.Value === "Occupy") {
+                                            occuptId += resultData.Name + ',';
+                                        }
+                                        else if (resultData.Value === "2Paid") {
+                                            paid += resultData.Name + ',';
+                                        }
+                                        else {
+                                            otherId += $.trim(resultData.Value) + "订单" + resultData.Name + ',';
+                                        }
+                                    }
+
+                                    if (forbitId !== '' && forbitId != null) {
+                                        outputMessage += "采购单" + forbitId.substring(0, forbitId.length - 1) +
+                                                "已经请款或者已经付款，禁止删除！" + "\n";
+                                    }
+
+                                    if (occuptId !== '' && occuptId != null) {
+                                        outputMessage += "删除采购单" + occuptId.substring(0, occuptId.length - 1) +
+                                                "前，请先释放占用！" + "\n";
+                                    }
+                                    if (paid !== '' && paid != null) {
+                                        outputMessage += "已付款的采购订单" + paid.substring(0, paid.length - 1) +
+                                                "不能删除！" + "\n";
+                                    }
+                                    if (otherId !== '' && otherId != null) {
+                                        outputMessage += otherId.substring(0, otherId.length - 1) +
+                                                " 不能删除！" + "\n";
+                                    }
+
+                                    if (outputMessage !== '' && outputMessage != null) {
+                                        alert(outputMessage);
+                                    }
+                                }
+                            }
+
+                        });
+                    }
+
+                } else {
+                    alert("删除原因不能为空！");
+                    return false;
+                }
+            },
+            cancelValue: "取消",
+            cancel: true
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/PurchaseOrderCause",
+            data: { "purchaseId": 0, "orderNo": purchaserOrderId, "pid": "暂时不显示", "type": "all" },
+            type: "Get",
+            success: function (html) {
+                d.content(html);
+                d.showModal();
+            }
+        });
+    }
+    //占用明细
+    function ShowUsedDetail(purchaseId) {
+        var d = dialog({
+            height: 200,
+            width: 500,
+            title: "采购单占用明细",
+            okValue: "关闭",
+            ok: true
+        });
+
+        $.ajax({
+            url: "/PurchaseOrder/ShowPoItemUsedDetail",
+            data: { "poItemId": purchaseId },
+            type: "Get",
+            success: function (result) {
+                if (result === true) {
+                    var tips = dialog({ title: '提示' });
+                    tips.content("出错啦！！！");
+                    tips.showModal();
+                    setTimeout(function () {
+                        tips.close().remove();
+                    }, 2000);
+                } else {
+                    d.content(result);
+                    d.showModal();
+                }
+            },
+            error: function (result) {
+                var tips = dialog({ title: '提示' });
+                tips.content(result);
+                tips.showModal();
+                setTimeout(function () {
+                    tips.close().remove();
+                }, 2000);
+            }
+        });
+    }
+    //查找订单总数
+    function SearchTotalCount() {
+        $("#SearchForm").ajaxSubmit({
+            url: '/PurchaseOrder/SearchTotalCount',
+            success: function (num) {
+                if (num == 0) {
+                    $("#TotalPageNum").text(num);
+                }
+                else {
+                    var nums = Math.ceil(num / 15) + "页";
+                    $("#TotalPageNum").text(nums);
+                }
+            }
+        });
+    }
+    function showChecked()
+    {
+        if ($("#purchaseId_cache").val() != "") {
+            var id = $("#purchaseId_cache").val();
+            var $tbodyCheckBox = $("#PoItemList #tbody").find("input[type='checkbox']");
+            $tbodyCheckBox.each(function () {
+                if (id.indexOf($(this).attr("value")) > -1) {
+                    $(this).prop("checked", true);
+                    $(this).parentsUntil("div:#PoItemList").find("input").prop("checked", true)
+                }
+            });
+        }
+    }
+</script>
