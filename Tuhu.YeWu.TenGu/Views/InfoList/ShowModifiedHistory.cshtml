@@ -2,28 +2,50 @@
 @{
     Layout = "../Shared/_Inner.cshtml";
 }
-<div>
-    <table style="width: 60%;">
+<div class="col-lg-12 row">
+    <table class="table table-bordered" style="width: 730px; margin: 5px;">
         <thead>
-            <tr>
-                <th>编号</th>
-                <th>修改人</th>
-                <th>操作类型</th>
-                <th>修改时间</th>
-                <th>前后对比</th>
-            </tr>
+        <tr>
+            <th style="width: 10%;">编号</th>
+            <th style="width: 35%;">修改人</th>
+            <th style="width: 20%;">操作类型</th>
+            <th style="width: 25%;">修改时间</th>
+            <th style="width: 10%;">前后对比</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var oprLog in Model)
-            {
-                <tr>
-                    <td>@oprLog.PKID</td>
-                    <td>@oprLog.CreateUser</td>
-                    <td>@oprLog.Operation</td>
-                    <td>@(oprLog.CreateDatetime != null?oprLog.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss"):"")</td>
-                    <td><a target="_blank" href="/PurchaseOrder/CompareDifferent?oprLogId=@oprLog.PKID" style="cursor: pointer;">详情</a></td>
-                </tr>
-            }
+        @foreach (var oprLog in Model)
+        {
+            <tr>
+                <td>@oprLog.PKID</td>
+                <td>@oprLog.CreateUser</td>
+                <td>@oprLog.Operation</td>
+                <td>@(oprLog.CreateDatetime != null ? oprLog.CreateDatetime.ToString("yyyy-MM-dd HH:mm:ss") : "")</td>
+                <td>
+                    <a onclick="PurchaseHistoryDetail(@oprLog.PKID);" style="cursor: pointer;">详情</a>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
+<script>
+    //查看历史操作详情
+    function PurchaseHistoryDetail(logId) {
+        $.ajax({
+            url: "/InfoList/CompareDifferent",
+            data: { "oprLogId": logId },
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "记录详情",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['650px', '530px'], //宽高
+                    zIndex: 120
+                });
+            }
+        });
+    }
+</script>

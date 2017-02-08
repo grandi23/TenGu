@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ThBiz.DataAccess.Entity.PurchaseOrderItemEntity>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+@if (Model != null && Model.Any())
+{
+    <div class="col-lg-12 row">
+        <table class="table table-bordered" style="width: 860px; margin: 5px;">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">
+                        产品单号
+                    </th>
+                    <th style="width: 50%;">
+                        产品名称
+                    </th>
+                    <th style="width: 25%;">
+                        产品编号
+                    </th>
+                    <th style="width: 10px;">
+                        采购数量
+                    </th>
+            </thead>
+            <tbody id="payment-message">
+                @foreach (var poItem in Model)
+                {
+                    var quantity = (!string.IsNullOrWhiteSpace(poItem.Status) && poItem.Status.Trim() == "已收货" || poItem.Status.Trim() == "部分收货" ?
+                        poItem.InstockNum - poItem.PaymentQuantity : poItem.Num - poItem.PaymentQuantity);
+                    if (quantity > 0)
+                    {
+                        <tr data-id="@poItem.PKID" data-quantity="@quantity">
+                            <td>@poItem.PKID</td>
+                            <td>@poItem.Name</td>
+                            <td>@poItem.PID</td>
+                            <td>
+                                <input type="number" value="@quantity" style="width: 60px;" />
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="div-footer">没有相关请款采购单信息！</div>
+}
+<script>
+    $("#payment-message input[type='number']").change(function () {
+        debugger;
+        var $this = $(this);
+        var oldQuantity = $this.closest("tr").attr("data-quantity");
+        var newQuantity = $this.val();
+        if (newQuantity === "") {
+            $this.val(oldQuantity);
+        } else if (parseInt(newQuantity) < 0 || parseInt(newQuantity) > parseInt(oldQuantity)) {
+            $this.val(oldQuantity);
+        }
+    });
+</script>

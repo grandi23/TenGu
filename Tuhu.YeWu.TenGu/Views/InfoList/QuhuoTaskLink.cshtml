@@ -1,0 +1,44 @@
+﻿@model System.Data.DataTable
+@{
+    Layout = null;
+}
+<style>
+    #task_list tbody tr:hover {
+       background-color:#E0EEEE;
+    }
+</style>
+<table id="task_list" class="table table-bordered" style="width:830px; margin: 5px;">
+    <thead>
+        <tr style="background: #4F94CD; color: #fff; font-weight: 600;">
+            <td>任务编号</td>
+            <td>创建人</td>
+            <td>创建时间</td>
+            <td>创建跟踪</td>
+            <td>状态</td>
+            <td>处理人</td>
+            <td>处理时间</td>
+            <td>完成人</td>
+            <td>完成时间</td>
+            <td>处理任务备注详情</td>
+        </tr>
+    </thead>
+    <tbody>        
+        @foreach (System.Data.DataRow dr in (Model as System.Data.DataTable).Rows)
+        {
+            <tr>
+                <td>
+                    @dr["PKID"].ToString()
+                </td>
+                <td>@dr["Creator"].ToString()</td>
+                <td>@Convert.ToDateTime(dr["CreateTime"]).ToString("yyyy/MM/dd HH:mm")</td>
+                <td>@Html.Raw(dr["Remark"].ToString())</td>
+                <td>@dr["Status"].ToString()</td> 
+                <td>@dr["Operator"].ToString().Replace("@tuhu.cn", "")</td>
+                <td>@dr["OperetionTime"].ToString()</td>
+                <td>@dr["FinishPerson"].ToString().Replace("@tuhu.cn", "")</td>
+                <td>@dr["FinishTime"].ToString()</td>
+                <td>@Html.Raw(dr["TaskRemark"].ToString())</td>
+            </tr>
+        }
+    </tbody>
+</table>

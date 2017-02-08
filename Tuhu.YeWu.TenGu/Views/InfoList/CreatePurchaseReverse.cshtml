@@ -1,0 +1,300 @@
+﻿@model ThBiz.DataAccess.Entity.PurchaseOrderItemEntity
+@using MVCControlsToolkit.Controls;
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<input type="hidden" id="hidden_oldNum" />
+@Html.IsValid()
+<div class="col-lg-12 row">
+    @using (Html.BeginForm("SavePurchaseReverse", "InfoList", FormMethod.Get, new { id = "reverseForm" }))
+    {
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.PKID)
+        @Html.HiddenFor(model => model.POId)
+        @Html.HiddenFor(model => model.CreatedBy)
+        @Html.HiddenFor(model => model.CreatedDatetime)
+        @Html.HiddenFor(model => model.WareHouse)
+        @Html.HiddenFor(model => model.WareHouseID)
+        @Html.HiddenFor(model => model.Reverse)
+        @Html.HiddenFor(model => model.DiffPrice)
+        <table class="table table-bordered" style="width: 730px; margin: 5px;">
+            <tr>
+                <td>供应商</td>
+                <td>
+                    @Html.TextBoxFor(model => model.VendorName, new { @readonly = "readonly", @style="width: 98%;"})
+                    @Html.HiddenFor(model => model.VendorId)
+                </td>
+                <td>产品名称</td>
+                <td colspan="3">
+                    @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @Style = "width: 98%;" })
+                </td>
+            </tr>
+            <tr>
+                <td>产品编号</td>
+                <td colspan="3">
+                    @Html.TextBoxFor(model => model.PID, new {@readonly = "readonly", @Style = "width: 98%;"})
+                </td>
+                <td>数量</td>
+                <td>
+                    @Html.TextBoxFor(model => model.PaymentQuantity, new {@Style = "width: 50%; border: 1px #FBB44C solid;", @type="number" })
+                    @Html.ValidationMessageFor(model => model.PaymentQuantity)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">基准价</td>
+                <td style="width: 20%;">
+                    @Html.TextBoxFor(model => model.BasePrice, new { @readonly = "readonly", @Style = "width: 98%;" })
+                </td>
+                <td style="width: 10%;">采购单价</td>
+                <td style="width: 20%;">
+                    @Html.TextBoxFor(model => model.PurchasePrice, new { @readonly = "readonly", @Style = "width: 98%;", })
+                </td>
+                <td style="width: 13%;">采购总价</td>
+                <td style="width: 22%;">
+                    @Html.TextBoxFor(model => model.TotalPrice, new {@readonly = "readonly", @Style = "width: 98%;"})
+                </td>
+            </tr>
+            <tr>
+                @*<td>
+                    <span>有发票: </span>
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model => model.Invoice)
+                </td>*@
+                <td>成本单价</td>
+                <td>
+                    @Html.TextBoxFor(model => model.CostPrice, new { @readonly = "readonly", @Style = "width: 98%;" })
+                </td>
+                <td>总成本</td>
+                <td>
+                    @Html.TextBoxFor(model => model.TotalCost, new {@readonly = "readonly", @Style = "width: 98%;"})
+                </td>
+                <td>总运费 </td>
+                <td>
+                    <input type="text" value="0" name="deliverFee" style="width: 98%;" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td>返利1</td>
+                <td>
+                    @Html.TextBoxFor(model => model.Rebate1, new { @readonly = "readonly", @Style = "width: 98%;", @onchange = "PriceChanged()" })
+                </td>
+                <td>返利2</td>
+                <td>
+                    @Html.TextBoxFor(model => model.Rebate2, new {@readonly = "readonly", @Style = "width: 98%;", @onchange = "PriceChanged()"})
+                </td>
+                <td>返利3</td>
+                <td>
+                    @Html.TextBoxFor(model => model.Rebate3, new {@readonly = "@readonly", @Style = "width: 98%;", @onchange = "PriceChanged()"})
+                </td>
+            </tr>
+            <tr>
+                <td>预计到货日期</td>
+                <td>
+                    @Html.TextBoxFor(model => model.PlanedInstockDate, new { @Style = "width: 98%; border: 1px #FBB44C solid;", Value = String.Format("{0:yyyy-MM-dd}", Model.PlanedInstockDate), onclick = "WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh' })" })
+                    @Html.ValidationMessageFor(model => model.PlanedInstockDate)
+                </td>
+                <td>提货方式</td>
+                <td>
+                    @Html.TextBoxFor(model => model.ShipmentType, new { @Style = "width: 98%; border: 1px #FBB44C solid;" })
+                </td>
+                <td>运营成本</td>
+                <td>
+                    @Html.TextBoxFor(model => model.AssetCost, new { @readonly = "readonly", @Style = "width: 98%;" })
+                </td>
+            </tr>
+            <tr>
+                <td>账期</td>
+                <td>
+                    <select name="AccountPeriod" style="width: 98%; border: 1px #FBB44C solid;">
+                        @for (var i = 0; i <= 31; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                </td>
+                <td>备注</td>
+                <td colspan="3">
+                    @Html.TextBoxFor(model => model.Remark, new {@Style = "width: 98%; border: 1px #FBB44C solid;" })
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<script type="text/javascript" language="javascript">
+    function shopChanged() {
+        if (document.getElementById("VendorId").value > 0) {
+            var ddlReport = document.getElementById("VendorId");
+            document.getElementById("VendorName").value = ddlReport.options[ddlReport.selectedIndex].text;
+        }
+        else
+            document.getElementById("VendorName").value = null;
+    }
+
+    function PriceChanged() {
+        if ($("#PaymentQuantity").val() == 0) {
+            ("#PaymentQuantity").val(-1);
+        }
+        if ($("#PurchasePrice").val() < 0) {
+            $("#PurchasePrice").val(0);
+        }
+        if ($("#Rebate1").val() < 0) {
+            $("#Rebate1").val(0);
+        }
+        if ($("#Rebate2").val() < 0) {
+            $("#Rebate2").val(0);
+        }
+        if ($("#Rebate3").val() < 0) {
+            $("#Rebate3").val(0);
+        }
+        $("#TotalPrice").val($("#PurchasePrice").val() * $("#PaymentQuantity").val());
+        $("#CostPrice").val($("#PurchasePrice").val() - $("#Rebate1").val() - $("#Rebate2").val() - $("#Rebate3").val());
+        $("#TotalCost").val($("#CostPrice").val() * $("#PaymentQuantity").val());
+        $("#DeliveryFee").val($("#FirstWeightFee").val() * $("#FirstWeightKg").val() + (($("#PaymentQuantity").val() * 9) - $("#FirstWeightKg").val()) * $("#ContinueWeight").val());
+        var value = $("input[name='AccountPeriod']:checked").val();
+        var assetCost;
+        if ($("#Invoice").prop("checked") === true) {
+            assetCost = ($("#PurchasePrice").val() * (parseFloat(1) + parseFloat(value)) + $("#DeliveryFee").val() / $("#PaymentQuantity").val()).toFixed(2);
+        } else {
+            assetCost = ($("#PurchasePrice").val() * parseFloat(1.04) * (parseFloat(1) + parseFloat(value)) + $("#DeliveryFee").val() / $("#PaymentQuantity").val()).toFixed(2);
+        }
+        $("#AssetCost").val(assetCost);
+    }
+
+    //仓库select改变事件
+    function WareHouseChanged() {
+        if ($("form #WareHouseID").find("option:selected").text() != "请选择") {
+            $("form #WareHouse").val($("form #WareHouseID").find("option:selected").text());
+        }
+        else {
+            $("form #WareHouse").val(null);
+        }
+    }
+
+    $(function () {
+        $("#ShipmentType").val("@Model.ShipmentType");
+
+        //$("#PlanedInstockDate").datepicker();
+    });
+    $(document).ready(function () {
+
+        //$("form").filtrateSelect();
+        $("#Invoice").prop("checked", true);//初始时选中有发票
+        if ($("#ShipmentType").val() == "") {
+            $("#submit").attr("disabled", "disabled");
+        }
+        else {
+            $("#submit").removeAttr("disabled");
+            $("#ShipmentType").css("border", "");
+        }
+
+        $("#ShipmentType").change(function () {
+            if ($("#ShipmentType").val() == "") {
+                alert("提货必填");
+                $("#ShipmentType").css("border", "1px Solid Red");
+                $("#submit").attr("disabled", "disabled");
+            }
+            else {
+                $("#ShipmentType").css("border", "");
+                $("#submit").removeAttr("disabled");
+            }
+        });
+
+        $("form").submit(function () {
+            var actualNum = 0;
+            actualNum = '@Model.PaymentQuantity';
+            if (actualNum > 0) {
+                return true;
+            }
+
+            //输入的数量
+            var num = $("#PaymentQuantity").val();
+            $("#PaymentQuantity").css("border", "");
+            if ((num - actualNum) < 0 || num >= 0) {
+                alert("退货数量只能输入-1到" + actualNum);
+                $("#PaymentQuantity").css("border", "1px Solid Red");
+                return false;
+            }
+        });
+    });
+
+    function DialogProductSelection() {
+        var dlgResult = window.showModalDialog("/PurchaseOrder/Search", "", "dialogWidth:740px; dialogHeight:600px; status:0;");
+        if (dlgResult != null) {
+            var uid = document.getElementById("UserID");
+            uid.value = dlgResult.split("|")[0];
+            var uname = document.getElementById("UserName");
+            uname.value = dlgResult.split("|")[1];
+        }
+    }
+
+    function SelectProduces_Dialog() {
+        var wareHouseId = $("#WareHouseID").val();
+        if (wareHouseId === "") {
+            alert("请先选择仓库！");
+        } else {
+            $('#SelectProducesDialog').dialog({
+                title: "搜索产品",
+                width: 1000,
+                height: 600,
+                modal: true
+            });
+        }
+    }
+
+    $(document).ready(function () {
+
+        var num = $("#PaymentQuantity").val().trim();
+        $("#hidden_oldNum").val(num);
+        if (num > 0) {
+            $("#PaymentQuantity").val(-num);
+        }
+
+        $("input[name='AccountPeriod']").click(function () {
+            var value = $(this).val();
+            var assetCost;
+            if ($("#Invoice").prop("checked") === true) {
+                assetCost = ($("#PurchasePrice").val() * (parseFloat(1) + parseFloat(value)) + $("#DeliveryFee").val() / $("#PaymentQuantity").val()).toFixed(2);
+            } else {
+                assetCost = ($("#PurchasePrice").val() * parseFloat(1.04) * (parseFloat(1) + parseFloat(value)) + $("#DeliveryFee").val() / $("#PaymentQuantity").val()).toFixed(2);
+            }
+            $("#AssetCost").val(assetCost);
+        });
+
+        $("#Invoice").click(function () {
+            var $this = $(this);
+            var value = $("input[name='AccountPeriod']:checked").val();
+            var assetCost;
+            if ($this.prop("checked") === true) {
+                assetCost = ($("#PurchasePrice").val() * (parseFloat(1) + parseFloat(value)) + $("#DeliveryFee").val() / $("#PaymentQuantity").val()).toFixed(2);
+            } else {
+                assetCost = ($("#PurchasePrice").val() * parseFloat(1.04) * (parseFloat(1) + parseFloat(value)) + $("#DeliveryFee").val() / $("#PaymentQuantity").val()).toFixed(2);
+            }
+            $("#AssetCost").val(assetCost);
+        });
+
+        $("#PaymentQuantity").change(function () {
+            debugger;
+            var $self = $(this);
+            var oldVal = $self.val().trim();
+
+            var oldNum = $("#hidden_oldNum").val().trim();
+            if (Math.abs(oldVal) > oldNum) {
+                alert("所填红冲数量已超过可红冲数量!");
+                $self.val(-Math.abs(oldNum));
+                return false;
+            }
+            else if (parseInt(oldVal) > 0) {
+                alert("红冲数量必须为负数！");
+                $self.val(-oldVal);
+                return false;
+            }
+
+            $self.val(-Math.abs(oldVal));
+            var totalPrice = parseFloat($self.val().trim()) * parseFloat($("#PurchasePrice").val().trim());
+            var totalCost = parseFloat($self.val().trim()) * parseFloat($("#CostPrice").val().trim());
+            $("#TotalPrice").val(totalPrice);
+            $("#TotalCost").val(totalCost);
+        });
+    });
+</script>

@@ -1,0 +1,61 @@
+﻿@model ThBiz.DataAccess.Entity.ShowPoItemUsedDetailModel
+@using ThBiz.Common.Configurations
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+@if (Model != null)
+{
+    if (Model.SoPoList.Any() || Model.SoStockList.Any() && Model.SoStockList.Any(_ => _.OccupyType == 1))
+    {
+        var index = 1;
+        <div style="border: 2px solid #ccc;padding:3px;background-color:#ccc;font-weight:bold;">销售订单</div>
+        foreach (var sopo in Model.SoPoList)
+        {
+            <span style="margin: 10px 15px 0 0;padding: 10px 0;">
+                <span style="font-weight:bold;">@index .</span>
+                <a href="@YewuDomainConfig.YewuOrderSite/Order/Details/@sopo.SoId" target="_blank">@sopo.SoId</a>
+            </span>
+            if (index % 5 == 0)
+            {
+                <br />
+            }
+            index++;
+        }
+        if (Model.SoStockList.Any(_ => _.OccupyType == 1))
+        {
+            foreach (var soStock in Model.SoStockList.Where(_ => _.OccupyType == 1))
+            {
+                <span style="margin: 10px 15px 0 0;padding: 10px 0;">
+                    <span style="font-weight:bold;">@index .</span>
+                    <a href="@YewuDomainConfig.YewuOrderSite/Order/Details/@soStock.SoId" target="_blank">@soStock.SoId</a>
+                </span>
+                if (index % 5 == 0)
+                {
+                    <br />
+                }
+                index++;
+            }
+        }
+    }
+
+    if (Model.SoStockList.Any())
+    {
+        if (Model.SoStockList.Any(_ => _.OccupyType == 2))
+        {
+            <div style="border: 2px solid #ccc;padding:3px;background-color:#ccc;font-weight:bold;">
+                退货占用数量：<span>@Model.SoStockList.Where(_ => _.OccupyType == 2).Sum(_ => _.Num)</span>
+            </div>
+        }
+        if (Model.SoStockList.Any(_ => _.OccupyType == 3))
+        {
+            <div style="border: 2px solid #ccc;padding:3px;background-color:#ccc;font-weight:bold;">
+                套餐打包占用数量：<span>@Model.SoStockList.Where(_ => _.OccupyType == 3).Sum(_ => _.Num)</span>
+            </div>
+        }
+    }
+}
+else
+{
+    <div style="text-align:center;border: 2px solid #ccc;padding:10px;margin:10px 0;">没有相关占用销售订单！</div>
+}
+

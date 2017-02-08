@@ -1,0 +1,48 @@
+﻿@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+<div class="col-lg-12 row">
+    <input type="hidden" id="OrderNo" value="@ViewBag.OrderNo" />
+    <input type="hidden" id="PID" value="@ViewBag.PID" />
+    <table class="table table-bordered" style="width: 480px; font-weight: 600; margin: 3px;">
+        <tr>
+            <td style="width: 30%;text-align: center">订单号</td>
+            <td style="width: 70%; color: #EA3F3F;">@ViewBag.OrderNo</td>
+        </tr>
+        <tr>
+            <td style="text-align: center">产品编号</td>
+            <td>@ViewBag.PID</td>
+        </tr>
+        <tr>
+            <td style="text-align: center">原因</td>
+            <td>
+                <select class="form-control" id="Reason" name="Reason" onchange="ShowHideDutyDiv(this)" style="width: 50%;">
+                    <option value="供应商无货">供应商无货</option>
+                    <option value="供应商产品有误">供应商产品有误</option>
+                    <option value="供应商价格变化">供应商价格变化</option>
+                    <option value="销售单取消">销售单取消</option>
+                    <option value="其他">其他</option>
+                </select>
+                <textarea class="form-control" id="otherreason" name="otherreason" style="width:90%; display: none; margin-top: 5px; min-height: 80px;" ></textarea>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $("#otherreason").val($("#Reason").val());
+    });
+    function ShowHideDutyDiv(obj) {
+        var seleValue = $(obj).val();
+        var t = document.getElementById("otherreason");
+        t.value = seleValue;
+        if (seleValue == "其他") {
+            t.value = "";
+            t.style.display = "block";
+        } else {
+            t.style.display = "none";
+        }
+    }
+</script>

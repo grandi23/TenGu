@@ -439,6 +439,7 @@
     <Compile Include="Models\LayoutMenu.cs" />
     <Compile Include="Models\PublicFunction.cs" />
     <Compile Include="Models\PurchaseOccupyModel.cs" />
+    <Compile Include="Models\PurchaseOrderItemsModel.cs" />
     <Compile Include="Models\StockLocation.cs" />
     <Compile Include="Models\StockLocationView.cs" />
     <Compile Include="Models\TuhuBiz.Designer.cs">
@@ -506,6 +507,16 @@
       <LastGenOutput>TuhuBiz.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Site.config" />
+    <Content Include="Views\InfoList\PurchaseOrderCause.cshtml" />
+    <Content Include="Views\InfoList\EditPurchaseOrderItem.cshtml" />
+    <Content Include="Views\InfoList\CreatePurchaseReverse.cshtml" />
+    <Content Include="Views\InfoList\ShowPoItemUsedDetail.cshtml" />
+    <Content Include="Views\InfoList\_MakeUpDifference.cshtml" />
+    <Content Include="Views\InfoList\QuhuoTaskLink.cshtml" />
+    <Content Include="Views\InfoList\CompareDifferent.cshtml" />
+    <Content Include="Views\InfoList\PoReturnGoodsList.cshtml" />
+    <Content Include="Views\InfoList\ApplyPaymentPurchaseOrder.cshtml" />
+    <Content Include="Views\InfoList\ApplyPayment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

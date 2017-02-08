@@ -1,0 +1,632 @@
+﻿@using System.Data;
+@using ThBiz.DataAccess.Entity
+@{
+    Layout = null;
+    decimal taxRebate = 0;
+    var purchaseList = ViewBag.PurchaseListData as List<PurchaseOrderItemEntity>;
+    var accountList = ViewBag.AccountData as List<PurchaseOrderItemEntity>;
+    decimal sumAmount = purchaseList.Where(_ => _.DataType == "Purchase" || _.TotalPrice > 0 || _.ApplyPaymentId > 0).Aggregate<PurchaseOrderItemEntity, decimal>(0, (current, item) => current + item.TotalPrice);
+    taxRebate = sumAmount >= ViewBag.TaxRebate ? ViewBag.TaxRebate : sumAmount;
+}
+<style type="text/css">
+    html {
+        -webkit-text-size-adjust: none;
+    }
+
+    .applicationTitle {
+        text-align: center;
+        font-size: 20px;
+        font-family: "Microsoft Yahei";
+        text-shadow: 0 1px 1px rgba(0,0,0,.15);
+        margin: 10px 0 20px 0;
+    }
+
+
+        .applicationTitle span {
+            color: #0B585E;
+        }
+
+    .cell_value {
+        -moz-word-break: break-all;
+        -o-word-break: break-all;
+        word-break: break-all;
+        word-wrap: break-word;
+        padding-left: 3px;
+    }
+
+    .cell_edit, .edit_carriage {
+        font-size: 12px;
+        margin-right: -30px;
+        position: relative;
+        float: left;
+        outline: none;
+        resize: none;
+        border: 2px solid #4bb8f3;
+        box-shadow: rgba(0,0,0,.1) 0 1px 2px 1px inset;
+        padding: 3px;
+        overflow: hidden;
+        height: 15px;
+    }
+
+    .edit_input {
+        width: 98.9%;
+    }
+
+    .edit_carriage {
+        width: 85.5%;
+        height: 19px;
+    }
+
+    .applicationTitle span {
+        color: #0B585E;
+    }
+
+    #applicationform td {
+        position: relative;
+        color: #0B585E;
+        padding: 4px;
+        font-size: 11px;
+        text-align: center;
+        border: 1px solid #696969;
+    }
+
+    #department:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #payee:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #department-list, #payee-list {
+        position: absolute;
+        top: 25px;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        background: #fff;
+        border: 1px solid #aaa;
+        box-shadow: 0 1px 3px #696969;
+    }
+
+        #department-list p {
+            color: #696969;
+            padding: 5px 10px 5px 10px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        #payee-list p {
+            color: #696969;
+            padding: 5px 10px 5px 10px !important;
+            margin: 0 !important;
+            cursor: pointer;
+        }
+
+    .selected {
+        background: #eee;
+    }
+
+    .deduction {
+        width: 20px;
+        color: #fcfcfc;
+        padding: 2px;
+        font-size: 0.6em;
+        display: block;
+        border-radius: 2px;
+        float: left;
+        cursor: pointer;
+        -webkit-transform: scale(0.75) translate(-3px, 0px);
+    }
+</style>
+<div class="applicationTitle">
+    @if (sumAmount >= 0)
+    {
+        <span>用 款 申 请 单</span>
+    }
+    else
+    {
+        <span>退 款 申 请 单</span>
+    }
+</div>
+<input type="hidden" id="hidden_venderId" value="@accountList[0].VendorId"/>
+<input type="hidden" id="hidden_billNo" value="@ViewBag.BillNo"/>
+<table style="width:100%;" id="applicationform">
+    <tr>
+        <td style="width:80px;">单位/部门</td>
+        <td colspan="5" id="payer" class="data-list" style="text-align: left;padding: 0;">
+            <div id="department" class="cell_value">上海阑途信息技术有限公司</div>
+            <input class="cell_edit edit_input" style="display: none;height: 25px;" />
+            <div id="department-list" style="display: none;">
+                <p class="selected">上海阑途信息技术有限公司</p>
+                <p>北京途虎信息技术有限公司</p>
+                <p>上海紫途电子商务有限公司</p>
+                <p>上海紫虎贸易有限公司</p>
+                <p>上海骥达贸易有限公司</p>
+            </div>
+        </td>
+        <td colspan="4">@DateTime.Now.ToString("yyyy年MM月dd日")</td>
+    </tr>
+    <tr>
+        <td>收款单位</td>
+        <td colspan="9" id="payee" style="padding:0;text-align: left;">
+            <div class="cell_value">
+                @{
+                    if (accountList.Count > 0)
+                    {
+                        @accountList[0].Payee
+                    }
+                }
+            </div>
+            <input class="cell_edit edit_input" style="display: none;height: 25px;" />
+            <div id="payee-list" style="display: none;">
+                @{
+                    foreach (var account in accountList)
+                    {
+                        <p data-bank="@account.Bank" data-account="@account.Account">@account.Payee</p>
+                    }
+                }
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>账号</td>
+        <td colspan="9" id="account" class="data-list" style="padding:0;text-align: left;">
+            <div class="cell_value">
+                @{
+                    if (accountList.Count > 0)
+                    {
+                        @accountList[0].Account
+                    }
+                }
+            </div>
+            <input class="cell_edit  edit_input" style="display: none;height: 25px;" />
+        </td>
+    </tr>
+    <tr>
+        <td>开户银行</td>
+        <td colspan="9" id="deposit_bank" style="padding:0;text-align: left;">
+            <div class="cell_value">
+                @{
+                    if (accountList.Count > 0)
+                    {
+                        @accountList[0].Bank
+                    }
+                }
+            </div>
+            <input class="cell_edit  edit_input" style="display: none;height: 25px;" />
+        </td>
+    </tr>
+    <tr>
+        <td rowspan="4">采购单号</td>
+        <td rowspan="4">货&nbsp;品</td>
+        <td rowspan="4">数量</td>
+        <td rowspan="4">金额(含税)</td>
+        <td rowspan="4" style="display:none;">运费金额</td>
+        <td colspan="6">相关信息</td>
+    </tr>
+    <tr>
+        <td rowspan="3" style="width: 30px;">普通发票</td>
+        <td colspan="3">增值税专用发票</td>
+        <td rowspan="3" style="width: 30px;">是否到票</td>
+        <td rowspan="3" style="width:30px;">是否到货</td>
+    </tr>
+    <tr>
+        <td rowspan="2">17%</td>
+        <td rowspan="2">6%</td>
+        <td rowspan="2">其他</td>
+    </tr>
+    <tr></tr>
+    @{
+        var dt = ViewBag.DtVendorName as DataTable;
+        decimal storedMoney = string.IsNullOrEmpty(dt.Rows[0][2].ToString()) ? 0 : Decimal.Parse(dt.Rows[0][2].ToString());
+
+        foreach (var item in purchaseList)
+        {
+            decimal totalPrice = 0;
+            totalPrice = Math.Round(item.TotalPrice, 2);
+            if (item.DataType == "Purchase" || totalPrice >= 0 || item.ApplyPaymentId > 0)
+            {
+                <tr style="height: 25px;text-align:center;" class="tr_purchase_info" tag-value="apply" data-applyPaymentId="@item.ApplyPaymentId" data-applyQuantity="@item.Num">
+                    <td>
+                        <span style="display: block;padding: 2px;text-align: center;" data-type="@item.DataType" id="poid">@item.PKID</span>
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.Name))
+                        {
+                            @item.Name
+                        }
+                        else if (!string.IsNullOrWhiteSpace(item.PName))
+                        {
+                            @item.PName
+                        }
+                        else
+                        {
+                            @item.TempName
+                        }
+                    </td>
+                    <td>
+                        @item.Num
+                    </td>
+                    <td>
+                        @totalPrice
+                    </td>
+                    <td class="col_input_freightFee" style="padding: 0;width:60px;display:none;">
+                        <div class="cell_value">0</div>
+                        <input id='@("freight_" + item.PKID)' class="cell_edit edit_carriage" style="display: none; height: 25px;" value="0" />
+                    </td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("general_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("seventeen_" + item.PKID)' checked="checked" /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("six_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("other_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("istake_ticket_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("isarrival_" + item.PKID)' @(item.Status == "已收货" ? "checked" : "") /></td>
+                </tr>
+            }
+            else
+            {
+                <tr style="height: 25px;text-align:center;" class="tr_purchase_info" tag-value="unapply" data-applyQuantity="@item.Num">
+                    <td>
+                        @if (item.TotalPrice < 0)
+                        {
+                            if (item.DataType == "Reverse")
+                            {
+                                <span tag="0" class="deduction" style="background: green;" data-color="green" id='@("deduction_" + item.PKID)' onclick="ExpenseDeduction(@item.PKID,@totalPrice,this)">抵</span>
+                            }
+                            else if (item.DataType == "Return")
+                            {
+                                <span tag="0" class="deduction" style="background: blue;" data-color="blue" id='@("deduction_" + item.PKID)' onclick="ExpenseDeduction(@item.PKID,@totalPrice,this)">抵</span>
+                            }
+                            else if (item.DataType == "Rebate")
+                            {
+                                <span tag="0" class="deduction" style="background: #daa520;" data-color="#daa520" id='@("deduction_" + item.PKID)' onclick="ExpenseDeduction(@item.PKID,@totalPrice,this)">抵</span>
+                            }
+                        }
+                        @if (item.Num < 0)
+                        {
+                            <span style="display: block;padding: 2px;text-align: left;" data-type="@item.DataType" id="poid">@item.PKID</span>
+                        }
+                        else
+                        {
+                            <span style="display: block;padding: 2px;text-align: center;" data-type="@item.DataType" id="poid">@item.PKID</span>
+                        }
+                    </td>
+                    <td style="border-right:#fcfcfc;">
+                        @if (!string.IsNullOrWhiteSpace(item.Name))
+                        {
+                            @item.Name
+                        }
+                        else if (!string.IsNullOrWhiteSpace(item.PName))
+                        {
+                            @item.PName
+                        }
+                        else
+                        {
+                            @item.TempName
+                        }
+                    </td>
+
+                    <td style="border-left:#fcfcfc;"></td>
+                    <td>
+                        @totalPrice
+                    </td>
+                    <td class="col_input_freightFee" style="padding: 0;width:60px;display:none;">
+                        <div class="cell_value">0</div>
+                        <input id='@("freight_" + item.PKID)' class="cell_edit edit_carriage" style="display: none;height: 25px; " value="0" />
+                    </td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("general_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("seventeen_" + item.PKID)' checked="checked" /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("six_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("other_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("istake_ticket_" + item.PKID)' /></td>
+                    <td style="padding: 0;"><input type="checkbox" id='@("isarrival_" + item.PKID)' @(item.Status == "已收货" ? "checked" : "") /></td>
+                </tr>
+            }
+        }
+
+        <tr style="height: 25px;text-align:center;" tag-value="unapply">
+            <td id="td_num"></td>
+            <td id="td_name" colspan="2"></td>
+            <td id="td_money"></td>
+            <td colspan="6"></td>
+        </tr>
+        if (storedMoney > 0)
+        {
+            <tr style="height: 25px;text-align:center;" tag-value="unapply">
+                <td colspan="2">
+                    【@dt.Rows[0][1].ToString()】&nbsp;&nbsp;余额：<span id="span_storedMoney" style="color:red;">@storedMoney.ToString("0.00") </span>
+                    <input type="hidden" id="hid_storedMoney" value="@storedMoney" />
+                    <input type="hidden" id="hid_sumAmount" value="@sumAmount" />
+                </td>
+                <td>
+                    是否使用:<input type="checkbox" id="IsPayed" onclick="IsPayedMoney(this)" />
+                </td>
+                <td colspan="6"></td>
+            </tr>
+        }
+    }
+    <tr  data-TaxRebate="@taxRebate">
+        <td>可抵扣返利</td>
+        <td @*class="col_input"*@ @*id="TaxRebate"*@ style="padding:0;text-align: left;">
+          <span>¥</span><span style="border-left: none;text-align: left;font-weight: bold;font-family: 'Microsoft Yahei'" id="span_taxRebate">@taxRebate</span>
+        </td>
+        <td>本次抵扣返利</td>
+        <td colspan="7" @*class="col_input"*@ id="TaxRebate" style="padding:0;text-align: left;">
+          <input type="number" style="font-weight: bold; font-family: 'Microsoft Yahei';height: 25px;" onBlur="ReCalculate(this)" class="cell_edit edit_input" id="txt_TaxRebate" value="@taxRebate" />
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right: none;">合计（大写）</td>
+        <td colspan="4" style="border-left: none;text-align: left;">
+            <span id="chinese_sum_amount" style="font-weight: bold;font-family: 'Microsoft Yahei'"></span>
+            <input type="hidden" id="hidden_sumAmount" value="@sumAmount" style="height: 25px;"/>
+        </td>
+        <td style="border-right: none;"> ¥</td>
+        <td colspan="4" id="sum_amount" style="border-left: none;text-align: left;font-weight: bold;font-family: 'Microsoft Yahei'">@Math.Round(sumAmount-taxRebate, 2)</td>
+    </tr>
+    <tr>
+        <td>备&nbsp;注</td>
+        <td colspan="9" class="col_input" id="remark" style="padding:0;text-align: left;">
+            <div class="cell_value"></div>
+            <input class="cell_edit edit_input" id="txt_rRemark" style="display: none; height: 25px;" />
+        </td>
+    </tr>
+
+</table>
+
+<script>
+    $("#TaxRebate input[type='number']").change(function () {
+        debugger;
+        var $this = $(this);
+        var oldQuantity = $this.closest("tr").attr("data-TaxRebate");
+        var newQuantity = $this.val();
+        if (newQuantity === "") {
+            $this.val(oldQuantity);
+        } else if (parseFloat(newQuantity) < 0 || parseFloat(newQuantity) > parseFloat(oldQuantity)) {
+            $this.val(oldQuantity);
+        }
+    });
+   function ReCalculate(item){
+       var rebate = $(item).val().trim();
+       $('#chinese_sum_amount').html(DX(parseFloat($("#hidden_sumAmount").val().trim()) - parseFloat(rebate)));
+       $("#sum_amount").text((parseFloat($("#hidden_sumAmount").val().trim()) - parseFloat(rebate)).toFixed(2));
+    }
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var oldFreightFee = 0;
+        ComputeTotalAmount(oldFreightFee, 0);
+        $(".col_input").mouseover(function () {
+            $(this).parent().find("div").hide();
+            $(this).find("input.cell_edit").show().focus();
+        });
+
+        $(".col_input_freightFee").mouseover(function () {
+            var self = $(this);
+            self.parent().find("div").hide();
+            self.find("input.cell_edit").show().focus().select();
+            oldFreightFee = self.find("input.edit_carriage").val().trim();
+        });
+
+        $(".col_input").mouseleave(function () {
+            var self = $(this);
+            var editInput = self.find("input.cell_edit").hide();
+            self.parent().find("div").html(editInput.val().trim()).show();
+        });
+
+        $(".col_input_freightFee").mouseleave(function () {
+            var self = $(this);
+            var editInput = self.find("input.cell_edit");
+            var freightFee = editInput.val().trim();
+            editInput.hide();
+            self.find("div").html(freightFee).show();
+            ComputeTotalAmount(oldFreightFee, freightFee);
+        });
+
+        $("#department").click(function () {
+            var self = $(this);
+            self.parent().find("div.cell_value").hide();
+            self.parent().find("input.cell_edit").show().focus().select();
+            self.parent().find("div#department-list").show();
+        });
+
+        $("#department-list p").hover(function () {
+            $(this).addClass("selected");
+        }, function () {
+            $(this).removeClass("selected");
+        });
+
+        $("#department-list p").click(function () {
+            var self = $(this);
+            self.parent().hide();
+            self.parent().parent().find("div.cell_value").text(self.text()).show();
+            self.parent().parent().find("input.cell_edit").hide();
+        });
+        $("#payer .edit_input").blur(function () {
+            var self = $(this);
+            self.hide();
+            var department = self.parent().find(".selected").text().trim();
+            if (department === "") {
+                department = self.parent().find("div.cell_value").text().trim();
+            }
+            self.parent().find("div.cell_value").text(department).show();
+            $("#department-list").hide();
+        });
+
+        $("#payee").click(function () {
+            var self = $(this);
+            self.parent().find("div.cell_value").hide();
+            self.parent().find("input.cell_edit").show().focus().select();
+            self.parent().find("div#payee-list").show();
+        });
+
+        $("#payee-list p").hover(function () {
+            $(this).addClass("selected");
+        }, function () {
+            $(this).removeClass("selected");
+        });
+
+        $("#payee-list p").click(function () {
+            var self = $(this);
+            self.parent().hide();
+            self.parent().parent().find("div.cell_value").html(self.text()).show();
+            self.parent().parent().find("input.cell_edit").hide();
+        });
+
+        $("#payee .edit_input").blur(function () {
+            var self = $(this);
+            self.hide();
+            var payee = self.parent().find(".selected").text().trim();
+            if (payee == "") {
+                payee = self.parent().find("div.cell_value").text().trim();
+            }
+            var bank = self.parent().find(".selected").attr("data-bank");
+            var account = self.parent().find(".selected").attr("data-account");
+            $("#account").find("div.cell_value").text(account);
+            $("#account").find("input.cell_edit").val(account);
+            $("#deposit_bank").find("div.cell_value").text(bank);
+            $("#deposit_bank").find("input.cell_edit").val(bank);
+            self.parent().find("div.cell_value").text(payee).show();
+            $("#payee-list").hide();
+        });
+    });
+
+    //计算采购单金额和物流费用之和
+    function ComputeTotalAmount(oldFreightFee, freightFee) {
+        var chineseSumAmount;
+        debugger;
+        var sumAmount =$("#hidden_sumAmount").val().trim();
+        var newSumAmount = parseFloat(Math.abs(sumAmount)) - parseFloat(oldFreightFee) + parseFloat(freightFee)-parseFloat($("#span_taxRebate").text().trim());
+        if (sumAmount < 0) {
+            chineseSumAmount = DX(Math.abs(newSumAmount));
+            chineseSumAmount = "(退)" + chineseSumAmount;
+            newSumAmount = -newSumAmount;
+        } else {
+            chineseSumAmount = DX(newSumAmount);
+        }
+
+        if (chineseSumAmount === "分") {
+            chineseSumAmount = "零元整";
+        }
+
+        $("#sum_amount").text(newSumAmount.toFixed(2));
+       // $("#hidden_sumAmount").val(newSumAmount.toFixed(2));
+        $("#chinese_sum_amount").text(chineseSumAmount);
+    }
+
+    function ExpenseDeduction(id, totalPrice, obj) {
+        var oldColor = $(obj).attr("data-color");
+        var newSumPrice = 0;
+        var chineseSumAmount;
+        var $hiddenSumAmount = $("#hidden_sumAmount");
+        var $sumAmount = $("#sum_amount");
+        var $deduction = $("#deduction_" + id);
+
+
+        var sumPrice = $hiddenSumAmount.val().trim();
+        var type = $deduction.attr("tag");
+
+        if (type == 0) {
+            newSumPrice = parseFloat(sumPrice) + parseFloat(totalPrice);
+
+            $deduction.text("否").attr("tag", "1").css("background", "#FF3333");
+            $deduction.parent().parent().attr("tag-value", "apply");
+        }
+        else if (type == 1) {
+            newSumPrice = (parseFloat(sumPrice)).toFixed(2) - (parseFloat(totalPrice)).toFixed(2);
+            $deduction.text("抵").attr("tag", "0").css("background", oldColor);
+            $deduction.parent().parent().attr("tag-value", "unapply");
+        }
+
+        if (newSumPrice < 0) {
+            chineseSumAmount = DX((Math.abs(newSumPrice)).toFixed(2));
+            chineseSumAmount = "(退)" + chineseSumAmount;
+
+        } else {
+            chineseSumAmount = DX(newSumPrice.toFixed(2));
+        }
+
+        if (chineseSumAmount === "分") {
+            chineseSumAmount = "零元整";
+        }
+
+
+        $hiddenSumAmount.val(newSumPrice.toFixed(2));
+        $sumAmount.text(newSumPrice.toFixed(2));
+        $("#chinese_sum_amount").text(chineseSumAmount);
+    }
+
+    //转换会计中文大写
+    function DX(n) {
+        if (n == 0) {
+            return '零元';
+        }
+        if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+            return "数据非法";
+        var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+        n += "00";
+        var p = n.indexOf('.');
+        if (p >= 0)
+            n = n.substring(0, p) + n.substr(p + 1, 2);
+        unit = unit.substr(unit.length - n.length);
+        for (var i = 0; i < n.length; i++)
+            str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+        return str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "元整");
+    }
+    //是否使用余额付款
+    function IsPayedMoney(obj) {
+        var storedMoney = parseFloat($('#hid_storedMoney').val());
+        var sumMoney = parseFloat($('#hid_sumAmount').val());
+
+        if (obj.checked) {
+            if (storedMoney > sumMoney) {
+
+                $('#span_storedMoney').html(storedMoney - sumMoney);
+                $('#sum_amount').html('0');
+                $('#hidden_sumAmount').val('0');
+                $('#txt_rRemark').val('使用供应商预存余额：' + sumMoney + '元');
+                $('#chinese_sum_amount').html(DX(0));
+                $('#td_money').html('-' + sumMoney);
+            }
+            if (storedMoney < sumMoney) {
+
+                $('#span_storedMoney').html(0);
+                $('#sum_amount').html(sumMoney - storedMoney);
+                $('#hidden_sumAmount').val(sumMoney - storedMoney);
+                $('#txt_rRemark').val('使用供应商预存余额：' + storedMoney + '元');
+                $('#chinese_sum_amount').html(DX(sumMoney - storedMoney));
+
+                $('#td_money').html('-' + storedMoney);
+            }
+            if (storedMoney == sumMoney) {
+
+                $('#span_storedMoney').html(0);
+                $('#sum_amount').html(0);
+                $('#hidden_sumAmount').val(0);
+                $('#txt_rRemark').val('使用供应商预存余额：' + sumMoney + '元');
+                $('#chinese_sum_amount').html(DX(0));
+
+                $('#td_money').html('-' + sumMoney);
+            }
+
+            $('#td_num').html('--');
+            $('#td_name').html('使用余额付款');
+
+        }
+        else {
+            $('#span_storedMoney').html(storedMoney);
+            $('#sum_amount').html(sumMoney);
+            $('#hidden_sumAmount').val(sumMoney);
+            $('#chinese_sum_amount').html(DX(sumMoney));
+            $('#txt_rRemark').val('');
+
+            $('#td_num').html('');
+            $('#td_name').html('');
+            $('#td_money').html('');
+        }
+    }
+</script>
+

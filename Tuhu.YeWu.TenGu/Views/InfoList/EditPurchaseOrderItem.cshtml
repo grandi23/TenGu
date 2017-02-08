@@ -1,0 +1,225 @@
+﻿@model Tuhu.YeWu.TenGu.Models.PurchaseOrderItems
+@using MVCControlsToolkit.Controls;
+@using ThBiz.DataAccess.Entity
+@{
+    this.Layout = "../Shared/_Inner.cshtml";
+    var editUser = new List<string> { "renyutao@tuhu.cn", "wanghuaizeng@tuhu.cn", "jiting@tuhu.cn", "brantgu@tuhu.cn", "baoli@tuhu.cn", "yangpeipei@tuhu.cn","huqi@tuhu.cn","xiajinhui@tuhu.cn" };
+    var admin = new List<string>() { "jiangyufei@tuhu.cn", "wanghuaizeng@tuhu.cn", "brantgu@tuhu.cn", "wangminyou@tuhu.cn", "yangpeipei@tuhu.cn", "lixiao@tuhu.cn", "chenqingzhen@tuhu.cn", "yexiaojuan@tuhu.cn", "buchenze@tuhu.cn", "zhonghaibin@tuhu.cn", "zhanglingjia@tuhu.cn", "yangtingting2@tuhu.cn", "lidan@tuhu.cn", "wujianyong@tuhu.cn", "yuanfang@tuhu.cn", "daiyuzhen@tuhu.cn", "nijing@tuhu.cn", "liuziwei@tuhu.cn", "dihongge@tuhu.cn", "daizhengzheng@tuhu", "dilingling@tuhu.cn", "zhangping2@tuhu.cn", "xuedanying@tuhu.cn", "linweiwei@tuhu.cn", "renyutao@tuhu.cn", "renyingqiang@tuhu.cn", "zhouxianming@tuhu.cn", "yuyu@tuhu.cn", "wangchanjuan@tuhu.cn", "chenling@tuhu.cn", "yuanwanjun@tuhu.cn" };
+    var orderInfoList = ViewBag.OrderInfo as List<BizOrder>;
+}
+@Html.IsValid()
+@Html.ValidationSummary(true)
+<div class="col-lg-12 row">
+    @using (Html.BeginForm("EditPoItem", "InfoList", FormMethod.Post, new { id = "editForm", style="font-size: 12px;" }))
+    {
+        @Html.HiddenFor(model => model.PKID)
+        @Html.HiddenFor(model => model.Status)
+        @Html.HiddenFor(model => model.POId)
+        @Html.HiddenFor(model => model.CreatedDatetime)
+        @Html.HiddenFor(model => model.UpdateTime)
+        <table class="table table-bordered" style="width: 810px; margin: 5px;">
+            <tr>
+                <td colspan="8" style="text-align: center; font-weight: 800;background: #F0F8FF">采购订单信息</td>
+            </tr>
+            <tr>
+                <td>供应商</td>
+                <td style="font-weight: 800;">@Model.VendorName</td>
+                <td>产品编号</td>
+                <td style="font-weight: 800;">@Model.PID</td>
+                <td>品名</td>
+                <td colspan="3" style="font-weight: 800;">@Model.Name</td>
+            </tr>
+            <tr>
+                <td>采购单价</td>
+                <td style="font-weight: 800;">
+                    @Math.Round(Model.PurchasePrice, 2)
+                    @Html.TextBoxFor(model => Model.PurchasePrice, new {@Style = "width: 80%;display:none", Value = Math.Round(Model.PurchasePrice, 2)})
+                </td>
+                <td>采购数量 </td>
+                <td style="font-weight: 800;">
+                    @if (Model.Status.Trim() != "已收货" && (Model.PID == "T-TransportSupplies|1" || Model.PID == "TS-TransportSupplies|1")
+                         && (Model.PayStatus != "2Paid" && Model.PayStatus != "2PartPaid" && Model.AuditStatus <= 0))
+                    {
+                        @Html.TextBoxFor(model => model.Num, new {@Style = "width: 98%;", @type = "number"})
+                    }
+                    else
+                    {
+                        @Model.Num
+                    }
+                </td>
+                <td>采购总价</td>
+                <td colspan="3" style="font-weight: 800;">
+                    @Math.Round(Model.TotalPrice ?? 0, 2)
+                </td>
+            </tr>
+            <tr>
+                <td>税率</td>
+                <td style="font-weight: 800;">
+                    @(Model.TaxPoint < 1 && Model.TaxPoint > 0 ? Convert.ToInt32(Model.TaxPoint*100) + "%" : "无")
+                </td>
+                <td>入库数量</td>
+                <td style="font-weight: 800;">
+                    @Model.InstockNum
+                </td>
+                <td>运费单价</td>
+                <td style="font-weight: 800;">
+                    @Math.Round(Model.FreightAmount, 2)
+                </td>
+                <td>抵扣单价</td>
+                <td style="font-weight: 800;">
+                    @Math.Round(Model.DiffPrice, 2)
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 13%;">含税成本价</td>
+                <td style="width: 12%; font-weight: 800;">
+                    @Math.Round(Model.CostPrice, 2)
+                    @Html.TextBoxFor(model => Model.CostPrice, new {@Style = "width: 80%;display:none", Value = Math.Round(Model.CostPrice, 4)})
+                </td>
+                <td style="width: 10%;">成本单价</td>
+                <td style="width: 20%; font-weight: 800;">
+                    @Math.Round(Model.NoTaxCost, 2)
+                </td>
+                <td style="width: 10%;">成本总价</td>
+                <td style="width: 8%; font-weight: 800;">
+                    @Math.Round(Model.NoTaxCost*Model.Num, 2)
+                </td>
+                <td style="width: 12%;">预计到货日期</td>
+                <td style="width: 15%; font-weight: 800;">
+                    @Html.TextBoxFor(model => model.PlanedInstockDate, new {@Style = "width: 85%", Value = String.Format("{0:yyyy-MM-dd}", Model.PlanedInstockDate), onclick = "WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh' })" })
+                    @Html.ValidationMessageFor(model => model.PlanedInstockDate, "*")
+                </td>
+            </tr>
+            <tr>
+                <td>提货方式</td>
+                <td style="font-weight: 800;">
+                    @Html.DropDownListFor(model => model.ShipmentType, new SelectList(ViewBag.ShipmentType as System.Collections.IEnumerable, "DicKey", "DicValue"), "请选择")
+                    @Html.ValidationMessageFor(model => model.ShipmentType)
+                </td>
+                <td>账期</td>
+                <td style="font-weight: 800;">
+                    @Model.AccountPeriod
+                </td>
+                <td>备注</td>
+                <td colspan="3" style="font-weight: 800;">
+                    @Html.TextBoxFor(model => model.Remark, new {@Style = "width: 98%;"})
+                </td>
+            </tr>
+            <tr>
+                <td>仓库</td>
+                <td style="font-weight: 800;">
+                    @Model.WareHouse
+                </td>
+                <td>创建时间</td>
+                <td style="font-weight: 800;">
+                    @Model.CreatedDatetime.ToString("yyyy/MM/dd HH:mm")
+                </td>
+                <td>创建人</td>
+                <td colspan="3" style="font-weight: 800;">
+                    @Model.CreatedBy
+                </td>
+            </tr>
+            @if (ViewBag.status == "已取消")
+            {
+                <tr>
+                    <td>删除原因</td>
+                    <td colspan="7" style="color: #EA3F3F; font-weight: 800;">
+                        @ViewBag.Reason
+                    </td>
+                </tr>
+            }
+            @if (Model.IsFromVenderSys)
+            {
+                <tr>
+                    <td colspan="8" style="text-align: center; font-weight: 800; background: #F0F8FF">物流信息</td>
+                </tr>
+                <tr>
+                    <td>物流公司</td>
+                    <td style="font-weight: 800;">
+                        @Model.LogisticCompany
+                    </td>
+                    <td>物流单号</td>
+                    <td style="font-weight: 800;">
+                        @Model.LogisticCode
+                    </td>
+                    <td>发货时间</td>
+                    <td colspan="3" style="font-weight: 800;">
+                        @Model.DeliveryTime
+                    </td>
+                </tr>
+                <tr>
+                    <td>物流联系方式</td>
+                    <td colspan="2" style="font-weight: 800;">
+                        @Model.LogisticTelNum
+                    </td>
+                    <td>物流备注</td>
+                    <td colspan="4" style="font-weight: 800;">
+                        @Model.PurchaseRemark
+                    </td>
+                </tr>
+            }
+            @if (orderInfoList != null && orderInfoList.Count > 0)
+            {
+                <tr>
+                    <td colspan="8" style="text-align: center; font-weight: 800; background: #F0F8FF">销售订单信息</td>
+                </tr>
+                <tr>
+                    <td>销售订单编号</td>
+                    <td colspan="7">
+                        预约安装时间
+                        @if (admin.Contains(User.Identity.Name))
+                        {
+                            if (orderInfoList.Count > 0)
+                            {
+                                <button type="button" id="removePuchase" style="float: right; color: #fff; background: #45B6B0; border: 1px #45B6B0 solid; width: 60px; font-weight: 400;" onclick="releaseOrder(@Model.PKID)">释放</button>
+                            }
+                        }
+                    </td>
+                </tr>
+                foreach (var item in orderInfoList)
+                {
+                    <tr>
+                        <td style="font-weight: 800;">
+                            @item.OrderNo
+                        </td>
+                        <td colspan="7" id="bookDate">
+                            @item.BookDatetime.ToString("yyyy-MM-dd") @item.BookPeriod
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    }
+    @*<label id="ErrorMessage" style="color: Red;"></label>*@
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("#ShipmentType").val("@Model.ShipmentType");
+    });
+    //释放
+    function releaseOrder(pkId) {
+        if (confirm("确认删除？")) {
+            $.ajax({
+                url: "/InfoList/RemovePruchaseOrder",
+                data: { "purchaseOrderId": pkId },
+                type: "get",
+                success: function(result) {
+                    if (result) {
+                        parent.layer.msg("采购订单释放成功！", {
+                            icon: 0,
+                            time: 2000
+                        },
+                        function () {
+                            parent.location.reload();
+                        });
+                        //location.href = "/PurchaseOrder/PurchaseIndex";
+                    } else {
+                        layer.msg("采购订单释放失败！", { icon: 0, time: 2000 });
+                        return false;
+                    }
+                    return true;
+                }
+            });
+        }
+    }
+</script>

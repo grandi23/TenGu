@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+<div id="difference_dialog" class="col-lg-12 row">
+    <table class="table table-bordered" style="width: 470px; margin: 5px;">
+        <tr>
+            <td style="width: 25%;">原始价格</td>
+            <td style="width: 75%;">
+                <input type="text" id="txtOriginalPrice" value="@ViewBag.PurchasePrice" readonly="readonly" style="width: 40%;"/>&nbsp;元
+            </td>
+        </tr>
+        <tr>
+            <td>调整后价格</td>
+            <td>
+                <input type="number" id="txtNewPrice" style="width: 40%;border: 1px #FBB44C solid;"/>&nbsp;元
+            </td>
+        </tr>
+        <tr>
+            <td>差价</td>
+            <td>
+                <input type="text" id="txtDifference" readonly="readonly" style="width: 40%;"/>&nbsp;元
+            </td>
+        </tr>
+        <tr>
+            <td>原因</td>
+            <td><textarea rows="4" cols="30" id="txtReason" style="border: 1px #FBB44C solid;"></textarea></td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#txtNewPrice").change(function() {
+            var newPrice = parseFloat($(this).val().trim());
+            var originalPrice = parseFloat($("#txtOriginalPrice").val().trim());
+            var diffPrice = newPrice - originalPrice;
+            $("#txtDifference").val(diffPrice.toFixed(4));
+        });
+    });
+</script>

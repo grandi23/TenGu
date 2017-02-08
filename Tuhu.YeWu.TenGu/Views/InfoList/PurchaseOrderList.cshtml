@@ -11,77 +11,47 @@
     var deletePower = new List<string> {"fanzhou@tuhu.cn", "zhangxiaowen@tuhu.cn", "huqi@tuhu.cn", "jiangxiaoling@tuhu.cn"};
 }
 <style type="text/css">
+     .head-info {
+         border-bottom: 1px solid #E5E5E5;
+         background: #428BCA;
+         color: #FFFFFF;
+         width: 100%;
+         text-align: center;
+         border-radius: 4px;
+         padding: 5px;
+         font-weight: bold;
+     }
     .purchaseorder-wrapper {
         font-family: "Microsoft Yahei";
-        margin: 7px 0;
+        margin: 5px 0;
         border: 1px solid #E5E5E5;
-        min-width: 1240px;
+        min-width: 100%;
         background: #fff;
         border-radius: 4px;
     }
-
     .purchaseorder-info {
         border-bottom: 1px solid #E5E5E5;
         background: #F7F7F7;
         cursor: pointer;
         text-align: center;
         border-radius: 4px;
+        padding: 3px;
     }
-
-    .head-info {
-        border-bottom: 1px solid #E5E5E5;
-        background: #31b0d5;
-        color: #FFFFFF;
-        min-width: 1240px;
-        border-radius: 4px;
-    }
-
-    .purchaseorder-info p {
-        margin-top: 6px;
-    }
-
-    .purchaseorder-right {
-        float: left;
-        width: 97%;
-        height: 30px;
-    }
-
-        .purchaseorder-right p {
-            float: left;
-        }
-
     .purchaseorder-item {
-        padding: 10px;
+        padding: 5px;
         display: none;
     }
-
     .even {
         background: #F9F8F8;
     }
-
     .odd {
         background: #ffffff;
     }
-
     .over {
-        background: #eee;
+        background: #E0EEEE;
     }
-
     .click {
         background: #eae9e9;
-    }
-
-    #difference_dialog table {
-        border: none;
-    }
-
-        #difference_dialog table td {
-            border: none;
-        }
-
-    .head-text {
-        font-weight: bold;
-        text-align: center;
     }
 </style>
 
@@ -90,23 +60,22 @@
     <div class="head-info">
         <table style="width:100%;">
             <tr>
-                <td style="width: 20px;" title="全选">
+                <td style="width: 2%;" title="全选">
                     <input id="currentpage-checkbox" type="checkbox" onclick="CheckCurrentPageCheckBox(this);" />
                 </td>
-                <td style="width: 90px;" class="head-text">订单号</td>
-                <td style="width: 100px;" class="head-text">仓库名称</td>
-                <td style="width:12%;" class="head-text">供应商</td>
-                <td style="width:80px;" class="head-text">采购方式</td>
-                <td style="width:80px;" class="head-text">提货方式</td>
-                <td style="width:80px;" class="head-text">采购总额</td>
-                <td style="width:80px;" class="head-text">采购总数</td>
-                <td style="width:80px;" class="head-text">入库总额</td>
-                <td style="width:80px;" class="head-text">运费总额</td>
-                @*<td style="width:80px;" class="head-text">成本总额</td>*@
-                <td style="width:90px;" class="head-text">入库数</td>
-                <td style="width:8%;" class="head-text">采购人</td>
-                <td style="width:140px;" class="head-text">创建时间</td>
-                <td style="width: 55px;" class="head-text">操作</td>
+                <td style="width: 7%;">订单号</td>
+                <td style="width: 8%;">仓库名称</td>
+                <td style="width: 9%;">供应商</td>
+                <td style="width: 5%;">采购方式</td>
+                <td style="width: 7%;">提货方式</td>
+                <td style="width: 7%;">采购总额</td>
+                <td style="width: 7%;">采购总数</td>
+                <td style="width: 7%;">入库总额</td>
+                <td style="width: 8%;">运费总额</td>
+                <td style="width: 8%;">入库数</td>
+                <td style="width: 8%;">采购人</td>
+                <td style="width: 10%;">创建时间</td>
+                <td style="width: 7%;">操作</td>
             </tr>
         </table>
     </div>
@@ -116,61 +85,70 @@
              <div class="purchaseorder-info" onclick="ExpandedAndPackup(this)" tag-status="unfold">
                  <table style="width:100%;">
                      <tr>
-                         <td style="width: 20px;">
+                         <td style="width: 2%;">
                              <input type="checkbox" onclick="SelectDivCheckBox(this) "/>
                          </td>
-                         <td style="width: 90px;">
-                             <span style="font-weight: bold; color: #d43f3a;">@item.PurchaseOrder.Id</span>
+                         <td style="width: 7%;">
+                            <span style="color: #EA3F3F; font-weight: bold;">
+                                @item.PurchaseOrder.Id
+                            </span>
                          </td>
-                         <td style="width: 100px;">
-                             <span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.WareHouseName</span>
+                         <td style="width: 8%;">
+                            <span style="color: #428BCA; font-weight: bold;">
+                                @item.PurchaseOrder.WareHouseName
+                            </span>
                          </td>
-                         <td style="width:12%;"><span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.VendorName</span></td>
-                         <td style="width:80px;"><span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.PurchaseModeText</span></td>
-                         <td style="width:80px;">
-                            <span style="color: #337ab7; font-weight: bold;">@(string.IsNullOrWhiteSpace(item.PurchaseOrder.ShipmentType) ? "" : item.PurchaseOrder.ShipmentType.Substring(1))</span>
+                         <td style="width: 9%;">
+                            <span style="color: #428BCA; font-weight: bold;">
+                                @item.PurchaseOrder.VendorName
+                            </span>
                          </td>
-                         <td style="width:80px;">
-                            <span style="color: #337ab7; font-weight: bold;">
+                         <td style="width: 5%;">
+                            <span style="color: #428BCA; font-weight: bold;">
+                                @item.PurchaseOrder.PurchaseModeText
+                            </span>
+                         </td>
+                         <td style="width: 7%;">
+                            <span style="color: #428BCA; font-weight: bold;">
+                                @(string.IsNullOrWhiteSpace(item.PurchaseOrder.ShipmentType) ? "" : item.PurchaseOrder.ShipmentType.Substring(1))
+                            </span>
+                         </td>
+                         <td style="width: 7%;">
+                            <span style="color: #428BCA; font-weight: bold;">
                                 @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new {_.PurchaseId, _.TotalPrice}).Distinct().Sum(_ => _.TotalPrice), 2)
                             </span>
                          </td>
-                         <td style="width:80px;">
-                            <span style="color: #337ab7; font-weight: bold;">
+                         <td style="width: 7%;">
+                            <span style="color: #428BCA; font-weight: bold;">
                                 @(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")&&_.Pid!= "TS-TransportSupplies|1" && _.Pid != "T-TransportSupplies|1")
                                     .Select(_ => new { _.PurchaseId, _.Num }).Distinct().Sum(_ => _.Num))
                             </span>
                          </td>
-                         <td style="width: 80px;">
-                             <span style="color: #337ab7; font-weight: bold;">
+                         <td style="width: 7%;">
+                             <span style="color: #428BCA; font-weight: bold;">
                                  @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new {_.PurchaseId, _.InstockTotalPrice}).Distinct().Sum(_ => _.InstockTotalPrice), 2)
                              </span>
                          </td>
-                         <td style="width: 80px;">
-                             <span style="color: #337ab7; font-weight: bold;">
+                         <td style="width: 8%;">
+                             <span style="color: #428BCA; font-weight: bold;">
                                  @Math.Round(item.PoItemList.FirstOrDefault(_ => !_.Status.StartsWith("已取消")) == null ? 0 : item.PoItemList.FirstOrDefault(_ => !_.Status.StartsWith("已取消")).ProductTotalFreight, 2)
                              </span>
                          </td>
-                         @*<td style="width: 80px;">
-                             <span style="color: #337ab7; font-weight: bold;">
-                                 @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new { _.PurchaseId, _.NoTaxCost, _.Num}).Sum(_ => _.NoTaxCost * _.Num), 2)
-                             </span>
-                         </td>*@
-                         <td style="width:90px;">
-                            <span style="color: #337ab7; font-weight: bold;">
+                         <td style="width: 8%;">
+                            <span style="color: #428BCA; font-weight: bold;">
                                  @(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消") && _.Pid != "TS-TransportSupplies|1" && _.Pid != "T-TransportSupplies|1")
                                      .Select(_ => new { _.PurchaseId, _.InstockNum }).Distinct().Sum(_ => _.InstockNum))
                              </span>
                          </td>
-                         <td  style="width:8%;">
-                            <span style="color: #337ab7; font-weight: bold;">
+                         <td  style="width: 8%;">
+                            <span style="color: #428BCA; font-weight: bold;">
                                 @(item.PurchaseOrder.CreatedByName != "VenderSys"? item.PurchaseOrder.CreatedByName :"供应商")
                             </span>
                          </td>
-                         <td style="width: 140px;">
-                            <span style="color: #337ab7; font-weight: bold;">@item.PurchaseOrder.CreatedDateTime.ToString("yyyy-MM-dd HH:mm")</span>
+                         <td style="width: 10%;">
+                            <span style="color: #428BCA; font-weight: bold;">@item.PurchaseOrder.CreatedDateTime.ToString("yyyy-MM-dd HH:mm")</span>
                          </td>
-                         <td style="width:55px;">
+                         <td style="width: 7%;">
                              <span>
                                  @Html.ActionLink("导出", "ExportDataToPdf", "InfoList", new { purchaseId = item.PurchaseOrder.Id }, new { btnkey = "ExportPdf", istuhuverify = "1" })
                              </span>
@@ -182,76 +160,55 @@
              <div class="purchaseorder-item">
                  @if (item.PoItemList != null && item.PoItemList.Any())
                  {
-                     <table id="List" class="tableContainer data-table" style="width: 100%;">
+                     <table id="List" style="width: 100%;">
                          <thead>
                              <tr>
-                                 <th style="width: 20px;">
+                                 <th style="width: 2%; text-align: center;">
                                      <input type="checkbox" onclick="SelectAll(this) " />
                                  </th>
-                                 <th style="width: 60px;">
+                                 <th style="width: 5%; text-align: center;">
                                      产品单号
                                  </th>
-                                 <th style="width: 240px;">
+                                 <th style="width: 18%;text-align: center;">
                                      产品名称
                                  </th>
-                                 <th style="width: 130px;">
+                                 <th style="width: 10%;text-align: center;">
                                      产品编号
                                  </th>
-                                 <th>
+                                 <th style="width: 4%; text-align: center;">
                                      采购数量
                                  </th>
-                                 <th>
+                                 <th style="width: 4%; text-align: center;">
                                      已入库
                                  </th>
-                                 <th style="width: 60px;">
+                                 <th style="width: 5%; text-align: center;">
                                      采购单价
                                  </th>
-                                 <th style="width: 60px;">
+                                 <th style="width: 5%; text-align: center;">
                                      采购总价
                                  </th>
-                                 @*<th style="width: 60px;">
-                                     入库总价
-                                 </th>*@
-                                 @*<th>
-                                     税率
-                                 </th>
-                                 <th style="width: 60px;">
-                                     含税成本价
-                                 </th>
-                                 <th style="width: 60px;">
-                                     成本单价
-                                 </th>
-                                 <th style="width: 60px;">
-                                     成本总价
-                                 </th>*@
-                                 <th style="width: 60px;">
+                                 <th style="width: 5%; text-align: center;">
                                      运费单价
                                  </th>
-                                 <th style="width: 80px;">
+                                 <th style="width: 5%; text-align: center;">
                                      运费记账类型
                                  </th>
-                                 <th>
+                                 <th style="width: 8%; text-align: center;">
                                      备注
                                  </th>
-                                 <th style="width: 55px;">
+                                 <th style="width: 5%; text-align: center;">
                                      凭证
                                  </th>
-                                 @*<th>
-                                     相关订单
-                                 </th>*@
-                                 <th>
+                                 <th style="width: 4%; text-align: center;">
                                      申请状态
                                  </th>
-                                 <th>
+                                 <th style="width: 4%; text-align: center;">
                                      支付状态
                                  </th>
-
-                                 @*<th>物流信息</th>*@
-
-                                 <th style="width: 110px;">
+                                 <th style="width: 8%; text-align: center;">
                                      入库信息
                                  </th>
-                                 <th colspan="2" style="text-align: center;">
+                                 <th colspan="2" style="width: 8%; text-align: center;">
                                      操作
                                  </th>
                              </tr>
@@ -339,24 +296,6 @@
                                      <td>
                                          @Math.Round(poItem.TotalPrice, 2)
                                      </td>
-                                     @*<td>
-                                         @Math.Round(poItem.InstockTotalPrice, 2)
-                                     </td>*@
-                                     @*<td>
-                                         @(poItem.TaxPoint < 1 && poItem.TaxPoint > 0 ? Convert.ToInt32(poItem.TaxPoint*100)+"%" : "无")*@
-                                         @*@Math.Round(poItem.Rebate1, 2)<br/>
-                                         @Math.Round(poItem.Rebate2, 2)<br/>
-                                         @Math.Round(poItem.Rebate3, 2)*@
-                                     @*</td>*@
-                                     @*<td>
-                                         @Math.Round(poItem.CostPrice, 2)
-                                     </td>
-                                     <td>
-                                         @Math.Round(poItem.NoTaxCost, 2)
-                                     </td>
-                                     <td>
-                                         @Math.Round(poItem.Num*poItem.NoTaxCost, 2)
-                                     </td>*@
                                      <td>
                                          @Math.Round(poItem.ProductFreight, 2)
                                      </td>
@@ -400,13 +339,6 @@
                                              }
                                          }
                                      </td>
-                                     @*<td>
-                                         @foreach (var od in poItems.Where(p => p.OrderId.HasValue && p.OrderId != 0))
-                                         {
-                                             <a href="@YewuDomainConfig.YewuOrderSite/Order/Details/@od.OrderId" target="_blank">@od.OrderId</a>
-                                             <br />
-                                         }
-                                     </td>*@
                                      <td id='@("audit_status_" + poItem.PurchaseId)'>
                                          @if (!purchaseStatus.Contains(poItem.Status))
                                         {
@@ -456,9 +388,6 @@
                                              }
                                          }
                                      </td>
-                                     @*<td >
-                                      <a href="#" class="logistic" purchaseId="@poItem.PurchaseId" venderId="@item.PurchaseOrder.VendorId">物流详情</a>
-                                     </td>*@
                                      <td title="@(poItem.InstockDate.ToString() != "0001/1/1 0:00:00" ? poItem.InstockDate.ToString() : "")">
                                          <label>@poItem.PlanedInstockDate.ToShortDateString()</label><span>(计划)</span><br />
                                          @if (poItem.Status.StartsWith("已收货") || poItem.Status.StartsWith("部分收货"))
@@ -497,7 +426,7 @@
                                              }
                                          }
                                      </td>
-                                     <td style="width: 55px;">
+                                     <td style="width: 4%; min-width: 55px;">
                                          <a onclick="EditPoItem1(this, @poItem.PurchaseId,'@poItem.Status') " style="cursor: pointer;">编辑</a>
                                          @if ((!poItem.IsFromVenderSys && poItem.DataType != "Reverse" && poItem.DataType != "Return") || poItem.IsFromVenderSys || User.Identity.Name == "brantgu@tuhu.cn" || User.Identity.Name == "renyutao@tuhu.cn")
                                          {
@@ -522,7 +451,7 @@
                                          }
                                          <a href="#" class="logistic" purchaseId="@poItem.PurchaseId" venderId="@item.PurchaseOrder.VendorId">物流信息</a>
                                      </td>
-                                     <td style="width: 60px;">
+                                     <td style="width: 4%; min-width: 60px;">
                                          <span id='@("applymentOperate_" + poItem.PurchaseId)'>
                                             @if (poItem.CreatedDateTime > Convert.ToDateTime("2015-03-01"))
                                             { 
@@ -558,8 +487,8 @@
                                          </span>
                                          <br />
                                          @*<a href="#" onclick="CreateLogistic(@poItem.PurchaseId,this) ">新增物流信息</a><br />*@
-                                         <a href="#" onclick="CreatePurchaseTask(@poItem.PurchaseId) ">创建任务</a><br />
-                                         @Html.ActionLink("查看历史", "ShowModifiedHistory", "InfoList", new {purchaseId = poItem.PurchaseId}, new {target = "_blank"})
+                                         <a href="#" onclick="CreatePurchaseTask(@poItem.PurchaseId) ">创建任务</a><br/>
+                                         <a href="#" onclick="ShowPurchaseHistory(@poItem.PurchaseId)">查看历史</a>
                                      </td>
                                  </tr>
                              }
@@ -572,15 +501,14 @@
 }
 else
 {
-    <div style="border: 1px solid #ccc;padding:10px;margin:10px 0;width: 99%;">没有相关信息！</div>
-}
+    <div class="alert alert-success text-center">        <span class="entypo-cancel-circled"></span>        <strong>&nbsp;&nbsp;没有相关信息！</strong>    </div>}
 <div class="logisticnformation" id="logisticnformation" style="display:none">
-    <table class="data-table">
+    <table class="table table-bordered" style="width: 500px; margin: 8px;">
         <thead>
             <tr id="headerTr">
-                <th>物流单号</th>
-                <th>物流公司</th>
-                <th><a href='#' class='addRow' id='addRow'>添加一行</a></th>
+                <td style="width: 30%;">物流单号</td>
+                <td style="width: 50%;">物流公司</td>
+                <td style="width: 20%;"><a href='#' class='addRow' id='addRow'>添加一行</a></td>
             </tr>
         </thead>
         <tbody class="addLogistic"></tbody>
@@ -588,12 +516,12 @@ else
 </div>
 @*@Html.Pager(Model.Pager, pageNumber => Url.Action("PurchaseOrderList", new { pageNumber }))*@
 
-<div id="window" style="display: none">
-    <table style="margin-top: 2px; margin-left: 20px;">
+<div id="window" class="col-lg-12 row" style="display: none">
+    <table class="table table-bordered" style="width: 830px; margin: 5px;">
         <tr>
-            <td>类型</td>
-            <td>
-                <select id="category" name="category">
+            <td style="width: 10%; font-weight: 600;">类型</td>
+            <td style="width: 90%;">
+                <select id="category" name="category" class="form-control" style="width: 30%;">
                     <option value="">-请选择-</option>
                     <option value="未到货">未到货</option>
                     <option value="送取货异常">送取货异常</option>
@@ -603,8 +531,12 @@ else
             </td>
         </tr>
         <tr>
-            <td>备注</td>
-            <td><textarea rows="1" cols="30" id="txtRemark"></textarea></td>
+            <td style="font-weight: 600;">
+                备注
+            </td>
+            <td>
+                <textarea rows="4" cols="30" id="txtRemark" class="form-control" style="width: 98%; min-height: 70px;"></textarea>
+            </td>
         </tr>
     </table>
 </div> 
@@ -615,12 +547,9 @@ else
         }).mouseout(function () {
             $(this).removeClass("over");
         });
-        //为表格的奇偶行设定不同的颜色
-        $("#tbody tr:even").addClass("even");
-        $("#tbody tr:odd").addClass("odd");
         //鼠标点击事件
         $("#PoItemList #List tr:gt(0)").bind("click", function () {
-            $("#PoItemList  #List  tr:gt(0)").removeClass("click");
+            $("#PoItemList #List tr:gt(0)").removeClass("click");
             $(this).addClass("click");
         });
 
@@ -632,63 +561,53 @@ else
                 var purchaseId = $(this).attr("purchaseId");
                 $.ajax({
                     type: 'post',
-                    url: '/PurchaseOrder/GetLogisticInformation',
+                    url: '/InfoList/GetLogisticInformation',
                     data: { "venderId": vId, "purchaseId": purchaseId },
                     success: function (date) {
                         if (date.length > 0) {
                             var dt = eval(date);
                             $.each(dt, function (item, val) {
-                                elems.find(".addLogistic").append("<tr><td><input  style='width:100%' value='" + dt[item].LogisticCode + "' type='text' class='txtCode'/></td><td><input  style='width:100%' value='" + dt[item].LogisticCompany + "' class='txtCompany' type='text'/></td><td><a href='#' class='deleteRow'>删除该行</a></td></tr>");
+                                elems.find(".addLogistic").append("<tr><td><input  style='width:98%' value='" + dt[item].LogisticCode + "' type='text' class='txtCode'/></td><td><input  style='width:98%' value='" + dt[item].LogisticCompany + "' class='txtCompany' type='text'/></td><td><a onclick='$(this).parent().parent().remove();' >删除</a></td></tr>");
                             });
                         }
                     }
                 });
                 var arrObj = new Array();
-                dialog({
+                layer.open({
+                    type: 1,
                     title: "物流信息",
-                    width: 450,
-                    height: 200,
-                    fixed: true,
+                    skin: 'layui-layer-rim', //加上边框
                     content: elems,
-                    button: [{
-                        value: "保存",
-                        autofocus: true,
-                        callback: function () {
-                            var $tr = elems.find(".addLogistic").find("tr");
-                            var jsonStr = null;
-                            $.each($tr, function (index, item) {
-                                var jsonObj = { "LogisticCode": "", "LogisticCompany": "" };
-                                var $self = $(item);
-                                debugger;
-                                var code = $self.find(".txtCode").val().trim();
-                                var company = $self.find(".txtCompany").val().trim();
-                                jsonObj.LogisticCode = code;
-                                jsonObj.LogisticCompany = company;
-                                arrObj[index] = jsonObj;
-                            });
-                            jsonStr = JSON.stringify(arrObj);
-                            $.ajax({
-                                type: 'post',
-                                url: '/PurchaseOrder/CreateLogistic',
-                                data: { "objJson": jsonStr, "venderId": vId, "purchaseId": purchaseId },
-                                success: function (result) {
-                                    alert(result);
-                                    $(".logisticnformation").dialog("close");
-                                }
-                            });
-                        }
-                    }, {
-                        value: "取消",
-                        callback: function () {
-                        }
-                    }]
-                }).showModal();
+                    area: ['550px', '350px'], //宽高
+                    btn: ['保存', '取消'],
+                    yes: function() {
+                        var $tr = elems.find(".addLogistic").find("tr");
+                        var jsonStr = null;
+                        $.each($tr, function (index, item) {
+                            var jsonObj = { "LogisticCode": "", "LogisticCompany": "" };
+                            var $self = $(item);
+                            var code = $self.find(".txtCode").val().trim();
+                            var company = $self.find(".txtCompany").val().trim();
+                            jsonObj.LogisticCode = code;
+                            jsonObj.LogisticCompany = company;
+                            arrObj[index] = jsonObj;
+                        });
+                        jsonStr = JSON.stringify(arrObj);
+                        $.ajax({
+                            type: 'post',
+                            url: '/InfoList/CreateLogistic',
+                            data: { "objJson": jsonStr, "venderId": vId, "purchaseId": purchaseId },
+                            success: function (result) {
+                                layer.msg(result, { icon: 0, time: 2000 });
+                                $(".logisticnformation").dialog("close");
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
 
                 elems.find("#addRow").unbind("click").click(function () {
-                    elems.find(".addLogistic").append("<tr><td><input type='text' style='width:100%' class='txtCode'/></td><td><input style='width:100%' class='txtCompany' type='text'/></td><td><a href='#' class='deleteRow'>删除该行</a></td></tr>");
-                });
-                $(".deleteRow").live("click", function () {
-                    $(this).parent().parent().remove();
+                    elems.find(".addLogistic").append("<tr><td><input type='text' style='width:98%' class='txtCode'/></td><td><input style='width:98%' class='txtCompany' type='text'/></td><td><a onclick='$(this).parent().parent().remove();' >删除</a></td></tr>");
                 });
             });
         });

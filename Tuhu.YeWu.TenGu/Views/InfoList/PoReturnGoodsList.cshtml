@@ -1,0 +1,149 @@
+﻿@model IEnumerable<ThBiz.DataAccess.Entity.ReturnPurchaseOrderWithStockLocation>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+<div class="col-lg-12 row">
+    <input type="hidden" id="OriginalPurchaseOrderItemId" value="@ViewBag.OriginalPurchaseOrderItemId" />
+    <table class="table table-bordered" style="width: 830px; margin: 5px;">
+        <thead>
+            <tr>
+                <th>
+                    采购单号
+                </th>
+                <th>
+                    批次
+                </th>
+                <th>
+                    产品名称
+                </th>
+                <th>
+                    仓库
+                </th>
+                <th>
+                    库存数量
+                </th>
+                <th>
+                    可用库存数量
+                </th>
+                <th>
+                    占用库存数量
+                </th>
+                <th>
+                    移库数量
+                </th>
+                <th>
+                    生产日期
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody id="ReturnGoodsList">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.PurchaseOrderItemId
+                    </td>
+                    <td>
+                        @item.BatchId
+                    </td>
+                    <td>
+                        @item.ProductID
+                    </td>
+                    <td>
+                        @item.Location
+                    </td>
+                    <td>
+                        @item.StockLocationNum
+                    </td>
+                    <td>
+                        @item.AvailableNum
+                    </td>
+                    <td>
+                        @item.SoStockNum
+                    </td>
+                    <td>
+                        @item.TransferNum
+                    </td>
+                    <td>
+                        @item.ProductCreateTime
+                    </td>
+                    <td>
+                        @if (item.AvailableNum > 0)
+                        {
+                            <a class="return" onclick="javascript:ReturnPurchaseBatch(this, @item.PurchaseOrderItemId, @item.BatchId,@item.StockLocationId,'@item.Location')" style="cursor: pointer">退货</a>
+                        }
+
+                        @if (item.SoStockNum > 0)
+                        {
+                            <a onclick="javascript:RemoveSoStocks(@item.StockLocationId, @item.BatchId)" style="cursor: pointer">释放</a>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="11">
+                        <div id='@("PurchaseReturnGoods" + item.BatchId + item.StockLocationId)' style="display: none"></div>
+                        <div id='@("loading" + item.BatchId + item.StockLocationId)' style="display: none;font-weight: bold;color: green">获取详细数据中....</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    function ReturnPurchaseBatch(target, poItemId, batchId,wareHouseId,wareHouseName) {
+        if ($(target).text() == "退货") {
+            $("div[id*='PurchaseReturnGoods']").each(function() {
+                if ($(this).id != "PurchaseReturnGoods" + batchId + wareHouseId) {
+                    $(this).empty();
+                }
+                $("#ReturnGoodsList td .return").text("退货");
+            });
+            $.ajax({
+                url: "/PurchaseOrder/ReturnGoodsForRespectiveLocation",
+                type:"GET",
+                data: { "poItemId": poItemId, "batchId": batchId, "wareHouseId": wareHouseId, "wareHouseName": wareHouseName },
+                beforeSend: function() {
+                    $("#loading"+batchId).show();
+                },
+                success: function(result) {
+                    $("#loading"+batchId).css("display","none");
+                    $("#PurchaseReturnGoods" + batchId + wareHouseId).empty().append(result);
+                    $("#PurchaseReturnGoods" + batchId + wareHouseId).slideDown("fast");
+                    $(target).text("取消");
+                },
+                error: function() {
+                    $("#loading" + batchId + wareHouseId).hidden();
+                }
+            });
+        } else {
+            $("#PurchaseReturnGoods" + batchId + wareHouseId).empty();
+            $("#PurchaseReturnGoods" + batchId + wareHouseId).slideToggle("fast");
+            $(target).text("退货");
+        }
+    }
+     
+    function RemoveSoStocks(warehouseId,batchId){
+        $.ajax({
+            url: "/PurchaseOrder/RemoveSoStocks",
+            type:"POST",
+            data: { "warehouseId": warehouseId, "batchId": batchId},
+            success: function(result) {
+                if (result==1) {
+                    var originalPoItemId = $("#OriginalPurchaseOrderItemId").val();
+                    $.ajax({
+                        url: "/PurchaseOrder/GetPurchaseReturnGoods",
+                        data: { "purchaseId": originalPoItemId},
+                        type: "GET",
+                        success: function(result) {
+                            $("#returnGoodsList").empty().append(result);
+                        }
+                    });
+                }
+            }
+        });
+    }
+ </script>
