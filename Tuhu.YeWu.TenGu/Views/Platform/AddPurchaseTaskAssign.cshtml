@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<div class="row col-lg-12">
+    <div class="form-inline">
+        <div class="form-group">
+            <label>&nbsp;负&nbsp;责&nbsp;人&nbsp;</label>
+            @Html.DropDownList("Employee", new SelectList(ViewBag.Employee as System.Collections.IEnumerable, "EmailAddress", "EmployeeName"), "请选择", new { @style = "width: 200px;" })
+        </div>
+        <input type="hidden" id="strAssignerName" value="@ViewBag.strAssignerName" />
+    </div>
+    <div class="form-inline">
+        <div class="form-group">
+            <label>负责仓库</label>
+            @Html.DropDownList("WareHouse", new SelectList(ViewBag.HouseWare, "WareHouseId", "WareHouseName"), "请选择", new { @style = "width: 300px;", @class = "form-control", @multiple = "multiple" })
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //var email = "";
+    $(document).ready(function () {
+        $("#Employee").select2({});
+        $("#WareHouse").select2({
+            placeholder: "请选择仓库"
+        });
+    });
+</script>

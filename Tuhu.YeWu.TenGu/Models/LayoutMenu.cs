@@ -25,7 +25,8 @@ namespace Tuhu.YeWu.TenGu.Models
                 new MenuNode(){ Icon = "icon icon-media-loop", DisplayName = "采购调价审核",Url = "#", ParentName = "采购审核", ParentIcon = "icon icon-lock"},
                 new MenuNode(){ Icon = "icon icon-mobile-portrait", DisplayName = "供应商资质审核",Url = "#", ParentName = "采购审核", ParentIcon = "icon icon-lock"},
 
-                new MenuNode(){ Icon = "icon icon-plus", DisplayName = "采购任务分配配置",Url = "#", ParentName = "系统配置", ParentIcon = "icon icon-media-shuffle"},
+                new MenuNode(){ Icon = "icon icon-minus", DisplayName = "区域仓库配置",Url = "/Platform/RegionWareHouseConfigIndex", ParentName = "系统配置", ParentIcon = "icon icon-media-shuffle"},
+                new MenuNode(){ Icon = "icon icon-plus", DisplayName = "采购任务分配配置",Url = "/Platform/PurchaseTaskAssignIndex", ParentName = "系统配置", ParentIcon = "icon icon-media-shuffle"},
                 new MenuNode(){ Icon = "icon icon-phone", DisplayName = "订单更改仓库配置",Url = "#", ParentName = "系统配置", ParentIcon = "icon icon-media-shuffle"},
                 new MenuNode(){ Icon = "icon icon-preview", DisplayName = "采购信息配置",Url = "#", ParentName = "系统配置", ParentIcon = "icon icon-media-shuffle"},
                 new MenuNode(){ Icon = "icon icon-reply", DisplayName = "订单可用周期配置",Url = "#", ParentName = "系统配置", ParentIcon = "icon icon-media-shuffle"},

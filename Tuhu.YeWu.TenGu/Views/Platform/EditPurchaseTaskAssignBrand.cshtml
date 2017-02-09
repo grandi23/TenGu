@@ -1,0 +1,45 @@
+﻿@using ThBiz.DataAccess.Entity
+@{
+    Layout = "../Shared/_Inner.cshtml";
+    var wareHouseBrands = ViewBag.WareHouse as List<BatchPurchaseAssigner>;
+    int count = 0;
+}
+
+<div class="row">
+    <table id="maintable" class="table-bordered" style="width: 540px;">
+        @foreach (var wareHouse in wareHouseBrands)
+        {
+            count++;
+            <tr data-warehouse-id="@wareHouse.WarehouseId" data-warehouse-name="@wareHouse.WarehouseName" style="height: 50px;">
+                <td style="width: 20%; vertical-align: middle;">
+                    @wareHouse.WarehouseName
+                </td>
+                <td style="width: 80%;">
+                    @Html.DropDownList("Brand", new SelectList(ViewBag.Brand, "CP_Brand", "CP_Brand"), new { @style = "width: 85%;", @class = "form-control", @multiple = "multiple" })
+                    @if (count > 1)
+                    {
+                        <button class="btn btn-sm btn-link" onclick="BrandsDitto(this);">同上</button>
+                    }
+                    <input type="hidden" value="@wareHouse.Brand" />
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#maintable").find("tr").each(function () {
+            var select = $(this).find("td").eq(1).find("select");
+            select.select2();
+            var list = $(this).find("td").eq(1).find("input[type='hidden']").val().split(',');
+            select.val(list).trigger("change");
+        });
+    });
+
+    function BrandsDitto(target) {
+        var $this = $(target);
+        var list = $this.closest("tr").prev().find("td").eq(1).find("select").val();
+        var select = $this.closest("tr").find("td").eq(1).find("select");
+        select.val(list).trigger("change");
+    }
+</script>

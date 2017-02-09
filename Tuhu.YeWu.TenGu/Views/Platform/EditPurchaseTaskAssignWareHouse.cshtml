@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+<div class="row">
+    <div class="form-inline">
+        <div class="form-group">
+            <label>选择仓库</label><span style="color: red;">*</span>
+            @Html.DropDownList("WareHouse", new SelectList(ViewBag.HouseWare, "WareHouseId", "WareHouseName"), new {@style = "width: 300px;", @class = "form-control", @multiple = "multiple"})
+        </div>
+    </div>
+    <input type="hidden" id="ExistWarehouseId" value="@ViewBag.ExistWarehouseId"/>
+    <input type="hidden" id="ExistWarehouseName" value="@ViewBag.ExistWarehouseName" />
+    <input type="hidden" id="AssignerId" value="@ViewBag.AssignerId" />
+    <input type="hidden" id="AssignerName" value="@ViewBag.AssignerName" />
+    <input type="hidden" id="EmailAddress" value="@ViewBag.EmailAddress" />
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#WareHouse").select2();
+        var list = $("#ExistWarehouseId").val().split(',');
+        $("#WareHouse").val(list).trigger("change");
+    });
+</script>

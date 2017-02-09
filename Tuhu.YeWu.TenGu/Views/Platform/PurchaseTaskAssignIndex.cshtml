@@ -1,0 +1,277 @@
+﻿@model IEnumerable<ThBiz.DataAccess.Entity.BatchPurchaseAssigner>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="control-label">负责人</label>
+                @Html.DropDownList("CreateBy", new SelectList(ViewBag.Employee, "EmailAddress", "EmployeeName"), "请选择", new { @style = "width: 200px;", @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-sm btn-success" onclick="searchList();">查询</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-sm btn-danger" onclick="addAssigner();">新增负责人</button>
+            </div>
+        </div><br />
+        <div id="dataList">
+            @Html.Partial("PurchaseTaskAssignList")
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#CreateBy").select2();
+    });
+    //检索
+    function searchList() {
+        var load = layer.load();
+        var person = $("#CreateBy").find("option:selected").text();
+        $.ajax({
+            type: 'post',
+            url: '/Platform/PurchaseTaskAssignIndex',
+            async: false,
+            data: { "TaskMaster": person ,"Type": "Serchase"},
+            success: function (html) {
+                layer.close(load);
+                $("#dataList").html(html);
+            },
+            error: function () {
+                layer.close(load);
+                alert("查询失败！");
+            }
+        });
+    }
+    //添加分配人仓库信息
+    function addAssigner() {
+        layer.open({
+            type: 2,
+            title: "添加任务分配信息",
+            skin: 'layui-layer-rim', //加上边框
+            area: ['450px', '430px'], //宽高
+            content: ['/Platform/AddPurchaseTaskAssign'],
+            btn: ["保存", "取消"],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+                var assignerName = body.find("#Employee").find("option:selected").val();//负责人名称
+                var assigner = body.find("#Employee").val();//负责人邮箱
+                if (assigner == "") {
+                    layer.msg('请选择负责人！', {
+                        icon: 2,
+                        time: 2000
+                    });
+                    return false;
+                }
+                if (body.find("#strAssignerName").val().indexOf(assignerName) > 0) //判断分配人是否已存在
+                {
+                    layer.msg('该分配人已经存在！', {
+                        icon: 2,
+                        time: 2000
+                    });
+                    return false;
+                }
+                if (body.find("#WareHouse").val().length < 1) {
+                    layer.msg('请至少选择一个仓库！', {
+                        icon: 2,
+                        time: 2000
+                    });
+                    return false;
+                }
+                var strWarehousId = 0;
+                var strWarehousName = "";
+                body.find("#WareHouse").find("option:selected").each(function() {
+                    if (strWarehousName == "") {
+                        strWarehousName = $(this).text();
+                        strWarehousId = $(this).val();
+                    } else {
+                        strWarehousName += "," + $(this).text();
+                        strWarehousId += "," + $(this).val();
+                    }
+                });
+                $.ajax({
+                    url: "/Platform/InsertPurchaseTaskAssign",
+                    data: { "assigner": assigner, "warehouseId": strWarehousId, "warehouseName": strWarehousName },
+                    type: "post",
+                    datatype: "json",
+                    success: function (result) {
+                        layer.msg(result, {
+                            icon: 1,
+                            time: 2000
+                        }, function () {
+                            layer.closeAll();
+                            location.reload();
+                        });
+                    },
+                    error: function () {
+                        layer.msg('添加失败', {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
+                });
+            },
+            btn2: function () { }
+        });
+    }
+    //修改仓库数据
+    function EditWareHouse(assigner) {
+        layer.open({
+            type: 2,
+            title: "编辑仓库",
+            skin: 'layui-layer-rim', //加上边框
+            offset: '100px',
+            area: ['450px', '400px'], //宽高
+            content: '/Platform/EditPurchaseTaskAssignWareHouse?assigner=' + assigner,
+            btn: ["保存", "取消"],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+                var newWarehouseName = "";
+                var newWarehouseId = "";
+                body.find("#WareHouse").find("option:selected").each(function () {
+                    if (newWarehouseName == "") {
+                        newWarehouseName = $(this).text();
+                        newWarehouseId = $(this).val();
+                    } else {
+                        newWarehouseName += "," + $(this).text();
+                        newWarehouseId += "," + $(this).val();
+                    }
+                });
+                var odlWarehouseId = body.find("#ExistWarehouseId").val();
+                var odlWarehouseName = body.find("#ExistWarehouseName").val();
+                var assignerId = body.find("#AssignerId").val();
+                var assignerName = body.find("#AssignerName").val();
+                var emailAddress = body.find("#EmailAddress").val();
+
+                $.ajax({
+                    url: "/Platform/UpdateBatchPurchaseAssignerWarehouse",
+                    data: {
+                        "AssignerId": assignerId,
+                        "AssignerName": assignerName,
+                        "NewWarehouseName": newWarehouseName,
+                        "NewWarehouseId": newWarehouseId,
+                        "OdlWarehouseId": odlWarehouseId,
+                        "OdlWarehouseName": odlWarehouseName,
+                        "EmailAddress": emailAddress
+                    },
+                    dataType: "json",
+                    type: "post",
+                    success: function (result) {
+                        if (result) {
+                            layer.msg("修改成功！", {
+                                icon: 1,
+                                time: 2000
+                            }, function () {
+                                layer.closeAll();
+                                location.reload();
+                            });
+                        }
+                        else {
+                            layer.msg("修改失败！", {
+                                icon: 2,
+                                time: 2000
+                            });
+                        }
+                    },
+                    error: function () {
+                        layer.msg("修改失败！", {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
+                });
+
+            },
+            btn2: function () {}
+        });
+    }
+    //编辑品牌
+    function EditBrand(assigner) {
+        layer.open({
+            type: 2,
+            title: "编辑品牌",
+            skin: 'layui-layer-rim', //加上边框
+            offset: '100px',
+            area: ['620px', '400px'], //宽高
+            content: '/Platform/EditPurchaseTaskAssignBrand?assigner=' + assigner,
+            btn: ["保存", "取消"],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+                var array = new Array();
+                var trList = body.find("tbody").find("tr");
+                for (var i = 0; i < trList.length; i++) {
+                    var tr = trList.eq(i);
+                    var wareHouseBrand = { "WareHouseId": "", "Assigner": "", "Brand": "", "AssignerName": assigner }
+                    wareHouseBrand.WareHouseId = tr.attr("data-warehouse-id");
+                    wareHouseBrand.WareHouseName = tr.attr("data-warehouse-name");
+                    var select = tr.find("select");
+                    if (select.val() == null || select.val().length < 1) {
+                        layer.msg(tr.attr("data-warehouse-name") + "未选择品牌！", {
+                            icon: 2,
+                            time: 2000
+                        });
+                        return false;
+                    }
+                    var sebrand = "";
+                    tr.find("select").find("option:selected").each(function () {
+                        sebrand = sebrand == "" ? $(this).val() : sebrand + "," + $(this).val();
+                    });
+                    wareHouseBrand.Brand = sebrand;
+                    array[i] = wareHouseBrand;
+                };
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "wareHouseBrand": JSON.stringify(array) },
+                    url: '/Platform/UpdateWareHouseBrandConfig',
+                    success: function (result) {
+                        if (result) {
+                            layer.msg("操作成功！", {
+                                icon: 1,
+                                time: 2000
+                            }, function () {
+                                layer.closeAll();
+                                location.reload();
+                            });
+                        }
+                        else {
+                            layer.msg("操作失败！", {
+                                icon: 2,
+                                time: 2000
+                            });
+                        }
+                    }
+                });
+            },
+            btn2: function ()  {}
+        });
+    }
+    //删除分配人信息
+    function Delete(assignerId) {
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            $.ajax({
+                type: 'post',
+                url: '/Platform/CloseBatchPurchaseAssignerByAssignerByAssignerId',
+                async: false,
+                data: { "assignerId": assignerId },
+                success: function(result) {
+                    if (result) {
+                        layer.msg("删除成功！", {
+                            icon: 1,
+                            time: 2000
+                        });
+                        window.location.reload();
+                    } else {
+                        layer.msg("删除失败！", {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
+                }
+            });
+        });
+     }
+</script>

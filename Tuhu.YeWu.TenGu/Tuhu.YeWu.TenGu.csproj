@@ -424,6 +424,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InfoListController.cs" />
+    <Compile Include="Controllers\PlatformController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -517,6 +518,15 @@
     <Content Include="Views\InfoList\PoReturnGoodsList.cshtml" />
     <Content Include="Views\InfoList\ApplyPaymentPurchaseOrder.cshtml" />
     <Content Include="Views\InfoList\ApplyPayment.cshtml" />
+    <Content Include="Views\Platform\RegionWareHouseConfigIndex.cshtml" />
+    <Content Include="Views\Platform\RegionWareHouseConfigList.cshtml" />
+    <Content Include="Views\Platform\AddRegionWareHouseConfig.cshtml" />
+    <Content Include="Views\Platform\EditRegionWareHouseConfig.cshtml" />
+    <Content Include="Views\Platform\PurchaseTaskAssignIndex.cshtml" />
+    <Content Include="Views\Platform\PurchaseTaskAssignList.cshtml" />
+    <Content Include="Views\Platform\AddPurchaseTaskAssign.cshtml" />
+    <Content Include="Views\Platform\EditPurchaseTaskAssignWareHouse.cshtml" />
+    <Content Include="Views\Platform\EditPurchaseTaskAssignBrand.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<ThBiz.DataAccess.Entity.BatchPurchaseAssigner>
+@{
+    Layout = null;
+}
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <tr style="background: #428BCA; color: #fff;">
+            <th style="width: 10%">负责人</th>
+            <th style="width: 10%;">负责仓库</th>
+            <th style="width: 65%;">负责品牌</th>
+            <th style="width: 15%;">操作</th>
+        </tr>
+        <tbody>
+            @foreach (var list in Model.GroupBy(_ => _.AssignerName))
+            {
+                var assign = list.First();
+                var count = list.Count();
+                for (int i = 0; i < count; i++)
+                {
+                    var m = list.ToList()[i];
+
+                    <tr style="font-size: 16px; font-weight: 600;">
+                        @if (i == 0)
+                        {
+                            <td rowspan="@count" style="font-size: 20px; font-weight: 600; vertical-align: middle;">
+                                @assign.AssignerName
+                            </td>
+                        }
+                        <td style="vertical-align: middle;">
+                            @m.WarehouseName
+                        </td>
+                        <td style="vertical-align: middle;">
+                            @m.Brand
+                        </td>
+                        @if (i == 0)
+                        {
+                            <td rowspan="@count" style="vertical-align: middle;">
+                                <button type="button" class="btn btn-sm btn-info" onclick="EditWareHouse('@assign.AssignerName');">编辑仓库</button>
+                                <button type="button" class="btn btn-sm btn-info" onclick="EditBrand('@assign.AssignerName');">编辑品牌</button>
+                                <button type="button" class="btn btn-sm btn-warning" onclick="Delete('@assign.AssignerId');">删除</button>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-success text-center">
+        <span class="entypo-cancel-circled"></span>
+        <strong>&nbsp;&nbsp;没有相关信息！</strong>
+    </div>
+}

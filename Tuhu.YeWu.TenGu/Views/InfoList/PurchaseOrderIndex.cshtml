@@ -1396,5 +1396,47 @@
             }
         });
     }
+    //入库
+    function PoInstock(poItemId) {
+        $.ajax({
+            type: 'get',
+            url: '/InfoList/PoInstock',
+            data: { "id": poItemId, "returnUrl": "/InfoList/PurchaseOrderIndex" },
+            success: function (result) {
+                layer.open({
+                    type: 1,
+                    title: "入库",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: result,
+                    area: ['750px', '350px'], //宽高
+                    btn: ['入库', '取消'],
+                    yes: function () {
+                        if (document.getElementById("WeekYear").value == "") {
+                            document.getElementById("WeekYearErr").style.display = "inline";
+                            return false;
+                        }
+                        $("#poStockForm").ajaxSubmit({
+                            url: this.url,
+                            data: {"id" : poItemId },
+                            type: "post",
+                            success: function () {
+                                layer.closeAll();
+                                location.reload();
+                            },
+                            error: function() {
+                                layer.closeAll();
+                                layer.msg("数据提交错误！", { icon: 2, time: 2000 });
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
 
+            },
+            error: function () {
+                layer.closeAll();
+                layer.msg("网络传输出错！", { icon: 2, time: 2000 });
+            }
+        });
+    }
 </script>

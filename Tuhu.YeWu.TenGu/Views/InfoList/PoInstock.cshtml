@@ -1,103 +1,93 @@
 ﻿@model Tuhu.YeWu.TenGu.Models.StockLocationView
 @{
-    ViewBag.Title = "入库";
+    Layout = "../Shared/_Inner.cshtml";
 }
-<h2>
-    订单入库</h2>
 @if (Model != null)
-{ 
-    using (Html.BeginForm("PoInstock", "InfoList", Model.PKID, FormMethod.Post, new { @onsubmit = "return SubmitCheck()" }))
-    {
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>新建库存</legend>
-        <br/>
-        <table>
-            <tr>
-                <th>产品名称：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @Style = "width: 300px" })
-                    @Html.ValidationMessageFor(model => model.Name)
-                </td>
-                <th>产品编号：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.PID, new { @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.PID)
-                </td>
-                <th>生产日期：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.WeekYear)<span>(周周年年)</span>
-                    @Html.ValidationMessageFor(model => model.WeekYear)
-                    <div id="WeekYearErr" style="display: none; color: Red">
-                        必填
-                    </div>
-                </td>
-                <th>入库日期：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.UpdatedTime)
-                    @Html.ValidationMessageFor(model => model.UpdatedTime)
-                </td>
-            </tr>
-            <tr>
-                <th>入库仓库</th>
-                <td>
-                    <input id="returnUrl" name="returnUrl" type="hidden" value="@ViewBag.returnUrl" />
-                    @Html.HiddenFor(model => model.Location)
-                    @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Location as System.Collections.IEnumerable, "PKID", "SimpleName"), "请选择", new { @onchange = "LocationChanged()" })
-                    @Html.ValidationMessageFor(model => model.LocationId)
-                </td>
-                <th>入库数量：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.Num, new { onchange = "EditQuantity(this);" })
-                    @Html.ValidationMessageFor(model => model.Num)
-                </td>
-                <th>成本单价：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.CostPrice, new { @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.CostPrice)
-                </td>
-                <th>成本总价：</th>
-                <td>
-                    @Html.TextBoxFor(model => model.TotalCost, new { @readonly = "readonly" })
-                    @Html.ValidationMessageFor(model => model.TotalCost)
-                </td>
-            </tr>
-            <tr>
-                <th>入库人：</th>
-                <td>
-                    <label>@User.Identity.Name</label>
-                </td>
-                <th>备注：</th>
-                <td colspan="5">
-                    @Html.TextBoxFor(model => model.Remark,new{@style="width: 100%;"})
-                    @Html.ValidationMessageFor(model => model.Remark)
-                </td>
-            </tr>
-            <tr>
-                <td colspan="8"><input type="submit" id="instock" value="入库" /></td>
-            </tr>
-        </table>
-    </fieldset>
-    }
-    <div>
-        @Html.ActionLink("Back to List", "PurchaseOrderIndex")
+{
+    <div class="col-lg-12 row">
+        @using (Html.BeginForm("PoInstock", "InfoList", Model.PKID, FormMethod.Post, new { @onsubmit = "return SubmitCheck()",id = "poStockForm" }))
+        {
+            @Html.ValidationSummary(true)
+            <table class="table table-bordered" style="width: 720px; margin: 5px;">
+                <tr>
+                    <th>产品名称</th>
+                    <td colspan="5">
+                        @Html.TextBoxFor(model => model.Name, new { @readonly = "readonly", @Style = "width: 98%;" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </td>
+                </tr>
+                <tr>
+                    <th>产品编号</th>
+                    <td colspan="3">
+                        @Html.TextBoxFor(model => model.PID, new {@readonly = "readonly", @Style = "width: 98%;"})
+                        @Html.ValidationMessageFor(model => model.PID)
+                    </td>
+                    <th>入库人</th>
+                    <td>
+                        <label>@User.Identity.Name</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 10%;">入库仓库</th>
+                    <td style="width: 30%;">
+                        <input id="returnUrl" name="returnUrl" type="hidden" value="@ViewBag.returnUrl" style="width: 98%;"/>
+                        @Html.HiddenFor(model => model.Location)
+                        @Html.DropDownListFor(model => model.LocationId, new SelectList(ViewBag.Location as System.Collections.IEnumerable, "PKID", "SimpleName"), "请选择", new {@onchange = "LocationChanged()", @style = "width: 98%; border: 1px #FBB44C solid;" })
+                        @Html.ValidationMessageFor(model => model.LocationId)
+                    </td>
+                    <th style="width: 10%;">入库日期</th>
+                    <td style="width: 20%;">
+                        @Html.TextBoxFor(model => model.UpdatedTime, new { @style = "width: 98%; border: 1px #FBB44C solid;", Value = String.Format("{0:yyyy-MM-dd}", Model.UpdatedTime), onclick = "WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh' })" })
+                        @Html.ValidationMessageFor(model => model.UpdatedTime)
+                    </td>
+                    <th style="width: 10%;">入库数量</th>
+                    <td style="width: 20%;">
+                        @Html.TextBoxFor(model => model.Num, new { onchange = "EditQuantity(this);", @style = "width: 98%; border: 1px #FBB44C solid;" })
+                        @Html.ValidationMessageFor(model => model.Num)
+                    </td>
+                </tr>
+                <tr>
+                    <th>生产日期</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.WeekYear, new { @style= "width: 65%; border: 1px #FBB44C solid;" })<span>(周周年年)</span>
+                        @Html.ValidationMessageFor(model => model.WeekYear)
+                        <div id="WeekYearErr" style="display: none; color: Red">
+                            必填
+                        </div>
+                    </td>
+                    <th>成本单价</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.CostPrice, new { @readonly = "readonly", @style = "width: 98%;" })
+                        @Html.ValidationMessageFor(model => model.CostPrice)
+                    </td>
+                    <th>成本总价</th>
+                    <td>
+                        @Html.TextBoxFor(model => model.TotalCost, new {@readonly = "readonly", @style = "width: 98%;" })
+                        @Html.ValidationMessageFor(model => model.TotalCost)
+                    </td>
+                </tr>
+                <tr>
+                    <th>备注</th>
+                    <td colspan="5">
+                        @Html.TextBoxFor(model => model.Remark, new { @style = "width: 98%; border: 1px #FBB44C solid;" })
+                        @Html.ValidationMessageFor(model => model.Remark)
+                    </td>
+                </tr>
+            </table>
+        }
     </div>
-
 }
 else
 {
-    <div class="Warning">
-        已经入库，请勿重复入库。</div>
-    <p>
-        <a href='@ViewBag.returnURL'>返回</a></p>
+    <div style="text-align: center; font-weight: 600; font-size: 20px;">
+        已经入库，请勿重复入库。
+    </div>
 }
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
-    $(function () {
-        $("#UpdatedTime").datepicker();
-    });
+    //$(function () {
+    //    $("#UpdatedTime").datepicker();
+    //});
     function LocationChanged() {
         if (document.getElementById("LocationId").value >= 0) {
             var ddlReport = document.getElementById("LocationId");
@@ -109,14 +99,14 @@ else
             $("#WareHouse").val("");
         }
     }
-    function SubmitCheck() {
-        if (document.getElementById("WeekYear").value == "") {
-            document.getElementById("WeekYearErr").style.display = "inline";
-            return false;
-        }
-        $("#instock").attr("disabled", "disabled");
-        return true;
-    }
+    //function SubmitCheck() {
+    //    if (document.getElementById("WeekYear").value == "") {
+    //        document.getElementById("WeekYearErr").style.display = "inline";
+    //        return false;
+    //    }
+    //    $("#instock").attr("disabled", "disabled");
+    //    return true;
+    //}
 
     function EditQuantity(target) {
         var oldQuantity = '@(Model!=null?Model.Num:0)';

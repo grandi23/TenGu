@@ -1,0 +1,157 @@
+﻿@using ThBiz.DataAccess.Entity
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<style>
+    .textbox {
+        width: 150px;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+<div class="col-lg-12">
+    <section class="panel">
+        <div class="panel-body">
+            <div class="form-group" id="divcion">
+                <div class="col-lg-9">
+                    <label>群组名称</label>
+                    <input type="text" class="textbox" id="filter-group" value="@ViewBag.Area"><span style="color: red;">*</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-9">
+                    <label>选择仓库</label>
+                    <input type="text" id="filter-warehouse" class="textbox" placeholder="输入仓库筛选" value=""><span style="color: red;">*</span>
+                </div>
+                <div id="warehouse-list" class="col-lg-9" style="height:320px;overflow-y:auto;">
+                    @if (ViewBag.WareHouse != null)
+                    {
+                        foreach (var item in ViewBag.WareHouse as IEnumerable<WareHouseInfo>)
+                        {
+                            <div>
+                                <label style="font-weight: normal !important;">
+
+                                    <input type="checkbox" data-warehouseId="@item.OrderNo" data-warehousName="@item.SimpleName" />@item.SimpleName
+                                </label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-offset-4 col-lg-10" style="text-align: right; margin-right: 40px;">
+                    <button class="btn btn-white" onclick="Sava();">保存</button>
+                    <button class="btn btn-white" onclick="parent.layer.closeAll();">取消</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script type="text/javascript">
+    var wareHouseNameList = '@Html.Raw(ViewBag.WareHouseName)';
+    var wareHouseName = JSON.parse(wareHouseNameList);
+    //初始加载修改页面信息
+    $(document).ready(function () {
+        for (var i=0;i< wareHouseName.length;i++) {
+            $("input").each(function() {
+                if ($(this).attr("data-warehousName") == wareHouseName[i] ) {
+                    $(this).attr("checked", true);
+                }
+            });
+        }
+    });
+
+    //仓库搜索
+    $(document).ready(function() {
+        $("#filter-warehouse").keyup(function() {
+            var filterValue = $(this).val().trim();
+            var $div = $("#warehouse-list").find("div");
+            $div.hide();
+            $div.each(function() {
+                var warehouseName = $(this).find("input").attr("data-warehousName");
+                if (warehouseName.indexOf(filterValue) >= 0) {
+                    $(this).show();
+                }
+            });
+        });
+    });
+
+    //修改
+    //Type:1表示修改前旧数据，2表示修改后新数据
+    //IsChageArea:false表示是修改前area,true表示修改后的
+    function Sava() {
+        var areaName = $("#filter-group").val();
+        var list = {};
+        var i = 0;
+        $("input:checked").each(function() {
+            list["request[" + i + "].newArea"] = areaName;
+            list["request[" + i + "].OdlArea"] = "";
+            list["request[" + i + "].WarehouseName"] = $(this).attr("data-warehousName");
+            list["request[" + i + "].WarehouseId"] = $(this).attr("data-warehouseId");
+            list["request[" + i + "].Type"] = 2;
+            i++;
+        });
+
+        var odlWarehouseIdList = "@ViewBag.WareHouseId";
+        var odlWarehouseId = JSON.parse(odlWarehouseIdList);
+        for (var j = 0; j < odlWarehouseId.length; j++) {
+            list["request[" + i + "].newArea"] = "";
+            list["request[" + i + "].odlArea"] = "@ViewBag.Area";
+            list["request[" + i + "].WarehouseName"] = wareHouseName[j];
+            list["request[" + i + "].WarehouseId"] = odlWarehouseId[j];
+            list["request[" + i + "].Type"] = 1;
+            i++;
+        }
+        var result = false;
+        for (var i in list) {
+            result = true;
+        }
+        if (areaName != null)
+        {
+            if (result)
+            {
+               $.ajax({
+                   url: "/Platform/UpdateWareHouseAreaConfiguration",
+                data: list,
+                type: "post",
+                success: function (data) {
+                    if (data.Result) {
+                        layer.msg('修改成功', {
+                            icon: 1,
+                            time: 2000
+                        }, function () {
+                            parent.layer.closeAll();
+                        });
+                    } else {
+                        layer.msg(data.Message, {
+                            icon: 2,
+                            time: 2000
+                        }, function () {
+                            parent.layer.closeAll();
+                        });
+                    }
+                },
+                error: function () {
+                    layer.msg('修改失败!', {
+                        icon: 2,
+                        time: 2000
+                    });
+                }
+            });
+            }
+            else {
+                layer.msg('仓库不能为空,请选择仓库', {
+                    icon: 2,
+                    time: 2000
+                });
+            }
+        } else {
+            layer.msg('仓库群组名不能为空！', {
+                icon: 2,
+                time: 2000
+            });
+        }
+    }
+</script>

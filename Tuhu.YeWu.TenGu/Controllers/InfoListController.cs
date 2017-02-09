@@ -19,6 +19,7 @@ using ThBiz.Business.EmployeeManagement;
 using ThBiz.Business.Monitor;
 using ThBiz.Business.OprLogManagement;
 using ThBiz.Business.Purchase;
+using ThBiz.Business.TrackLogs;
 using ThBiz.Common.Configurations;
 using ThBiz.Common.Entity;
 using ThBiz.Common.Common;
@@ -447,11 +448,11 @@ namespace Tuhu.YeWu.TenGu.Controllers
             return fileResult;
         }
         /// <summary>
-        /// 入库操作
+        /// 入库页面显示
         /// 2017/01/24
         /// </summary>
         //[PowerManage]
-        public ActionResult PoInstock(int id, string returnUrl = "/PurchaseOrder/PoItemIndex")
+        public ActionResult PoInstock(int id, string returnUrl = "/InfoList/PurchaseOrderIndex")
         {
             try
             {
@@ -494,6 +495,72 @@ namespace Tuhu.YeWu.TenGu.Controllers
 
             return View();
         }
+        /// <summary>
+        /// 入库操作
+        /// 2017/02/09
+        /// </summary>
+        [HttpPost, OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public ActionResult PoInstock(int id, string returnUrl, StockLocation sl, FormCollection collection)
+        {
+            try
+            {
+                var pm = new PurchaseManager();
+                var poi = pm.GetPurchaseOrderItemEntity(id);
+                poi.InstockDate = DateTime.Now;
+                if (ModelState.IsValid && !poi.Status.StartsWith("已收货") && !poi.Status.StartsWith("已取消"))
+                {
+                    if (poi.Num > 0)
+                    {
+                        pm.PurchaseOrderItemInputStorage(id, sl.WeekYear, int.Parse(collection["Num"]));
+                        SaveOprLog("PoItem", id, typeof(PurchaseOrderItemEntity), "入库操作", null);
+
+                        var poiEntity = new PurchaseOrderItemEntity()
+                        {
+                            PKID = poi.PKID,
+                            PID = poi.PID,
+                            TotalPrice = poi.TotalPrice,
+                            PurchasePrice = poi.PurchasePrice,
+                            WareHouseID = poi.WareHouseID,
+                            Num = poi.Num,
+                            VendorId = poi.VendorId,
+                            VendorName = poi.VendorName
+                        };
+
+                        new TrackLogManager().LogTrackDataForPoInStock(poiEntity, ThreadIdentity.Operator.Name);
+
+                    }
+                    else //退货
+                    {
+                        var st = new StockLocations()
+                        {
+                            PID = sl.PID,
+                            Name = sl.Name,
+                            Num = sl.Num,
+                            LocationId = poi.VendorId,
+                            Location = poi.VendorName,
+                            CostPrice = sl.CostPrice,
+                            TotalCost = sl.CostPrice * sl.Num,
+                            CreatedTime = DateTime.Now,
+                            CreatedBy = User.Identity.Name,
+                            UpdatedTime = DateTime.Now,
+                            WeekYear = sl.WeekYear,
+                            Remark = sl.Remark
+                        };
+                        pm.ReturnGoods(id, st);
+
+                        SaveOprLog("PoItem", id, typeof(PurchaseOrderItemEntity), "退货", null);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(Level.Error, ex, "Error in PoInstock,id:" + id);
+            }
+
+            return Redirect(returnUrl);
+        }
+
         /// <summary>
         /// 采购单操作历史
         /// 2017/01/24
@@ -935,6 +1002,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         }
         /// <summary>
         /// 保存红冲
+        /// 2017/02/08
         /// </summary>
         public string SavePurchaseReverse(int PKID, int PoId, string createdBy, DateTime CreatedDatetime,
             string WareHouse, int WareHouseID, int Reverse, string VendorName, int VendorId, string PID,
@@ -1067,6 +1135,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         }
         /// <summary>
         /// 申请调价页面
+        /// 2017/02/08
         /// </summary>
         /// <returns></returns>
         public ActionResult MakeUpDiffPrice(decimal purchasePrice)
@@ -1460,6 +1529,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         }
         /// <summary>
         /// 获取需要请款的数据
+        /// 2017/02/08
         /// </summary>
         public ActionResult ApplyPayment(string purchaseOrderList, string id)
         {

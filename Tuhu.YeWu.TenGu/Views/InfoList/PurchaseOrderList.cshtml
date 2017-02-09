@@ -406,8 +406,7 @@
                                          {
                                              if (User.Identity.Name == "renyutao@tuhu.cn" && (poItem.Status.StartsWith("新建") || poItem.Status.StartsWith("部分收货") || poItem.Status.StartsWith("已发货")) && poItem.PurchaseMode != 6)
                                              {
-                                                @Html.ActionLink("入库", "PoInstock", "InfoList", new { id = poItem.PurchaseId, returnUrl = "/PurchaseOrder/PurchaseIndex" },
-                                             new { @btnkey = "PutInStorage", @istuhuverify = "1" })
+                                                <a onclick="PoInstock(@poItem.PurchaseId);" style="cursor: pointer;" btnkey = "PutInStorage" istuhuverify = "1" >入库</a>
                                              }
                                             if ((finishedReceiptUsers.Contains(user) || User.Identity.Name.Equals(poItem.CreatedBy)) && poItem.Status.StartsWith("部分收货") && (poItem.AuditStatus == -1 || poItem.IsApplyRejected || poItem.PayStatus == "2Paid" || poItem.PayStatus == "2PartPaid"))
                                             {

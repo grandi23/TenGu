@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+<div class="row col-lg-12">
+    <div class="form-inline">
+        <div class="form-group">
+            <label>群组名称</label><span style="color: red;">*</span>
+            <input type="text" id="areaGroup" placeholder="例如：华东" value="" style="width: 150px;">
+        </div>
+        <input type="hidden" id="oldArea" value="@ViewBag.Area" />
+        <div class="form-group">
+            <label>选择仓库</label><span style="color: red;">*</span>
+            @Html.DropDownList("WareHouse", new SelectList(ViewBag.WareHouse, "OrderNo", "SimpleName"), "请选择", new { @style = "width: 300px;", @class = "form-control", @multiple = "multiple" })
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#WareHouse").select2({
+            placeholder: "请选择仓库"
+        });
+    });
+</script>
