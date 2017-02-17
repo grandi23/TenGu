@@ -1,0 +1,214 @@
+﻿@model Tuhu.Component.Common.Models.ListModel<ThBiz.DataAccess.Entity.OperateActive>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<div class="col-md-12 row">
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-inline", @id = "SearchForm" }))
+    {
+        <div class="form-group">
+            <label class="control-label">活动编号</label>
+            @Html.TextBox("ActiveId", "", new { @type="number", @class = "form-control", @style = "width: 150px;" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">活动渠道</label>
+            <select name="Channel" id="Channel" class="form-control" style="width: 100px;">
+                <option selected="" value="">请选择</option>
+                <option value="自营">自营</option>
+                <option value="三方">三方</option>
+                <option value="汽配龙">汽配龙</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">活动时间</label>
+            <input name="StarDate" id="StarDate" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'EndDate\')}' })" /> 至
+            <input name="EndDate" id="EndDate" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', minDate: '#F{$dp.$D(\'StarDate\')}' })" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">审批状态</label>
+            <select name="ActiveState" id="ActiveState" class="form-control" style="width: 100px;">
+                <option selected="" value="">请选择</option>
+                <option value="待运营审核">待运营审核</option>
+                <option value="待采购审核">待采购审核</option>
+                <option value="已通过">已通过</option>
+                <option value="已驳回">已驳回</option>
+                <option value="已取消">已取消</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">创建人</label>
+            @Html.DropDownList("CreateBy", new SelectList(ViewBag.CreateBy, "EmailAddress", "EmployeeName"), "请选择", new { @style = "width: 150px;", @class = "form-control" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">创建时间</label>
+            <input name="BeginTime" id="BeginTime" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'EndTime\')}' })" /> 至
+            <input name="EndTime" id="EndTime" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', minDate: '#F{$dp.$D(\'BeginTime\')}' })" />
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-info" onclick="searchList();">查询</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-success" onclick="addActive();">创建活动</button>
+        </div>
+    }<br />
+    <div id="dataList">
+        @Html.Partial("OperateActiveList")
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#CreateBy").select2();
+        $("#dataList").on("click", ".pager > a", function (event) {
+            event.preventDefault();
+            if (this.href !== "") {
+                var load = layer.load();
+                $("#SearchForm").ajaxSubmit({
+                    url: this.href,
+                    data: { "Type": "Search" },
+                    success: function (html) {
+                        layer.close(load);
+                        $("#dataList").html(html);
+                    },
+                    error: function () {
+                        layer.close(load);
+                        alert("翻页失败！");
+                    }
+                });
+            } else {
+                return false;
+            }
+            return true;
+        });
+    });
+    //检索
+    function searchList() {
+        var load = layer.load();
+        $("#SearchForm").ajaxSubmit({
+            url: '/PurchaseOrder/TaskPoolIndex',
+            data: { "Type": "Search" },
+            success: function (html) {
+                layer.close(load);
+                $("#dataList").html(html);
+            },
+            error: function () {
+                layer.close(load);
+                alert("查询失败！");
+            }
+        });
+    }
+    //创建活动
+    function addActive() {
+        $.ajax({
+            url: "/Platform/AddOperateActive",
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "创建运营活动",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['1030px', '600px'], //宽高
+                    btn: ['确定', '取消'],
+                    yes: function () {
+                        var aname = $("#aName").val();
+                        if (aname == "" || typeof aname == "undefined") {
+                            layer.msg("请填写活动名称！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var achannel = $("#aChannel").val();
+                        if (achannel == "" || typeof achannel == "undefined") {
+                            layer.msg("请选择活动渠道！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aStar = $("#aStar").val();
+                        if (aStar == "" || typeof aStar == "undefined") {
+                            layer.msg("请选择活动开始时间！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aEnd = $("#aEnd").val();
+                        if (aEnd == "" || typeof aEnd == "undefined") {
+                            layer.msg("请选择活动结束时间！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aPoint = $("#aPoint").val();
+                        if (aPoint == "" || typeof aPoint == "undefined") {
+                            layer.msg("请填写利益点！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aCoupon = $("#aCoupon").val();
+                        var aLink = $("#aLink").val();
+
+                        var trList = $("#abody").find('tr');
+                        if (trList.length <= 0) {
+                            layer.msg("未添加任何活动产品！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var products = [];
+                        //循环获取数据
+                        for (var i = 0; i < trList.length; i++) {
+                            var tdArr = trList.eq(i).find("td");
+                            var name = tdArr.eq(0).text(); //产品名称
+                            var code = tdArr.eq(1).text(); //产品编号
+                            var purchase = tdArr.eq(2).text(); //进货价
+                            var daily = tdArr.eq(3).text(); //官网价
+                            var active = tdArr.eq(4).find("input").val(); //活动价
+                            if (active === "" || parseFloat(active) <= 0) {
+                                layer.msg("第" + (i + 1) + "行活动价格填写错误！", { icon: 0, time: 2000 });
+                                return false;
+                            }
+                            var sale = tdArr.eq(5).find("input").val(); //预计销量
+                            if (sale === "" || parseInt(sale) <= 0) {
+                                layer.msg("第" + (i + 1) + "行预计销量填写错误！", { icon: 0, time: 2000 });
+                                return false;
+                            }
+                            var floor = tdArr.eq(6).find("input").val(); //活动底价
+                            if (floor === "" || parseFloat(floor) <= 0) {
+                                layer.msg("第" + (i + 1) + "行活动底价填写错误！", { icon: 0, time: 2000 });
+                                return false;
+                            }
+                            products.push({
+                                "PKID": 0,
+                                "ActiveId": 0,
+                                "ProductName": name,
+                                "PID": code,
+                                "PurchasePrice": purchase,
+                                "DailyPrice": daily,
+                                "ActivePrice": active,
+                                "ExpecteSale": sale,
+                                "FloorPrice": floor,
+                                "MinMargin": 0,
+                                "ExpecteSaleAmount": 0,
+                                "ActiveProductState": 0
+                            });
+                        }
+                        return false;
+                        $.ajax({
+                            url: "/Platform/InsertOperateActiveInfo",
+                            data: {
+                                "name": aname, "channel": achannel, "starDate": aStar, "endDate": aEnd,
+                                "point": aPoint, "coupon": aCoupon, "link": aLink, "products": JSON.stringify(array)
+                            },
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.indexOf('成功') > 0) {
+                                    layer.closeAll();
+                                    layer.msg(data, {
+                                        icon: 1, time: 2000
+                                    }, function () {
+                                        searchList();
+                                    });
+                                } else {
+                                    layer.msg(data, { icon: 0, time: 2000 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+</script>

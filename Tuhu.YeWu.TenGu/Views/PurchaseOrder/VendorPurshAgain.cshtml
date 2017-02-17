@@ -1,0 +1,55 @@
+﻿@model ThBiz.DataAccess.Entity.PurchaseTaskInfo
+@{
+    Layout = null;
+}
+
+<div class="col-lg-12 row">
+    <table class="table table-bordered" style="width: 610px; margin: 5px;">
+        <tr>
+            <td colspan="5" style="font-weight: 600;">产品名称：@Model.ProductName</td>
+        </tr>
+        <tr>
+            <td style="width: 5%;">
+                <input type="checkbox" onclick="checkVenderInquiry(this)"/>
+            </td>
+            <td style="width: 38%; font-weight: 600;">供应商</td>
+            <td style="width: 17%; font-weight: 600;">询价状态</td>
+            <td style="width: 20%; font-weight: 600;">供货价格</td>
+            <td style="width: 20%; font-weight: 600;">可供数量</td>
+        </tr>
+        <tbody id="pushAginBody">
+            @foreach (var inquiry in Model.InquiryProductList)
+            {
+                <tr>
+                    <td style="width: 3%;">
+                        @if (inquiry.InquiryProductState == "已提交")
+                        {
+                            <input type="checkbox" name="pagin" data-id="@inquiry.PKID"/>
+                        }
+                    </td>
+                    <td>@inquiry.VendorName</td>
+                    <td>@inquiry.InquiryProductState</td>
+                    <td>@inquiry.QuotedPrice</td>
+                    <td>@inquiry.ProvideCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    //全选，取消
+    function checkVenderInquiry(col) {
+        var list = $("#pushAginBody input[name='pagin']");
+        if ($(col).prop('checked')) {
+            for (var j = 0; j < list.length; j++) {
+                list[j].checked = true;
+            }
+        } else {
+            for (var i = 0; i < list.length; i++) {
+                list[i].checked = false;
+            }
+        }
+    }
+
+</script>

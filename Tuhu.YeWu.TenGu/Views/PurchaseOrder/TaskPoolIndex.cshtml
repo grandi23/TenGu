@@ -1,0 +1,198 @@
+﻿@model Tuhu.Component.Common.Models.ListModel<ThBiz.DataAccess.Entity.PurchaseTaskInfo>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<div class="col-md-12 row">
+    @using (Html.BeginForm("ExportTaskPool", "PurchaseOrder", FormMethod.Post, new {@class = "form-inline", @id = "SearchForm" }))
+    {
+        <div class="form-group">
+            <label class="control-label">类别</label>
+            <select name="Category" class="form-control" style="width: 100px;">
+                <option selected="" value="">请选择</option>
+                <option value="轮胎">轮胎</option>
+                <option value="保养">保养</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">品牌</label>
+            @Html.DropDownList("Brand", new SelectList(ViewBag.ProductBrandList, "CP_Brand", "CP_Brand"), "请选择", new {@style = "width: 150px;", @class = "form-control"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">产品名称</label>
+            @Html.TextBox("ProductName", "", new {@class = "form-control", style = "width: 150px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">区域</label>
+            @Html.DropDownList("WarehouseGroupName", new SelectList(ViewBag.Area, "Area", "Area"), "请选择", new {@style = "width: 120px;", @class = "form-control", onchange = "changHouse(this);"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">仓库</label>
+            @Html.DropDownList("WarehouseName", new SelectList(ViewBag.HouseWare, "WareHouseName", "WareHouseName"), "请选择", new {@style = "width: 120px;", @class = "form-control"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">任务状态</label>
+            @Html.DropDownList("TaskState", new SelectList(ViewBag.TaskState, "text", "text"), "请选择", new {@style = "width: 120px;", @class = "form-control"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">任务主人</label>
+            @Html.DropDownList("CreateBy", new SelectList(ViewBag.CreateBy, "EmailAddress", "EmployeeName"), "请选择", new {@style = "width: 150px;", @class = "form-control"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">创建时间</label>
+            <input name="BeginTime" id="begin" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'end\')}' })"/> 至
+            <input name="EndTime" id="end" class="form-control" style="width: 120px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', minDate: '#F{$dp.$D(\'begin\')}' })"/>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-info" onclick="searchList();">查询</button>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-success" id="btnexport">导出</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-primary" onclick="AssignmentTask();">分配任务</button>
+        </div>
+    }<br/>
+    <div id="dataList">
+        @Html.Partial("TaskPoolList")
+    </div>
+</div>
+<input type="hidden" id="ownerName"/>
+<div id="taskMaster" style="display: none">
+    <div class="form-inline form-group" style="margin: 15px;">
+        <label class="control-label" style="font-size: 16px;">任务主人</label>
+        @Html.DropDownList("TaskOwner", new SelectList(ViewBag.CreateBy, "EmailAddress", "EmployeeName"), "请选择", new { @style = "width: 250px;", @class = "form-control", @onchange= "$('#ownerName').val($(this).val());" })
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        //导出Excel
+        $("#btnexport").click(function () {
+            if (confirm('确认导出数据？')) {
+                return true;
+            } else {
+                return false;
+            };
+        });
+        $("#Brand").select2();
+        $("#CreateBy").select2();
+        $("#WarehouseName").select2();
+        $("#dataList").on("click", ".pager > a", function (event) {
+            event.preventDefault();
+            if (this.href !== "") {
+                var load = layer.load();
+                $("#SearchForm").ajaxSubmit({
+                    url: this.href,
+                    data: { "Type": "Search" },
+                    success: function (html) {
+                        layer.close(load);
+                        $("#dataList").html(html);
+                    },
+                    error: function () {
+                        layer.close(load);
+                        alert("翻页失败！");
+                    }
+                });
+            } else {
+                return false;
+            }
+            return true;
+        });
+
+    });
+    //检索
+    function searchList() {
+        var load = layer.load();
+        $("#SearchForm").ajaxSubmit({
+            url: '/PurchaseOrder/TaskPoolIndex',
+            data: { "Type": "Search" },
+            success: function (html) {
+                layer.close(load);
+                $("#dataList").html(html);
+            },
+            error: function () {
+                layer.close(load);
+                alert("查询失败！");
+            }
+        });
+    }
+    //下拉框动态更改仓库信息
+    function changHouse(sel) {
+        $.ajax({
+            type: 'GET',
+            async: false,
+            url: "/PurchaseOrder/GetHousesByArea",
+            data: { "area": sel.value,"type" : 2 },
+            success: function (result) {
+                $("#WarehouseName").html(result);
+            },
+            error: function () {
+                alert("获取仓库数据失败！");
+            }
+        });
+
+    }
+    //全选，取消
+    function checkAll(col) {
+        var list = $("input[name='pcheck']");
+        if ($(col).prop('checked')) {
+            for (var j = 0; j < list.length; j++) {
+                list[j].checked = true;
+            }
+        } else {
+            for (var i = 0; i < list.length; i++) {
+                list[i].checked = false;
+            }
+        }
+    }
+    //分配任务
+    function AssignmentTask() {
+        var ids = "";
+        $("#dataList").find("input[type=checkbox][name=pcheck]:checked").map(function () {
+            var id = $(this).attr("data-id");
+            ids += ids === "" ? id : "," + id;
+        });
+        if (ids === "") {
+            layer.msg("请选择至少一个任务！", { icon: 0, time: 2000 });
+            return false;
+        }
+        layer.open({
+            type: 1,
+            title: "分配任务",
+            skin: 'layui-layer-rim',
+            content: $("#taskMaster").html(),
+            area: ['375px', '180px'], //宽高
+            btn: ['确定', '取消'],
+            yes: function () {
+                var owner = $("#ownerName").val();
+                if (owner == "" || typeof owner == "undefined") {
+                    layer.msg("请选择任务主人！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                $.ajax({
+                    url: "/PurchaseOrder/AssignPurchaseTaskMaster",
+                    data: { "master": owner, "ids": ids },
+                    type: "GET",
+                    beforeSend: function () {
+                        layer.load(2);
+                    },
+                    success: function (result) {
+                        layer.closeAll();
+
+                        if (result) {
+                            layer.msg("分配任务成功！", { icon: 1, time: 2000 }, function() {
+                                searchList();
+                            });
+                        } else {
+                            layer.msg("分配任务失败！", { icon: 0, time: 2000 });
+                        }
+                    },error: function() {
+                        layer.closeAll();
+                        layer.msg("网络传输错误！", { icon: 2, time: 2000 });
+                    }
+                });
+            },
+            cancel: function () { }
+        });
+
+    }
+</script>

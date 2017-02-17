@@ -1,0 +1,215 @@
+﻿@model Tuhu.Component.Common.Models.ListModel<ThBiz.DataAccess.Entity.FactoryForProduct>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+
+<div class="col-md-12 row">
+    @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "form-inline", id = "SearchForm" }))
+    {
+        <div class="form-group">
+            <label class="control-label">产品名称</label>
+            @Html.TextBox("ProductName", null, new { @class = "form-control", @style = "width: 200px;" })
+        </div>
+        <div class="form-group">
+            <label class="control-label">品牌:</label>
+            @Html.DropDownList("Brand", new SelectList(ViewBag.Brand as System.Collections.IEnumerable, "CP_Brand", "CP_Brand"), "请选择", new { @class = "form-control", @style = "width: 150px;" })
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-success" onclick="searchList();">查询</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-danger" onclick="addFactory();">新增</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-primary" onclick="importProduct();">导入</button>
+        </div>
+    }<br />
+    <div id="dataList">
+        @Html.Partial("FactoryForProductList")
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#Brand").select2();
+        $("#dataList").on("click", ".pager > a", function (event) {
+            event.preventDefault();
+            if (this.href !== "") {
+                var load = layer.load();
+                $("#SearchForm").ajaxSubmit({
+                    url: this.href,
+                    data: { "Type": "Search" },
+                    success: function (html) {
+                        layer.close(load);
+                        $("#dataList").html(html);
+                    },
+                    error: function () {
+                        layer.close(load);
+                        alert("翻页失败！");
+                    }
+                });
+            } else {
+                return false;
+            }
+            return true;
+        });
+    });
+    //检索
+    function searchList() {
+        var load = layer.load();
+        $("#SearchForm").ajaxSubmit({
+            url: '/Platform/FactoryForProductIndex',
+            data: { "Type": "Search" },
+            success: function (html) {
+                layer.close(load);
+                $("#dataList").html(html);
+            },
+            error: function () {
+                layer.close(load);
+                layer.msg('查询失败');
+            }
+        });
+    }
+    //删除
+    function deleteProduct(fId) {
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function() {
+            $.ajax({
+                type: 'post',
+                url: '/Platform/DeleteFactoryProduct',
+                async: false,
+                data: { "fId": fId },
+                success: function(result) {
+                    if (result) {
+                        layer.msg("删除成功！", {
+                            icon: 1,
+                            time: 2000
+                        });
+                        window.location.reload();
+                    } else {
+                        layer.msg("删除失败！", {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
+                },
+                error: function () {
+                    layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                }
+
+            });
+        });
+    }
+    //新增
+    function addFactory() {
+        $.ajax({
+            url: "/Home/BatchSelectProduct",
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "选择产品",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['780px', '500px'], //宽高
+                    btn: ['添加', '取消'],
+                    yes: function () {
+                        var array = [];
+
+                        $("#pbody").find("input[type=checkbox][name=spCheck]:checked").map(function () {
+                            var product = {
+                                "id": 0,
+                                "IsPush": 0,
+                                "ProductName": $(this).attr("data-name"),
+                                "ProductId": $(this).attr("data-pid"),
+                                "Brand": $(this).attr("data-brand")
+                            };
+                            array.push(product);
+                        });
+                        if (array.length === "") {
+                            layer.msg("请选择至少一个产品！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        $.ajax({
+                            url: "/Platform/InsertFactoryProduct",
+                            data: { "products": JSON.stringify(array) },
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.indexOf('成功') > 0) {
+                                    layer.closeAll();
+                                    layer.msg(data, {
+                                        icon: 1, time: 2000
+                                    }, function () {
+                                        searchList();
+                                    });
+                                } else {
+                                    layer.msg(data, { icon: 0, time: 2000 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+    //导入
+    function importProduct() {
+        layer.open({
+            type: 2,
+            title: "导入",
+            skin: 'layui-layer-rim', //加上边框
+            content: "/Home/ImportExcel?temp=/Content/excel/工厂专供导入模版.xlsx",
+            area: ['580px', '450px'], //宽高
+            btn: ['导入', '取消'],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+
+                if (body.find('#efile')[0].files.length <= 0) {
+                    alert("未选择文件！");
+                    return false;
+                }
+                var checkFile = body.find('#efile')[0].files[0];
+                if (checkFile.name == "" || checkFile.size > 10000000 || checkFile.name.indexOf(".xls") <= 0) {
+                    layer.msg('文件限制，必须小于10M的Excel文件！', { icon: 0, time: 2000 });
+                    return false;
+                }
+                var eload;
+                body.find("#eform").ajaxSubmit({
+                    url: "/Platform/ImportFactoryForProduct",
+                    type: "post",
+                    beforeSend: function () {
+                        eload = layer.load();
+                    },
+                    complete: function () {
+                        layer.close(eload);
+                    },
+                    success: function (data) {
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            html +=
+                                "<tr>" +
+                                "<td style='width:5%;'>" + (i + 1) + "</td>" +
+                                "<td style='width:95%;'>" + data[i] + "</td>" +
+                                "</tr>";
+                        }
+                        body.find("#ebody").html(html);
+                    },
+                    error: function () {
+                        layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                    }
+                });
+            },
+            btn2: function () {
+                searchList();
+            },
+            cancel: function() {
+                searchList();
+            }
+        });
+    }
+</script>

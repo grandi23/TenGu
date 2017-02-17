@@ -1,0 +1,48 @@
+﻿@using Tuhu.YeWu.TenGu.Models
+@model Tuhu.Component.Common.Models.ListModel<ThBiz.DataAccess.Entity.FactoryForProduct>
+@{
+    Layout = null;
+    var rowCount = 1;
+}
+
+@if (Model.Source != null && Model.Source.Any())
+{
+    <table class="table table-bordered">
+        <tr style="background: #428BCA; color: #fff;">
+            <th style="width: 3%;">序号</th>
+            <th style="width: 40%;">产品名称</th>
+            <th style="width: 19%;">产品编号</th>
+            <th style="width: 13%;">品牌</th>
+            <th style="width: 10%;">创建人</th>
+            <th style="width: 10%;">创建时间</th>
+            <th style="width: 5%;">操作</th>
+        </tr>
+        <tbody>
+            @foreach (var m in Model.Source)
+            {
+                <tr>
+                    <td>@rowCount</td>
+                    <td>@m.ProductName</td>
+                    <td>@m.PID</td>
+                    <td>@m.Brand</td>
+                    <td>@m.CreateBy</td>
+                    <td>@m.CreateDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct(@m.PKID);">删除</button>
+                    </td>
+                </tr>
+                rowCount++;
+            }
+        </tbody>
+    </table>
+    @Html.Pager(Model.Pager, pageNumber => Url.Action("FactoryForProductIndex", new { pageNumber }))
+}
+else
+{
+    <div class="alert alert-success text-center">
+        <span class="entypo-cancel-circled"></span>
+        <strong>&nbsp;&nbsp;没有相关信息！</strong>
+    </div>
+}
+
+

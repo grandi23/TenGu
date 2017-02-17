@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="itextsharp">
       <HintPath>..\DLL\itextsharp.dll</HintPath>
     </Reference>
@@ -120,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\js\jquery-3.1.1.min.js" />
     <Content Include="Content\css\awwwards.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\dripicon.css" />
@@ -415,16 +419,23 @@
     <Content Include="Content\js\wizard\jquery.stepy.js" />
     <Content Include="Content\js\wizard\lib\jquery.cookie-1.3.1.js" />
     <Content Include="Content\js\wizard\lib\modernizr-2.6.2.min.js" />
+    <Content Include="Content\css\pager.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\img\user.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\BaishiWmsUtil.cs" />
+    <Compile Include="App_Code\ExportImportUtil.cs" />
+    <Compile Include="App_Code\PowerManageAttribute.cs" />
+    <Compile Include="App_Code\HandleErrorByLoggingAttribute.cs" />
+    <Compile Include="App_Code\ThreadIdentityActionFilterAttribute.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InfoListController.cs" />
     <Compile Include="Controllers\PlatformController.cs" />
+    <Compile Include="Controllers\PurchaseOrderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -437,6 +448,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Models\HtmlExtension.cs" />
     <Compile Include="Models\LayoutMenu.cs" />
     <Compile Include="Models\PublicFunction.cs" />
     <Compile Include="Models\PurchaseOccupyModel.cs" />
@@ -527,6 +539,22 @@
     <Content Include="Views\Platform\AddPurchaseTaskAssign.cshtml" />
     <Content Include="Views\Platform\EditPurchaseTaskAssignWareHouse.cshtml" />
     <Content Include="Views\Platform\EditPurchaseTaskAssignBrand.cshtml" />
+    <Content Include="Views\PurchaseOrder\TaskPoolIndex.cshtml" />
+    <Content Include="Views\PurchaseOrder\TaskPoolList.cshtml" />
+    <Content Include="Views\PurchaseOrder\BatchPlaceOrder.cshtml" />
+    <Content Include="Views\PurchaseOrder\ExecuteTaskIndex.cshtml" />
+    <Content Include="Views\PurchaseOrder\ExecuteTaskList.cshtml" />
+    <Content Include="Views\PurchaseOrder\SelectTaskCloseReson.cshtml" />
+    <Content Include="Views\PurchaseOrder\VendorPurshAgain.cshtml" />
+    <Content Include="Views\Platform\FactoryForProductIndex.cshtml" />
+    <Content Include="Views\Platform\FactoryForProductList.cshtml" />
+    <Content Include="Views\Home\BatchSelectProduct.cshtml" />
+    <Content Include="Views\Home\ImportExcel.cshtml" />
+    <Content Include="Content\excel\工厂专供导入模版.xlsx" />
+    <Content Include="Views\Platform\OperateActiveIndex.cshtml" />
+    <Content Include="Views\Platform\OperateActiveList.cshtml" />
+    <Content Include="Views\Platform\AddOperateActive.cshtml" />
+    <Content Include="Views\Platform\SelectOperateActiveProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,83 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="col-lg-12 row" style="width: 740px; margin: 5px;">
+    <div class="row">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="control-label">产品名称</label>
+                <input id="pname" class="form-control" style="width: 250px; height: 30px;"/>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info btn-sm" onclick="serchProduct();">查询</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td style="width: 3%; ">
+                        <input type="checkbox" onclick="checkProduct(this);" />
+                    </td>
+                    <td style="width: 57%;vertical-align: middle;">产品名称</td>
+                    <td style="width: 20%;vertical-align: middle;">产品编号</td>
+                    <td style="width: 20%;vertical-align: middle;">品牌</td>
+                </tr>
+            </thead>
+            <tbody id="pbody"></tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    //查询产品
+    function serchProduct() {
+        var pname = $("#pname").val();
+        if (pname === "") {
+            layer.msg("请输入产品名称！", { icon: 0, time: 2000 });
+            return false;
+        }
+        $.ajax({
+            type: 'GET',
+            async: false,
+            data: { "keyWord": pname },
+            url: '/Home/SelectProductList',
+            success: function(result) {
+                if (result.length === 0) {
+                    layer.msg("未查询到数据！", { icon: 0, time: 2000 });
+                } else {
+                    var html = "";
+                    for (var i = 0; i < result.length; i++) {
+                        html +=
+                            "<tr>" +
+                            "<td>" +
+                            '<input type="checkbox" name="spCheck" data-pid="' + result[i].ProductId + '" data-name="' + result[i].ProductName + '" data-brand="' + result[i].Brand + '"/>' +
+                            "</td>" +
+                            "<td>" + result[i].ProductName + "</td>" +
+                            "<td>" + result[i].ProductId + "</td>" +
+                            "<td>" + result[i].Brand + "</td>" +
+                            "</tr>";
+                    }
+                    $("#pbody").html(html);
+                }
+            },
+            error: function () {
+                layer.msg("数据传输失败！", { icon: 0, time: 2000 });
+            }
+        });
+    };
+    //全选，取消
+    function checkProduct(col) {
+        var list = $("input[name='spCheck']");
+        if ($(col).prop('checked')) {
+            for (var j = 0; j < list.length; j++) {
+                list[j].checked = true;
+            }
+        } else {
+            for (var i = 0; i < list.length; i++) {
+                list[i].checked = false;
+            }
+        }
+    }
+</script>

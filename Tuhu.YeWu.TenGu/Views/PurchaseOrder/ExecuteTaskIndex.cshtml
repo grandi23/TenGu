@@ -1,0 +1,258 @@
+﻿@model  IEnumerable<ThBiz.DataAccess.Entity.PurchaseTaskInfo>
+@{
+    Layout = "../Shared/_Inner.cshtml";
+    var compelete = (int)ViewBag.Complete;
+}
+<div class="col-md-12 row">
+    <div class="form-inline">
+    </div>
+</div>
+<div class="col-md-12 row">
+    @using (Html.BeginForm("ExportExecuteTask", "PurchaseOrder", FormMethod.Get, new {@class = "form-inline", id = "SearchForm"}))
+    {
+        <div class="form-group">
+            <span style="color: #fff; background-color: #EA3F3F; font-size: 15px; font-weight: 600; padding: 6px 12px; border-radius: 4px;">当前任务总数：@Model.Count()</span>
+        </div>
+        <div class="form-group">
+            <span style="color: #fff; background-color: #1C86EE; font-size: 15px; font-weight: 600; padding: 6px 12px; border-radius: 4px; margin-left: 5px; margin-right: 5px;">已完成任务数：@compelete</span>
+        </div>
+        <div class="form-group">
+            <span style="color: #fff; background-color: #3CB371; font-size: 15px; font-weight: 600; padding: 6px 12px; border-radius: 4px; cursor: pointer;" onclick="getMyTask();">获取任务</span>
+        </div><br/><br/>
+        <div class="form-group">
+            <label class="control-label">产品名称:</label>
+            @Html.TextBox("ProductName", null, new {@class = "form-control", @style = "width: 200px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">品牌:</label>
+            @Html.DropDownList("Brand", new SelectList(ViewBag.Brand as System.Collections.IEnumerable, "CP_Brand", "CP_Brand"), "请选择", new {@class = "form-control", @style = "width: 150px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">区域:</label>
+            @Html.DropDownList("WarehouseGroupName", new SelectList(ViewBag.Area as System.Collections.IEnumerable, "Area", "Area"), "请选择", new {@class = "form-control", @style = "width: 120px;", onchange = "changHouse(this);"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">仓库:</label>
+            @Html.DropDownList("WarehouseName", new SelectList(ViewBag.WareHouse as System.Collections.IEnumerable, "WareHouseId", "WareHouseName"), "请选择", new {@class = "form-control", @style = "width: 120px;"})
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-info" onclick="searchList();">查询</button>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-success" id="btnexport">导出</button>
+        </div>
+    }<br/>
+    <div id="dataList" style="overflow: auto; width: 100%;">
+        @Html.Partial("ExecuteTaskList")
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#Brand").select2();
+        $("#WarehouseName").select2();
+        //导出Excel
+        $("#btnexport").click(function () {
+            if (confirm('确认导出数据？')) {
+                return true;
+            } else {
+                return false;
+            };
+        });
+    });
+    //检索
+    function searchList() {
+        var load = layer.load();
+        $("#SearchForm").ajaxSubmit({
+            url: '/PurchaseOrder/ExecuteTaskIndex',
+            data: { "Type": "Search" },
+            success: function (html) {
+                layer.close(load);
+                $("#dataList").html(html);
+            },
+            error: function () {
+                layer.close(load);
+                layer.msg('查询失败');
+            }
+        });
+    }
+    //获取采购任务
+    function getMyTask() {
+        layer.confirm('确认获取任务？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                url: "/PurchaseOrder/GetMyPurchaseTask",
+                type: "post",
+                success: function(data) {
+                    if (parseInt(data) > 0) {
+                        layer.msg('本次获取到' + data + '条任务！', { icon: 1, time: 2000
+                        }, function() {
+                            location.reload();
+                        });
+                    } else {
+                        layer.msg('没有可获取的任务！', { icon: 0, time: 2000 });
+                    }
+                },
+                error: function() {
+                    layer.msg('获取任务失败！', { icon: 2, time: 2000 });
+                }
+            });
+        });
+    }
+    //全选，取消
+    function checkAll(col) {
+        var list = $("input[name='pcheck']");
+        if ($(col).prop('checked')) {
+            for (var j = 0; j < list.length; j++) {
+                list[j].checked = true;
+            }
+        } else {
+            for (var i = 0; i < list.length; i++) {
+                list[i].checked = false;
+            }
+        }
+    }
+    //下拉框动态更改仓库信息
+    function changHouse(sel) {
+        $.ajax({
+            type: 'GET',
+            async: false,
+            url: "/PurchaseOrder/GetHousesByArea",
+            data: { "area": sel.value, "type": 2 },
+            success: function (result) {
+                $("#WarehouseName").html(result);
+            },
+            error: function () {
+                alert("获取仓库数据失败！");
+            }
+        });
+
+    }
+    //限制价格修改
+    function determinPrice(col, price) {
+        if (parseFloat($(col).val()) > parseFloat(price)) {
+            layer.msg('不允许提高价格！', { icon: 0, time: 2000 });
+            $(col).val(price);
+        }
+    }
+    //限制数量修改
+    function determinCount(col, count) {
+        if (parseInt($(col).val()) < Math.round(count * 0.8)) {
+            layer.msg('数量不能小于' + Math.round(count * 0.8) + '！', { icon: 0, time: 2000 });
+            $(col).val(count);
+        }
+    }
+    //关闭任务
+    function closeTask(taskId) {
+        $.ajax({
+            url: "/PurchaseOrder/SelectTaskCloseReson",
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "关闭任务",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['450px', '250px'], //宽高
+                    btn: ['申请', '取消'],
+                    yes: function () {
+                        var are = "";
+                        var re = $("#cReson").val();
+                        var ot = $("#oReson").val();
+                        if (re == "" || typeof re == "undefined") {
+                            layer.msg("请选择关闭原因！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        if (re != "市场缺货" && ot == "") {
+                            layer.msg("请输入详细说明！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        if (re == "已创建移库任务") {
+                            are = re + ":" + ot;
+                        } else if (re == "已有在途采购订单") {
+                            are = re + ":" + ot;
+                        } else if (re == "市场缺货") {
+                            are = re;
+                        } else {
+                            are = ot;
+                        }
+                        $.ajax({
+                            url: "/PurchaseOrder/ClosePurchaseTask",
+                            data: {
+                                "taskId": taskId,
+                                "closeReson": are
+                            },
+                            type: "post",
+                            success: function (data) {
+                                if (data.indexOf('成功') > 0) {
+                                    layer.closeAll();
+                                    layer.msg(data, {
+                                        icon: 1, time: 2000
+                                    }, function () {
+                                        searchList();
+                                    });
+                                } else {
+                                    layer.msg(data, { icon: 0, time: 2000 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+    //重新推送
+    function pushAgain(taskId) {
+        $.ajax({
+            url: "/PurchaseOrder/VendorPurshAgain",
+            data: { "taskId": taskId },
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "重新推送",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['650px', '400px'], //宽高
+                    btn: ['推送', '取消'],
+                    yes: function () {
+                        var ids = "";
+                        $("#pushAginBody").find("input[type=checkbox][name=pagin]:checked").map(function () {
+                            var id = $(this).attr("data-id");
+                            ids += ids === "" ? id : "," + id;
+                        });
+                        if (ids === "") {
+                            layer.msg("请选择至少一个供应商！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        $.ajax({
+                            url: "/PurchaseOrder/PushAgainVenderInquiryProduct",
+                            data: { "ids": ids },
+                            type: "post",
+                            success: function (data) {
+                                if (data.indexOf('成功') > 0) {
+                                    layer.closeAll();
+                                    layer.msg(data, {
+                                        icon: 1, time: 2000
+                                    }, function () {
+                                        searchList();
+                                    });
+                                } else {
+                                    layer.msg(data, { icon: 0, time: 2000 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+</script>

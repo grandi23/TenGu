@@ -1,0 +1,46 @@
+﻿
+div.pager {
+     margin-top: 25px; 
+     font-size: 0;
+}
+div.pager span {
+     display: inline-block; 
+     width: 28px; 
+     height: 28px; 
+     border-left: 1px solid #dddddd; 
+     text-align: center; 
+     font-weight: bold; 
+     font-size: 12px; 
+     line-height: 28px;
+}
+div.pager a {
+     display: inline-block; 
+     min-width: 28px; 
+     padding: 0 5px; 
+     height: 28px; 
+     border: 1px solid #dddddd; 
+     border-right: none; 
+     color: #2c59b8; 
+     text-align: center; 
+     text-decoration: none; 
+     font-size: 12px; 
+     line-height: 28px;
+}
+div.pager a.first-child {
+     width: 77px;
+}
+div.pager a.last-child {
+     width: 77px; 
+     border-right: 1px solid #dddddd;
+}
+div.pager a:hover, div.pager a.current {
+     background-color: #f4f4f4; 
+     color: #cc0202;
+}
+div.pager a.current {
+     cursor: default;
+}
+div.pager a.disabled, div.pager a.disabled:hover {
+     background-color: #f4f4f4; 
+     color: #999999; cursor: default;
+}

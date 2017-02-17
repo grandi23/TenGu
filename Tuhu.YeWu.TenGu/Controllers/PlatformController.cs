@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Newtonsoft.Json;
+using NPOI.OpenXmlFormats.Dml;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using ThBiz.Business;
@@ -27,6 +28,7 @@ using ThBiz.DataAccess.Entity;
 using TheBiz.Common;
 using TheBiz.Common.Common;
 using Tuhu.Component.Common;
+using Tuhu.Component.Common.Models;
 using Tuhu.Component.Framework;
 using Tuhu.Component.Framework.Identity;
 using Tuhu.YeWu.TenGu.Models;
@@ -596,6 +598,261 @@ namespace Tuhu.YeWu.TenGu.Controllers
             var result = PurchaseNewManager.UpdateBatchPurchaseAssignerByAssigner(listJson);
 
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 工厂专供产品配置
+        /// <summary>
+        /// 工厂专供产品配置
+        /// RenYongQiang 2017/02/15
+        /// </summary>
+        //[PowerManage]
+        public ActionResult FactoryForProductIndex(TaskPoolRequest request)
+        {
+            var result = new PurchaseNewManager().SelectFactoryForProductList(request);
+            var dataList = result.ReturnValue;
+            var totalRecord = result.OutValue;
+            var pager = new PagerModel(request.PageNumber, request.PageSize)
+            {
+                TotalItem = totalRecord
+            };
+            if (!string.IsNullOrEmpty(request.Type))
+            {
+                return View("FactoryForProductList", new ListModel<FactoryForProduct>(pager, dataList));
+            }
+
+            ViewBag.Brand = new CargoManager().GetProductBrandList();//品牌
+
+            return View(new ListModel<FactoryForProduct>(pager, dataList));
+        }
+        /// <summary>
+        /// 删除工厂专供产品
+        /// RenYongQiang 2017/02/15
+        /// </summary>
+        public ActionResult DeleteFactoryProduct(int fId)
+        {
+            return Json(PurchaseNewManager.DeleteFactoryForProductById(fId), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 新增工厂专供产品
+        /// RenYongQiang 2017/02/15
+        /// </summary>
+        public ActionResult InsertFactoryProduct(string products)
+        {
+            var list = JsonConvert.DeserializeObject<List<ProductMaintain>>(products);
+            if (list.Any())
+            {
+                foreach (var product in list)
+                {
+                    PurchaseNewManager.InsertFactoryForProduct(product);
+                }
+                return Json("新增成功！", JsonRequestBehavior.AllowGet);
+            }
+            return Json("添加失败，未选择任何产品！", JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 导入工厂专供产品
+        /// RenYongQiang 2017/02/16
+        /// </summary>
+        [HttpPost]
+        public ActionResult ImportFactoryForProduct(HttpPostedFileBase efile)
+        {
+            var errors = new List<string>();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(efile?.FileName))
+                {
+                    errors.Add("失败,未获取到文件！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+                var fileName = efile.FileName;
+
+                if (!fileName.EndsWith(".xls") && !fileName.EndsWith(".xlsx"))
+                {
+                    errors.Add("失败,仅能上传.xls或.xlsx文件的格式！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+
+                if (efile.ContentLength / (1024 * 1024) > 10) //大于10M
+                {
+                    errors.Add("失败,文件容量大于10M！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+
+                var strem = efile.InputStream;
+
+                var ds = TuhuUtil.ExcelToDataTableByStream(true, strem, fileName);
+
+                if (ds == null || ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count == 0)
+                {
+                    errors.Add("失败,文件内没有内容！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+                var dt = ds.Tables[0];
+                //验证列是否存在
+                var colums = "产品名称,产品编号,品牌";
+                errors.AddRange(from msg in colums.Split(',') where dt.Columns[msg] == null select $"该导入的文件中没有\"{msg}\"这一列！");
+                if (errors.Count > 0)
+                {
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+                //过滤空白行
+                dt = dt.AsEnumerable().Where(x => !string.IsNullOrEmpty(x.Field<string>("产品名称"))).CopyToDataTable();
+
+                var itemList = new List<ProductMaintain>();
+
+                //导入数据
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    var row = dt.Rows[i];
+                    var item = new ProductMaintain();
+                    //产品名称
+                    if (string.IsNullOrEmpty(row["产品名称"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写产品名称！");
+                        continue;
+                    }
+                    item.ProductName = row["产品名称"].ToString();
+                    //产品编号
+                    if (string.IsNullOrEmpty(row["产品编号"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写产品编号！");
+                        continue;
+                    }
+                    item.ProductId = row["产品编号"].ToString();
+                    //品牌
+                    if (string.IsNullOrEmpty(row["品牌"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写品牌！");
+                        continue;
+                    }
+                    item.Brand = row["品牌"].ToString();
+
+                    itemList.Add(item);
+                }
+
+                if (itemList.Count > 0)
+                {
+                    PurchaseNewManager.BatchFactoryForProduct(itemList);
+                    errors.Add("本次共成功导入" + itemList.Count + "行!");
+                }
+                else
+                {
+                    errors.Add("导入失败,无有效数据！");
+                }
+
+                return Json(errors, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionMonitor.AddNewMonitor("工厂专供配置", "导入", ex.ToString(), ThreadIdentity.Operator.Name, "工厂专供配置导入",
+                    MonitorLevel.Error, MonitorModule.Purchase);
+                errors.Add("导入错误，操作无法进行！");
+                return Json(errors, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
+
+        #region 运营活动配置
+        /// <summary>
+        /// 运营活动配置
+        /// RenYongQiang 2017/02/16
+        /// </summary>
+        //[PowerManage]
+        public ActionResult OperateActiveIndex(OperateActiveRequest request)
+        {
+            var result = new PurchaseNewManager().SelectOperateActiveList(request);
+            var dataList = result.ReturnValue;
+            var totalRecord = result.OutValue;
+            var pager = new PagerModel(request.PageNumber, request.PageSize)
+            {
+                TotalItem = totalRecord
+            };
+            if (!string.IsNullOrEmpty(request.Type))
+            {
+                return View("OperateActiveList", new ListModel<OperateActive>(pager, dataList));
+            }
+
+            ViewBag.CreateBy = new EmployeeManager().GetEmployeesByDeptName("采购部");
+
+            return View(new ListModel<OperateActive>(pager, dataList));
+        }
+        /// <summary>
+        /// 创建活动页面
+        /// RenYongQiang 2017/02/16
+        /// </summary>
+        public ActionResult AddOperateActive()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 运营活动选择产品页面
+        /// RenYongQiang 2017/02/17
+        /// </summary>
+        public ActionResult SelectOperateActiveProduct()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 获取运营活动产品备选数据
+        /// RenYongQiang 2017/02/17
+        /// </summary>
+        public ActionResult SelectActiveProductList(string keyWord)
+        {
+            var list = new List<ProductShortInfo>();
+
+            if (!string.IsNullOrEmpty(keyWord))
+            {
+                list = new CargoManager().SelectProductWithPriceByKeyWord(keyWord);
+                if (list.Any())
+                {
+                    var kls = PurchaseNewManager.SelectAveragePurchasePrice(list);
+                    foreach (var ls in list)
+                    {
+                        var ks = kls.FirstOrDefault(x => x.PID == ls.PID);
+                        if (ks != null)
+                        {
+                            ls.PurchasePrice = ks.PurchasePrice;
+                        }
+                    }
+                }
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 新增运营活动信息
+        /// RenYongQiang 2017/02/17
+        /// </summary>
+        public ActionResult InsertOperateActiveInfo(string name, string channel, string starDate, string endDate,
+            string point, string coupon, string link, string products)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(channel) || string.IsNullOrEmpty(starDate) ||
+                string.IsNullOrEmpty(endDate) || string.IsNullOrEmpty(point) || string.IsNullOrEmpty(coupon) ||
+                string.IsNullOrEmpty(link) || string.IsNullOrEmpty(products))
+            {
+                return Json("活动信息填写不完整，创建活动失败！", JsonRequestBehavior.AllowGet);
+            }
+            var activeProduct = JsonConvert.DeserializeObject<List<OperateActiveProduct>>(products);
+            if (activeProduct.Any(x => x.ActivePrice <= 0 || x.ExpecteSale <= 0 || x.FloorPrice <= 0))
+            {
+                return Json("活动产品填写错误，创建活动失败！", JsonRequestBehavior.AllowGet);
+            }
+            var operate = new OperateActive()
+            {
+                ActiveName = name,
+                ActiveChannel = channel,
+                ActiveStarDate = Convert.ToDateTime(starDate),
+                ActiveEndDate = Convert.ToDateTime(endDate),
+                InterestPoint = point,
+                Coupon = coupon,
+                ActiveLink = link,
+                ActiveState = "待运营审核",
+                ActiveProductList = activeProduct
+            };
+
+            PurchaseNewManager.InsertOperateActive(operate);
+
+            return Json("创建活动成功！", JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

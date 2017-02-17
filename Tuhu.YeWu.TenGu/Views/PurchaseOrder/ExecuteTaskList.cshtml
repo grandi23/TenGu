@@ -1,0 +1,120 @@
+﻿@using ThBiz.DataAccess.Entity
+@model IEnumerable<PurchaseTaskInfo>
+@{
+    Layout = null;
+    List<VendorInquiryProduct> vendors = ViewBag.VendorList;
+}
+<style>
+    .headtr{
+        
+    }
+    .headth {
+        
+    }
+</style>
+@if (Model.Any())
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr style="background: #428BCA; color: #fff; white-space: nowrap;">
+                <th style="min-width: 30px; vertical-align: inherit; text-align: center;" rowspan="2">
+                    <input type="checkbox" onclick="checkAll(this)"/>
+                </th>
+                <th style="min-width: 70px; vertical-align: inherit; text-align: center;" rowspan="2">任务编号</th>
+                <th style="min-width:300px; vertical-align: inherit; text-align: center;" rowspan="2">产品名称</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">区域</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">区域需求量</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">平均采购价</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">最低采购价</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">工厂指导价</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">活动指导价</th>
+                <th style="min-width:100px; vertical-align: inherit; text-align: center;" rowspan="2">仓库名称</th>
+                <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">需求量</th>
+                @foreach (var vendor in vendors)
+                {
+                    <th style="min-width: 200px; text-align: center;" colspan="2">@vendor.VendorName</th>
+                }
+                <th style="min-width: 110px; vertical-align: inherit; text-align: center;" rowspan="2">操作</th>
+            </tr>
+            <tr style="background: #428BCA; color: #fff; white-space: nowrap;">
+                @for (var i = 0; i < vendors.Count; i++)
+                {
+                    <th style="min-width: 100px; text-align: center;">供货价格</th>
+                    <th style="min-width: 100px; text-align: center;">可供数量</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var list in Model.GroupBy(p => new {p.PID, p.Region}))
+        {
+            var count = list.Count();
+            for (int i = 0; i < count; i++)
+            {
+                var m = list.ToList()[i];
+                <tr>
+                    <td>
+                        <input type="checkbox" name="pcheck" data-id="@m.PKID"/>
+                    </td>
+                    <td>@m.PKID</td>
+                    @if (i == 0)
+                    {
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.First().ProductName</td>
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.First().Region</td>
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.Sum(x => x.DemandCount)</td>
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.Sum(x => x.AveragePrice)</td>
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.Sum(x => x.MinimumPrice)</td>
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.Sum(x => x.FactoryPrice)</td>
+                        <td rowspan="@count" style="vertical-align: middle; font-weight: 600; text-align: center;">@list.Sum(x => x.ActivityPrice)</td>
+                    }
+                    <td>@m.WareHouseName</td>
+                    <td>@m.DemandCount</td>
+                    @if (i == 0)
+                    {
+                        foreach (var vendor in vendors)
+                        {
+                            var mv = list.First().InquiryProductList.FirstOrDefault(x => x.VendorId == vendor.VendorId);
+                            if (mv != null)
+                            {
+                                if (mv.InquiryProductState == "已提交")
+                                {
+                                    <td rowspan="@count" style="vertical-align: middle;">
+                                        <input type="number" style="width: 60px;" value="@mv.QuotedPrice" onchange="determinPrice(this, @mv.QuotedPrice);"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">元</span>
+                                    </td>
+                                    <td rowspan="@count" style="vertical-align: middle;">
+                                        <input type="number" style="width: 60px;" value="@mv.ProvideCount" onchange="determinCount(this, @mv.ProvideCount);"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">个</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td rowspan="@count" style="vertical-align: middle;">
+                                        <input type="number" style="width: 60px;" value="0.00" disabled="disabled"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">元</span>
+                                    </td>
+                                    <td rowspan="@count" style="vertical-align: middle;">
+                                        <input type="number" style="width: 60px;" value="0" disabled="disabled"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">个</span>
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td rowspan="@count" style="vertical-align: middle;"></td>
+                                <td rowspan="@count" style="vertical-align: middle;"></td>
+                            }
+                        }
+                    }
+                    <td>
+                        <a style="cursor: pointer;" onclick="closeTask(@m.PKID);">关闭</a> |
+                        <a style="cursor: pointer;" onclick="pushAgain(@m.PKID);">重新推送</a>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-success text-center">
+        <span class="entypo-cancel-circled"></span>
+        <strong>&nbsp;&nbsp;没有相关信息！</strong>
+    </div>
+}

@@ -1603,7 +1603,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
             return View();
         }
         #endregion
-        #region 私有方法
+        #region 公共方法
         /// <summary>
         /// 获取IP地址
         /// 2017/01/24

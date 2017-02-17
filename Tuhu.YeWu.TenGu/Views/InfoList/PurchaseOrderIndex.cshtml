@@ -171,7 +171,7 @@
             $("#SearchForm").ajaxSubmit({
                 url: '/InfoList/PurchaseOrderList',
                 beforeSend: function () {
-                    loading = layer.load(2);
+                    loading = layer.load();
                 },
                 success: function (html) {
                     layer.close(loading);
@@ -198,7 +198,7 @@
             $("#SearchForm").ajaxSubmit({
                 url: '/InfoList/PurchaseOrderList',
                 beforeSend: function () {
-                    loading = layer.load(2);
+                    loading = layer.load();
                 },
                 success: function (html) {
                     layer.close(loading);
@@ -229,7 +229,7 @@
             $("#SearchForm").ajaxSubmit({
                 url: '/InfoList/PurchaseOrderList',
                 beforeSend: function () {
-                    loading = layer.load(2);
+                    loading = layer.load();
                 },
                 success: function (html) {
                     layer.close(loading);
@@ -264,7 +264,7 @@
             $("#SearchForm").ajaxSubmit({
                 url: '/InfoList/PurchaseOrderList',
                 beforeSend: function () {
-                    loading = layer.load(2);
+                    loading = layer.load();
                 },
                 success: function (html) {
                     layer.close(loading);
@@ -300,7 +300,7 @@
         $("#SearchForm").ajaxSubmit({
             url: '/InfoList/PurchaseOrderList',
             beforeSend: function () {
-                loading = layer.load(2);
+                loading = layer.load();
             },
             success: function (html) {
                 $("#PoItemList").empty().append(html);
@@ -331,7 +331,7 @@
         $("#SearchForm").ajaxSubmit({
             url: '/InfoList/PurchaseOrderList',
             beforeSend: function () {
-                loading = layer.load(2);
+                loading = layer.load();
             },
             success: function (html)
             {
@@ -1112,7 +1112,7 @@
                 url: '/InfoList/ConfirmationFreight',
                 data: { "poItemId": poItemId },
                 beforeSend: function () {
-                    loading = layer.load(2);
+                    loading = layer.load();
                 },
                 success: function (result) {
                     var $target = $(target).closest("tr").children();
@@ -1138,7 +1138,7 @@
                 url: '/InfoList/FinishedGoodsReceipt',
                 data: { "poItemId": poItemId },
                 beforeSend: function () {
-                    loading = layer.load(2);
+                    loading = layer.load();
                 },
                 success: function (result) {
                     layer.closeAll();

@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="col-lg-12 row">
+    <div class="form-inline form-group" style="margin: 15px;">
+        <label class="control-label" style="font-size: 16px; width: 90px;">关闭原因</label>
+        <select id="cReson" class="form-control" onchange="selectReson();">
+            <option value="">请选择</option>
+            <option value="已创建移库任务">已创建移库任务</option>
+            <option value="已有在途采购订单">已有在途采购订单</option>
+            <option value="市场缺货">市场缺货</option>
+            <option value="其他">其他</option>
+        </select>
+    </div>
+    <div class="form-inline form-group" style="margin: 15px; display: none;" id="otherDiv">
+        <label class="control-label" style="font-size: 16px; width: 90px;" id="resonLable"></label>
+        <input class="form-control" id="oReson" style="width: 250px;"/>
+    </div>
+</div>
+
+<script>
+    function selectReson() {
+        var reson = $("#cReson").val();
+        if (reson != "" && reson != "市场缺货") {
+            $("#otherDiv").show();
+            if (reson == "已创建移库任务") {
+                $("#resonLable").text("移库任务号");
+            } else if (reson == "已有在途采购订单") {
+                $("#resonLable").text("采购订单号");
+            } else {
+                $("#resonLable").text("详细说明");
+            }
+        } else {
+            $("#otherDiv").hide();
+        }
+    }
+</script>

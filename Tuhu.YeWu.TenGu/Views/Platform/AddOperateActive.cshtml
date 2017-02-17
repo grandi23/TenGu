@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="col-lg-12 row">
+    <table class="table table-bordered" style="width: 1010px; margin: 5px;">
+        <tr>
+            <td colspan="2">
+                <label style="width: 60px; font-weight: 600; color: #FBB44C;">活动名称</label>
+                <input id="aName" class="form-control" style="width: 89%; display: inline;"/>
+            </td>
+            <td>
+                <span style="width: 60px; font-weight: 600; color: #FBB44C;">活动渠道</span>
+                <select id="aChannel" class="form-control" style="width: 70%; display: inline;">
+                    <option selected="" value="">请选择</option>
+                    <option value="自营">自营</option>
+                    <option value="三方">三方</option>
+                    <option value="汽配龙">汽配龙</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label style="width: 60px; font-weight: 600; color: #FBB44C;">活动时间</label>
+                <input id="aStar" class="form-control" style="width: 145px; display: inline;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'aEnd\')}' })"/> 至
+                <input id="aEnd" class="form-control" style="width: 145px; display: inline;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh', minDate: '#F{$dp.$D(\'aStar\')}' })"/>
+            </td>
+            <td colspan="3">
+                <label style="width: 60px; font-weight: 600; color: #FBB44C;">利益点</label>
+                <input id="aPoint" class="form-control" style="width: 87%; display: inline;"/>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 40%;">
+                <label style="width: 60px; font-weight: 600;">优惠券</label>
+                <input id="aCoupon" class="form-control" style="width: 80%; display: inline;"/>
+            </td>
+            <td style="width: 35%;">
+                <label style="width: 60px; font-weight: 600;">活动链接</label>
+                <input id="aLink" class="form-control" style="width: 75%; display: inline;"/>
+            </td>
+            <td style="width: 25%" colspan="2">
+                <button class="btn btn-sm btn-info" onclick="addActiveProduct();">添加产品</button>
+            </td>
+        </tr>
+    </table>
+    <table class="table table-bordered" style="width: 1010px; margin: 5px;">
+        <thead>
+            <tr style="font-weight: 600; text-align: center;">
+                <td style="width: 26%;">产品名称</td>
+                <td style="width: 14%;">产品编号</td>
+                <td style="width: 7%;">进货价</td>
+                <td style="width: 8%;">日常售价</td>
+                <td style="width: 8%;">活动价</td>
+                <td style="width: 8%;">预计销量</td>
+                <td style="width: 8%;">活动底价</td>
+                <td style="width: 8%;">最低毛利</td>
+                <td style="width: 8%;">预销金额</td>
+                <td style="width: 5%;">操作</td>
+            </tr>
+        </thead>
+        <tbody id="abody"></tbody>
+    </table>
+</div>
+<script>
+    function addActiveProduct() {
+        $.ajax({
+            url: "/Platform/SelectOperateActiveProduct",
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "创建运营活动",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['780px', '500px'], //宽高
+                    btn: ['确定', '取消'],
+                    yes: function (index) {
+                        var array = [];
+                        $("#pbody").find("input[type=checkbox][name=spCheck]:checked").map(function () {
+                            var product = {
+                                "ProductName": $(this).attr("data-name"),
+                                "PID": $(this).attr("data-pid"),
+                                "PurchasePrice": $(this).attr("data-pprice"),
+                                "DailyPrice": $(this).attr("data-dprice")
+                            };
+                            array.push(product);
+                        });
+                        if (array.length === "") {
+                            layer.msg("请选择至少一个产品！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        addtbodyHtml(array);
+                        layer.close(index);
+                    },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+    //添加tbody内容
+    function addtbodyHtml(array) {
+        var text = "";
+        for (var i = 0; i < array.length; i++) {
+            text +=
+                "<tr>" +
+                    "<td>" + array[i].ProductName + "</td>" +
+                    "<td>" + array[i].PID + "</td>" +
+                    "<td>" + array[i].PurchasePrice + "</td>" +
+                    "<td>" + array[i].DailyPrice + "</td>" +
+                    "<td><input type='number' value='0' style='width: 100%;' onchange='changePrice(this);'></td>" +
+                    "<td><input type='number' value='0' style='width: 100%;' onchange='changePrice(this);'></td>" +
+                    "<td><input type='number' value='0' style='width: 100%;' onchange='changePrice(this);'></td>" +
+                    "<td>0.00</td>" +
+                    "<td>0.00</td>" +
+                    "<td><a onclick='$(this).closest(\"tr\").remove();' style='cursor: pointer;'>删除</a></td>" +
+                "</tr>";
+        }
+        $("#abody").html(text);
+    }
+    //价格变动
+    function changePrice(tra) {
+        if (parseFloat($(tra).val()) < 0 || $(tra).val() == "") {
+            $(tra).val(0);
+        }
+        var tds = $(tra).closest('tr').find('td');
+        var pprice = parseFloat($(tds[2]).text());
+        var aprice = parseFloat($(tds[4]).find('input').val());
+        var ecount = parseFloat($(tds[5]).find('input').val());
+        var fprice = parseFloat($(tds[6]).find('input').val());
+
+        $(tds[7]).text((fprice-pprice).toFixed(2));
+        $(tds[8]).text((ecount*aprice).toFixed(2));
+    }
+</script>
