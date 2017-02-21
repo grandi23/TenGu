@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = null;
+    Layout = "../Shared/_Inner.cshtml";
 }
 
 <div class="col-lg-12 row" style="width: 740px; margin: 5px;">
@@ -39,11 +39,18 @@
             layer.msg("请输入产品名称！", { icon: 0, time: 2000 });
             return false;
         }
+        var pload;
         $.ajax({
             type: 'GET',
             async: false,
             data: { "keyWord": pname },
             url: '/Platform/SelectActiveProductList',
+            beforeSend: function () {
+                pload = layer.load();
+            },
+            complete: function () {
+                layer.close(pload);
+            },
             success: function(result) {
                 if (result.length === 0) {
                     layer.msg("未查询到数据！", { icon: 0, time: 2000 });

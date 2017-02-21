@@ -83,7 +83,7 @@
     function searchList() {
         var load = layer.load();
         $("#SearchForm").ajaxSubmit({
-            url: '/PurchaseOrder/TaskPoolIndex',
+            url: '/Platform/OperateActiveIndex',
             data: { "Type": "Search" },
             success: function (html) {
                 layer.close(load);
@@ -180,12 +180,18 @@
                                 "ActiveProductState": 0
                             });
                         }
-                        return false;
+                        var aload;
                         $.ajax({
                             url: "/Platform/InsertOperateActiveInfo",
                             data: {
                                 "name": aname, "channel": achannel, "starDate": aStar, "endDate": aEnd,
-                                "point": aPoint, "coupon": aCoupon, "link": aLink, "products": JSON.stringify(array)
+                                "point": aPoint, "coupon": aCoupon, "link": aLink, "products": JSON.stringify(products)
+                            },
+                            beforeSend: function () {
+                                aload = layer.load();
+                            },
+                            complete: function () {
+                                layer.close(aload);
                             },
                             type: "post",
                             dataType: "json",
@@ -210,5 +216,275 @@
                 });
             }
         });
+    }
+    //运营采购审核
+    function operateAudit(oaId, ostep) {
+        $.ajax({
+            url: "/Platform/OperateActiveDetile?aId=" + oaId,
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "运营活动详情",
+                    skin: 'layui-layer-rim',
+                    content: html,
+                    area: ['1030px', '600px'], //宽高
+                    btn: ['通过', '驳回', '取消'],
+                    yes: function () {
+                        layer.confirm('确定审核通过？', function () {
+                            $.ajax({
+                                url: "/Platform/AuditOperateActive",
+                                data: { "aId": oaId, "step": ostep },
+                                type: "post",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data) {
+                                        layer.closeAll();
+                                        layer.msg("操作成功", {
+                                            icon: 1, time: 2000
+                                        }, function () {
+                                            searchList();
+                                        });
+                                    } else {
+                                        layer.msg("操作失败", { icon: 0, time: 2000 });
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                                }
+                            });
+                        });
+                    },
+                    btn2: function () {
+                        layer.open({
+                            type: 2,
+                            title: "驳回原因",
+                            skin: 'layui-layer-rim',
+                            content: "/Home/InputReson",
+                            area: ['400px', '250px'], //宽高
+                            btn: ['确定', '取消'],
+                            yes: function (index) {
+                                var body = layer.getChildFrame('body', index).contents();
+                                var reso = body.find("#ireason").val();
+                                if (reso == "" || typeof reso == "undefined") {
+                                    layer.msg("请输入驳回原因！", { icon: 0, time: 2000 });
+                                    return false;
+                                }
+                                $.ajax({
+                                    url: "/Platform/AuditOperateActive",
+                                    data: { "aId": oaId, "step": ostep+1, "reson": reso },
+                                    type: "post",
+                                    dataType: "json",
+                                    success: function (data) {
+                                        if (data) {
+                                            layer.closeAll();
+                                            layer.msg("操作成功", {
+                                                icon: 1, time: 2000
+                                            }, function () {
+                                                searchList();
+                                            });
+                                        } else {
+                                            layer.msg("操作失败", { icon: 0, time: 2000 });
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                                    }
+                                });
+                            }
+                        });
+                        return false;
+                    }
+                });
+            }
+        });
+    }
+    //运营采购驳回
+    function operateReject(oaId) {
+        $.ajax({
+            url: "/Platform/OperateActiveDetile?aId=" + oaId,
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "运营活动详情",
+                    skin: 'layui-layer-rim',
+                    content: html,
+                    area: ['1030px', '600px'], //宽高
+                    btn: ['修改', '撤销申请'],
+                    yes: function () {
+                        layer.closeAll();
+                        editActive(oaId);
+                    },
+                    btn2: function () {
+                        layer.confirm('确定撤销申请？', function () {
+                            $.ajax({
+                                url: "/Platform/AuditOperateActive",
+                                data: { "aId": oaId, "step": 5 },
+                                type: "post",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data) {
+                                        layer.closeAll();
+                                        layer.msg("操作成功", {
+                                            icon: 1, time: 2000
+                                        }, function () {
+                                            searchList();
+                                        });
+                                    } else {
+                                        layer.msg("操作失败", { icon: 0, time: 2000 });
+                                    }
+                                },
+                                error: function () {
+                                    layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                                }
+                            });
+                        });
+                        return false;
+                    }
+                });
+            }
+        });
+    }
+    //修改活动
+    function editActive(oaId) {
+        $.ajax({
+            url: "/Platform/EditOperateActive?aId=" + oaId,
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "修改运营活动",
+                    skin: 'layui-layer-rim', //加上边框
+                    content: html,
+                    area: ['1030px', '600px'], //宽高
+                    btn: ['确定', '取消'],
+                    yes: function () {
+                        var aname = $("#aName").val();
+                        if (aname == "" || typeof aname == "undefined") {
+                            layer.msg("请填写活动名称！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var achannel = $("#aChannel").val();
+                        if (achannel == "" || typeof achannel == "undefined") {
+                            layer.msg("请选择活动渠道！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aStar = $("#aStar").val();
+                        if (aStar == "" || typeof aStar == "undefined") {
+                            layer.msg("请选择活动开始时间！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aEnd = $("#aEnd").val();
+                        if (aEnd == "" || typeof aEnd == "undefined") {
+                            layer.msg("请选择活动结束时间！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aPoint = $("#aPoint").val();
+                        if (aPoint == "" || typeof aPoint == "undefined") {
+                            layer.msg("请填写利益点！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var aCoupon = $("#aCoupon").val();
+                        var aLink = $("#aLink").val();
+
+                        var trList = $("#abody").find('tr');
+                        if (trList.length <= 0) {
+                            layer.msg("未添加任何活动产品！", { icon: 0, time: 2000 });
+                            return false;
+                        }
+                        var products = [];
+                        //循环获取数据
+                        for (var i = 0; i < trList.length; i++) {
+                            var tdArr = trList.eq(i).find("td");
+                            var name = tdArr.eq(0).text(); //产品名称
+                            var code = tdArr.eq(1).text(); //产品编号
+                            var purchase = tdArr.eq(2).text(); //进货价
+                            var daily = tdArr.eq(3).text(); //官网价
+                            var active = tdArr.eq(4).find("input").val(); //活动价
+                            if (active === "" || parseFloat(active) <= 0) {
+                                layer.msg("第" + (i + 1) + "行活动价格填写错误！", { icon: 0, time: 2000 });
+                                return false;
+                            }
+                            var sale = tdArr.eq(5).find("input").val(); //预计销量
+                            if (sale === "" || parseInt(sale) <= 0) {
+                                layer.msg("第" + (i + 1) + "行预计销量填写错误！", { icon: 0, time: 2000 });
+                                return false;
+                            }
+                            var floor = tdArr.eq(6).find("input").val(); //活动底价
+                            if (floor === "" || parseFloat(floor) <= 0) {
+                                layer.msg("第" + (i + 1) + "行活动底价填写错误！", { icon: 0, time: 2000 });
+                                return false;
+                            }
+                            products.push({
+                                "PKID": 0,
+                                "ActiveId": 0,
+                                "ProductName": name,
+                                "PID": code,
+                                "PurchasePrice": purchase,
+                                "DailyPrice": daily,
+                                "ActivePrice": active,
+                                "ExpecteSale": sale,
+                                "FloorPrice": floor,
+                                "MinMargin": 0,
+                                "ExpecteSaleAmount": 0,
+                                "ActiveProductState": 0
+                            });
+                        }
+                        var aload;
+                        $.ajax({
+                            url: "/Platform/EditOperateActiveInfo",
+                            data: {
+                                "aId": oaId, "name": aname, "channel": achannel, "starDate": aStar, "endDate": aEnd,
+                                "point": aPoint, "coupon": aCoupon, "link": aLink, "products": JSON.stringify(products)
+                            },
+                            beforeSend: function () {
+                                aload = layer.load();
+                            },
+                            complete: function () {
+                                layer.close(aload);
+                            },
+                            type: "post",
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.indexOf('成功') > 0) {
+                                    layer.closeAll();
+                                    layer.msg(data, {
+                                        icon: 1, time: 2000
+                                    }, function () {
+                                        searchList();
+                                    });
+                                } else {
+                                    layer.msg(data, { icon: 0, time: 2000 });
+                                }
+                            },
+                            error: function () {
+                                layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                            }
+                        });
+                    },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+    //详情
+    function operateDetail(oaId) {
+        $.ajax({
+            url: "/Platform/OperateActiveDetile?aId=" + oaId,
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "运营活动详情",
+                    skin: 'layui-layer-rim',
+                    content: html,
+                    area: ['1030px', '600px'], //宽高
+                    btn: ['关闭'],
+                    cancel: function () { }
+                });
+            }
+        });
+
     }
 </script>

@@ -60,5 +60,13 @@ namespace Tuhu.YeWu.TenGu.Controllers
             ViewBag.Template = temp;
             return View();
         }
+        /// <summary>
+        /// 记录原因
+        /// RenYongQiang 2017/02/20
+        /// </summary>
+        public ActionResult InputReson()
+        {
+            return View();
+        }
     }
 }

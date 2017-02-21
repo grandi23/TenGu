@@ -102,59 +102,54 @@
     }
     //新增
     function addFactory() {
-        $.ajax({
-            url: "/Home/BatchSelectProduct",
-            type: "POST",
-            success: function (html) {
-                layer.open({
-                    type: 1,
-                    title: "选择产品",
-                    skin: 'layui-layer-rim', //加上边框
-                    content: html,
-                    area: ['780px', '500px'], //宽高
-                    btn: ['添加', '取消'],
-                    yes: function () {
-                        var array = [];
+        layer.open({
+            type: 2,
+            title: "选择产品",
+            skin: 'layui-layer-rim', //加上边框
+            content: "/Home/BatchSelectProduct",
+            area: ['790px', '500px'], //宽高
+            btn: ['添加', '取消'],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+                var array = [];
 
-                        $("#pbody").find("input[type=checkbox][name=spCheck]:checked").map(function () {
-                            var product = {
-                                "id": 0,
-                                "IsPush": 0,
-                                "ProductName": $(this).attr("data-name"),
-                                "ProductId": $(this).attr("data-pid"),
-                                "Brand": $(this).attr("data-brand")
-                            };
-                            array.push(product);
-                        });
-                        if (array.length === "") {
-                            layer.msg("请选择至少一个产品！", { icon: 0, time: 2000 });
-                            return false;
-                        }
-                        $.ajax({
-                            url: "/Platform/InsertFactoryProduct",
-                            data: { "products": JSON.stringify(array) },
-                            type: "post",
-                            dataType: "json",
-                            success: function (data) {
-                                if (data.indexOf('成功') > 0) {
-                                    layer.closeAll();
-                                    layer.msg(data, {
-                                        icon: 1, time: 2000
-                                    }, function () {
-                                        searchList();
-                                    });
-                                } else {
-                                    layer.msg(data, { icon: 0, time: 2000 });
-                                }
-                            },
-                            error: function () {
-                                layer.msg('数据传输失败！', { icon: 2, time: 2000 });
-                            }
-                        });
-                    },
-                    cancel: function () { }
+                body.find("#pbody").find("input[type=checkbox][name=spCheck]:checked").map(function () {
+                    var product = {
+                        "id": 0,
+                        "IsPush": 0,
+                        "ProductName": $(this).attr("data-name"),
+                        "ProductId": $(this).attr("data-pid"),
+                        "Brand": $(this).attr("data-brand")
+                    };
+                    array.push(product);
                 });
-            }
+                if (array.length === "") {
+                    layer.msg("请选择至少一个产品！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                $.ajax({
+                    url: "/Platform/InsertFactoryProduct",
+                    data: { "products": JSON.stringify(array) },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.indexOf('成功') > 0) {
+                            layer.closeAll();
+                            layer.msg(data, {
+                                icon: 1, time: 2000
+                            }, function () {
+                                searchList();
+                            });
+                        } else {
+                            layer.msg(data, { icon: 0, time: 2000 });
+                        }
+                    },
+                    error: function () {
+                        layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                    }
+                });
+            },
+            cancel: function () { }
         });
     }
     //导入
@@ -170,7 +165,7 @@
                 var body = layer.getChildFrame('body', index).contents();
 
                 if (body.find('#efile')[0].files.length <= 0) {
-                    alert("未选择文件！");
+                    layer.msg('未选择文件！', { icon: 0, time: 2000 });
                     return false;
                 }
                 var checkFile = body.find('#efile')[0].files[0];

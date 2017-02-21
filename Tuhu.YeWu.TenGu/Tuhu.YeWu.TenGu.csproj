@@ -555,6 +555,10 @@
     <Content Include="Views\Platform\OperateActiveList.cshtml" />
     <Content Include="Views\Platform\AddOperateActive.cshtml" />
     <Content Include="Views\Platform\SelectOperateActiveProduct.cshtml" />
+    <Content Include="Content\excel\运营活动产品导入模版.xlsx" />
+    <Content Include="Views\Platform\OperateActiveDetile.cshtml" />
+    <Content Include="Views\Home\InputReson.cshtml" />
+    <Content Include="Views\Platform\EditOperateActive.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

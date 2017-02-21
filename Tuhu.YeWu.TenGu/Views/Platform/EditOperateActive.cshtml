@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ThBiz.DataAccess.Entity.OperateActive
+@{
     Layout = null;
 }
 
@@ -7,37 +8,37 @@
         <tr>
             <td colspan="2">
                 <label style="width: 60px; font-weight: 600; color: #FBB44C;">活动名称</label>
-                <input id="aName" class="form-control" style="width: 89%; display: inline;"/>
+                <input id="aName" class="form-control" style="width: 89%; display: inline;" value="@Model.ActiveName"/>
             </td>
             <td>
                 <span style="width: 60px; font-weight: 600; color: #FBB44C;">活动渠道</span>
                 <select id="aChannel" class="form-control" style="width: 70%; display: inline;">
-                    <option selected="" value="">请选择</option>
-                    <option value="自营">自营</option>
-                    <option value="三方">三方</option>
-                    <option value="汽配龙">汽配龙</option>
+                    <option value="">请选择</option>
+                    <option value="自营" @(Model.ActiveChannel == "自营" ? "selected=\"\"" : "")>自营</option>
+                    <option value="三方" @(Model.ActiveChannel == "三方" ? "selected=\"\"" : "")>三方</option>
+                    <option value="汽配龙" @(Model.ActiveChannel == "汽配龙" ? "selected=\"\"" : "")>汽配龙</option>
                 </select>
             </td>
         </tr>
         <tr>
             <td>
                 <label style="width: 60px; font-weight: 600; color: #FBB44C;">活动时间</label>
-                <input id="aStar" class="form-control" style="width: 145px; display: inline;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'aEnd\')}' })"/> 至
-                <input id="aEnd" class="form-control" style="width: 145px; display: inline;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm', skin: 'blueFresh', minDate: '#F{$dp.$D(\'aStar\')}' })"/>
+                <input id="aStar" class="form-control" style="width: 145px; display: inline;" value="@Model.ActiveStarDate.ToString("yyyy-MM-dd HH:mm")" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm', skin: 'blueFresh', maxDate: '#F{$dp.$D(\'aEnd\')}' })" /> 至
+                <input id="aEnd" class="form-control" style="width: 145px; display: inline;" value="@Model.ActiveEndDate.ToString("yyyy-MM-dd HH:mm")" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm', skin: 'blueFresh', minDate: '#F{$dp.$D(\'aStar\')}' })" />
             </td>
             <td colspan="3">
                 <label style="width: 60px; font-weight: 600; color: #FBB44C;">利益点</label>
-                <input id="aPoint" class="form-control" style="width: 87%; display: inline;"/>
+                <input id="aPoint" class="form-control" style="width: 87%; display: inline;" value="@Model.InterestPoint"/>
             </td>
         </tr>
         <tr>
             <td style="width: 40%;">
                 <label style="width: 60px; font-weight: 600;">优惠券</label>
-                <input id="aCoupon" class="form-control" style="width: 80%; display: inline;"/>
+                <input id="aCoupon" class="form-control" style="width: 80%; display: inline;" value="@Model.Coupon"/>
             </td>
             <td style="width: 35%;">
                 <label style="width: 60px; font-weight: 600;">活动链接</label>
-                <input id="aLink" class="form-control" style="width: 75%; display: inline;"/>
+                <input id="aLink" class="form-control" style="width: 75%; display: inline;" value="@Model.ActiveLink"/>
             </td>
             <td style="width: 25%" colspan="2">
                 <button class="btn btn-sm btn-info" onclick="addActiveProduct();">添加产品</button>
@@ -60,7 +61,31 @@
                 <td style="width: 5%;">操作</td>
             </tr>
         </thead>
-        <tbody id="abody"></tbody>
+        <tbody id="abody">
+        @foreach (var info in Model.ActiveProductList)
+        {
+            <tr>
+                <td>@info.ProductName</td>
+                <td>@info.PID</td>
+                <td>@info.PurchasePrice</td>
+                <td>@info.DailyPrice</td>
+                <td>
+                    <input type="number" value="@info.ActivePrice" style="width: 100%;" onchange="changePrice(this);"/>
+                </td>
+                <td>
+                    <input type="number" value="@info.ExpecteSale" style="width: 100%;" onchange="changePrice(this);"/>
+                </td>
+                <td>
+                    <input type="number" value="@info.FloorPrice" style="width: 100%;" onchange="changePrice(this);"/>
+                </td>
+                <td>@info.MinMargin</td>
+                <td>@info.ExpecteSaleAmount</td>
+                <td>
+                    <a onclick="$(this).closest('tr').remove();" style="cursor: pointer;">删除</a>
+                </td>
+            </tr>
+        }
+        </tbody>
     </table>
 </div>
 <script>
@@ -203,5 +228,4 @@
         }
         $("#abody").append(text);
     }
-
 </script>
