@@ -609,7 +609,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         //[PowerManage]
         public ActionResult FactoryForProductIndex(TaskPoolRequest request)
         {
-            var result = new PurchaseNewManager().SelectFactoryForProductList(request);
+            var result = PurchaseNewManager.SelectFactoryForProductList(request);
             var dataList = result.ReturnValue;
             var totalRecord = result.OutValue;
             var pager = new PagerModel(request.PageNumber, request.PageSize)
@@ -761,7 +761,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         //[PowerManage]
         public ActionResult OperateActiveIndex(OperateActiveRequest request)
         {
-            var result = new PurchaseNewManager().SelectOperateActiveList(request);
+            var result = PurchaseNewManager.SelectOperateActiveList(request);
             var dataList = result.ReturnValue;
             var totalRecord = result.OutValue;
             var pager = new PagerModel(request.PageNumber, request.PageSize)
@@ -823,7 +823,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         /// 导入运营活动产品
         /// RenYongQiang 2017/02/17
         /// </summary>
-
+        [HttpPost]
         public ActionResult ImportActiveProductList(HttpPostedFileBase efile)
         {
             var errors = new List<string>();

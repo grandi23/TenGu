@@ -1,0 +1,404 @@
+﻿@using ThBiz.DataAccess.Entity
+@{
+    Layout = "../Shared/_Inner.cshtml";
+}
+<input type="hidden" id="vsele" value="" />
+<div class="col-md-12">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="control-label">供应商:</label>
+            <select id="VendorId" class="form-control" style="width: 200px;"></select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">仓库:</label>
+            @Html.DropDownList("WareHouse", new SelectList(ViewBag.HouseWare as System.Collections.IEnumerable, "WareHouseId", "WareHouseName"), "请选择", new {@class = "form-control", @style = "width: 150px;"})
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-info" onclick="searchPlace();">查询</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-success" onclick="addPlaceProduct();">添加产品</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-primary" onclick="importPlaceProduct();">导入产品</button>
+        </div>
+    </div>
+    <div class="form-inline" style="margin-top: 5px;">
+        <div class="form-group">
+            <label class="control-label">提货方式:</label>
+            <select id="pickWay" class="form-control" style="width: 100px;">
+                <option value="">请选择</option>
+                <option value="1途虎提货">途虎提货</option>
+                <option value="2供商送货">供商送货</option>
+                <option value="5第三方物流">第三方物流</option>
+                <option value="6快递">快递</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">采购方式:</label>
+            <select id="purchMode" class="form-control" style="width: 100px;">
+                <option value="0">正常</option>
+                <option value="1">补货</option>
+                <option value="2">专项</option>
+                <option value="3">扫货</option>
+                <option value="7">汽配龙</option>
+                <option value="8">预约采购</option>
+                <option value="9">活动备货</option>
+                <option value="10">大客户</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">预计到货:</label>
+            <input type="text" class="form-control" id="planedDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" style="width: 150px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh' })"/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">税率:</label>
+            <select id="rate" class="form-control" onchange="ChangeTotalFreight();" style="width: 100px;">
+                <option value="">请选择</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">运费记账类型:</label>
+            <select id="tallyType" class="form-control" style="width: 100px;">
+                <option value="采购成本">采购成本</option>
+                <option value="采购费用">采购费用</option>
+            </select>
+        </div>
+    </div>
+    <div id="dataList" style="width: 100%;">
+        <table class="table">
+            <thead>
+                <tr style="background: #428BCA; color: #fff; display:table; width: 100%; table-layout:fixed;">
+                    <th style="width: 5%;">序号</th>
+                    <th style="width: 40%;">产品名称</th>
+                    <th style="width: 10%;">采购数量</th>
+                    <th style="width: 10%;">采购价格</th>
+                    <th style="width: 10%;">运费单价</th>
+                    <th style="width: 20%;">备注</th>
+                    <th style="width: 5%;">操作</th>
+                </tr>
+            </thead>
+            <tbody id="pbody" style="display: block; max-height: 358px; height: 358px; overflow-y: auto; "></tbody>
+            <tr style="display: table; width: 100%; table-layout:fixed;">
+                <td colspan="2" style="text-align: right; font-weight: 600; width: 45%;">合计</td>
+                <td style="text-align: center; font-weight: 600; width: 10%;"><label id="tcount">0</label></td>
+                <td style="text-align: center; font-weight: 600; width: 10%;"><label id="tprice">0.00</label></td>
+                <td style="width: 10%;">
+                    <input type="number" id="tfreight" style="width: 100%;" onchange="changePrice();"/>
+                </td>
+                <td colspan="2" style="width: 25%;"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var vlist = [];
+    @foreach (VenderForQuery info in ViewBag.VendorId)
+    {
+        <text>vlist.push({id:'@info.PKID',text:'@info.SimpleName'})</text>
+    }
+    $(function() {
+        $("#WareHouse").select2();
+        //查询动态赋值
+        $("#VendorId").select2({
+            placeholder: "请输入供应商名称",
+            ajax: {
+                delay: 400,
+                data: function (params) {
+                    $("#vsele").val(params.term);
+                    return;
+                },
+                processResults: function () {
+                    var array = $.grep(vlist, function (info) {
+                        return info.text.indexOf($("#vsele").val()) > -1;
+                    });
+                    return {
+                        results: array
+                    };
+                },
+                cache: true
+            },
+            minimumInputLength: 1,
+            escapeMarkup: function (markup) { return markup; }
+        });
+    });
+    //查询采购下单数据
+    function searchPlace() {
+        var vendorId = $("#VendorId").val();
+        if (vendorId == "" || vendorId == null) {
+            layer.msg("请选择供应商！", { icon: 0, time: 2000 });
+            return false;
+        }
+        var wareHouseId = $("#WareHouse").val();
+        if (wareHouseId == "" || typeof wareHouseId == "undefined") {
+            layer.msg("请选择仓库！", { icon: 0, time: 2000 });
+            return false;
+        }
+        var load = layer.load();
+        $.ajax({
+            type: 'get',
+            url: '/PurchaseOrder/GetCreatManuallyPlaceOrderList',
+            data: { "vendorId": vendorId, "houseId": wareHouseId },
+            success: function (data) {
+                layer.close(load);
+                getVenderRabe();
+                packeTable(data);
+            },
+            error: function () {
+                layer.close(load);
+                alert("查询失败！");
+            }
+        });
+    }
+    //获取供应商税率信息
+    function getVenderRabe() {
+        var vId = $('#VendorId').val();
+        if (vId == "" || vId == "0" || vId == null) {
+            return false;
+        }
+        $.ajax({
+            url: '/PurchaseOrder/GetVenderRateSelectData',
+            type: 'GET',
+            async: false,
+            data: { "venderId": vId },
+            success: function (result) {
+                $("#rate").html(result);
+            },
+            error: function () {
+                alert("查询失败！");
+            }
+        });
+    }
+    //添加列表数据
+    function packeTable(list) {
+        var txt = "";
+        if (list.length > 0) {
+            var ttcount = 0;
+            var ttprice = 0;
+            var ttferight = 0;
+            for (var i = 0; i < list.length; i++) {
+                var count = parseInt(list[i].PurchaseCount);
+                var price = parseFloat(list[i].PurchasePrice);
+                var fright = parseFloat(list[i].FreightPrice);
+                txt +=
+                    "<tr did='" + list[i].PKID + "' style='display:table; width:100%; table-layout:fixed;'>" +
+                    "<td style='width: 5%;'>" + (i+1) + "</td>" +
+                    "<td style='width: 40%;'>" + list[i].ProductName + "</td>" +
+                    "<td style='width: 10%;'><input type='number' value='" + count + "' style='width: 100%;' onchange='changePrice();'></td>" +
+                    "<td style='width: 10%;'><input type='number' value='" + price.toFixed(2) + "' style='width: 100%;' onchange='changePrice();'></td>" +
+                    "<td style='width: 10%;'>" + fright.toFixed(2) + "</td>" +
+                    "<td style='width: 20%;'><input type='text' style='width: 100%;'></td>" +
+                    "<td style='width: 5%;'><a style='cursor: pointer;' onclick='delPlaceProduct(this, " + list[i].PKID + ");'>删除</a></td>" +
+                    "</tr>";
+                ttcount += count;
+                ttprice += price;
+                ttferight += fright;
+            }
+            $("#tcount").text(ttcount);
+            $("#tprice").text(ttprice.toFixed(2));
+            $("#tfreight").val(ttferight.toFixed(2));
+        } else {
+            txt +=
+                "<tr>" +
+                "<td colspan='7' style='text-align: center; font-weight: 600;'>没有相关信息！</td>" +
+                "</tr>";
+        }
+        $("#pbody").html(txt);
+    }
+    //添加下单产品
+    function addPlaceProduct() {
+        var vendorId = $("#VendorId").val();
+        if (vendorId == "" || vendorId == null) {
+            layer.msg("请选择供应商！", { icon: 0, time: 2000 });
+            return false;
+        }
+        var vendorName = $("#VendorId").find("option:selected").text();
+        var wareHouseId = $("#WareHouse").val();
+        if (wareHouseId == "" || typeof wareHouseId == "undefined") {
+            layer.msg("请选择仓库！", { icon: 0, time: 2000 });
+            return false;
+        }
+        var wareHouseName = $("#WareHouse").find("option:selected").text();
+        layer.open({
+            type: 2,
+            title: "选择产品",
+            skin: 'layui-layer-rim', //加上边框
+            content: "/Home/BatchSelectProduct",
+            area: ['790px', '500px'], //宽高
+            btn: ['添加', '取消'],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+                var array = [];
+
+                body.find("#pbody").find("input[type=checkbox][name=spCheck]:checked").map(function () {
+                    var product = {
+                        "ProductName": $(this).attr("data-name"),
+                        "PID": $(this).attr("data-pid"),
+                        "Brand": $(this).attr("data-brand"),
+                        "WareHouseId": wareHouseId,
+                        "WareHouseName": wareHouseName,
+                        "VendorId": vendorId,
+                        "VendorName": vendorName,
+                        "PurchaseCount": 0,
+                        "PurchasePrice": 0
+                    };
+                    array.push(product);
+                });
+                if (array.length === "") {
+                    layer.msg("请选择至少一个产品！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                $.ajax({
+                    url: "/PurchaseOrder/InsertBatchCreatManuallyPlaceOrder",
+                    data: { "placeOrder": JSON.stringify(array) },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.indexOf('成功') > 0) {
+                            layer.closeAll();
+                            searchPlace();
+                        } else {
+                            layer.msg(data, { icon: 0, time: 2000 });
+                        }
+                    },
+                    error: function () {
+                        layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                    }
+                });
+            },
+            cancel: function () { }
+        });
+    }
+    //导入下单产品
+    function importPlaceProduct() {
+        var vendorId = $("#VendorId").val();
+        if (vendorId == "" || vendorId == null) {
+            layer.msg("请选择供应商！", { icon: 0, time: 2000 });
+            return false;
+        }
+        var vendorName = $("#VendorId").find("option:selected").text();
+        var wareHouseId = $("#WareHouse").val();
+        if (wareHouseId == "" || typeof wareHouseId == "undefined") {
+            layer.msg("请选择仓库！", { icon: 0, time: 2000 });
+            return false;
+        }
+        var wareHouseName = $("#WareHouse").find("option:selected").text();
+        layer.open({
+            type: 2,
+            title: "导入",
+            skin: 'layui-layer-rim', //加上边框
+            content: "/Home/ImportExcel?temp=/Content/excel/采购任务下单导入模版.xlsx",
+            area: ['580px', '450px'], //宽高
+            btn: ['导入', '取消'],
+            yes: function (index) {
+                var body = layer.getChildFrame('body', index).contents();
+
+                if (body.find('#efile')[0].files.length <= 0) {
+                    layer.msg('未选择文件！', { icon: 0, time: 2000 });
+                    return false;
+                }
+                var checkFile = body.find('#efile')[0].files[0];
+                if (checkFile.name == "" || checkFile.size > 10000000 || checkFile.name.indexOf(".xls") <= 0) {
+                    layer.msg('文件限制，必须小于10M的Excel文件！', { icon: 0, time: 2000 });
+                    return false;
+                }
+                var eload;
+                body.find("#eform").ajaxSubmit({
+                    url: "/PurchaseOrder/ImportCreatManuallyPlaceOrder",
+                    data: {
+                        "vendorId": vendorId, "vendorName": vendorName,
+                        "wareId": wareHouseId, "wareName": wareHouseName
+                    },
+                    type: "post",
+                    beforeSend: function () {
+                        eload = layer.load();
+                    },
+                    complete: function () {
+                        layer.close(eload);
+                    },
+                    success: function (data) {
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            html +=
+                                "<tr>" +
+                                "<td style='width:5%;'>" + (i + 1) + "</td>" +
+                                "<td style='width:95%;'>" + data[i] + "</td>" +
+                                "</tr>";
+                        }
+                        body.find("#ebody").html(html);
+                    },
+                    error: function () {
+                        layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                    }
+                });
+            },
+            btn2: function () {
+                searchPlace();
+            },
+            cancel: function () {
+                searchPlace();
+            }
+        });
+    }
+    //更改价格
+    function changePrice() {
+        var totalf = parseFloat($("#tfreight").val());//运费总价
+        if ($("#tfreight").val() < 0) {
+            $("#tfreight").val("0");
+        }
+        var singlef = 0;//运费单价
+        var totalNum = 0; //总数量
+        var totalMoney = 0; //采购总价
+        //计算采购总数量，总价格
+        $("#pbody").children().each(function () {
+            totalNum += parseInt($(this).children().eq(2).find("input").val());
+            totalMoney += parseFloat($(this).children().eq(3).find("input").val());
+        });
+        //计算运费单价
+        if ($("#tallyType").val() == "采购成本" && totalNum > 0) {
+            singlef = totalf / totalNum;
+        }
+        //运费单价
+        $("#pbody").children().each(function () {
+            var $columns = $(this).children();
+            $columns.eq(4).text(singlef.toFixed(2));
+        });
+
+        $("#tcount").text(totalNum);
+        $("#tprice").text(totalMoney.toFixed(2));
+    }
+    //删除采购下单产品
+    function delPlaceProduct(tar, tpId) {
+        layer.confirm('确认删除？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: 'post',
+                url: '/PurchaseOrder/DeleteTaskPlaceOrder',
+                async: false,
+                data: { "tpId": tpId },
+                success: function (result) {
+                    if (result) {
+                        layer.msg("删除成功！", {
+                            icon: 1,
+                            time: 2000
+                        },function() {
+                            $(tar).closest('tr').remove();
+                            changePrice();
+                        });
+                    } else {
+                        layer.msg("删除失败！", {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
+                },
+                error: function () {
+                    layer.msg('数据传输失败！', { icon: 2, time: 2000 });
+                }
+
+            });
+        });
+    }
+</script>

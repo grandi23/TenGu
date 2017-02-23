@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using ThBiz.Business.CargoManagement;
 using ThBiz.Business.EmployeeManagement;
+using ThBiz.Business.Monitor;
 using ThBiz.Business.Purchase;
+using ThBiz.Common.Common;
 using ThBiz.Common.Entity;
 using ThBiz.DataAccess.Entity;
+using TheBiz.Common;
+using TheBiz.Common.Common;
 using Tuhu.Component.Common.Models;
-using Webdiyer.WebControls.Mvc;
+using Tuhu.Component.Framework.Identity;
 
 namespace Tuhu.YeWu.TenGu.Controllers
 {
@@ -230,6 +236,178 @@ namespace Tuhu.YeWu.TenGu.Controllers
             }
 
             return Json(PurchaseNewManager.UpdatePurchaseTaskMaster(master, ids), JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 手动创建任务下单页面
+        /// RenYongQiang 2017/02/22
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult AddPurchaseTask()
+        {
+            ViewBag.VendorId = new VenderManager().SelectAllVenderForQueries();
+            ViewBag.HouseWare = PurchaseNewManager.SelectWareHouseAreaConfigList();
+
+            return View();
+        }
+        /// <summary>
+        /// 获取人工创建采购任务下单数据
+        /// RenYongQiang 2017/02/22
+        /// </summary>
+        public ActionResult GetCreatManuallyPlaceOrderList(int vendorId, int houseId)
+        {
+            if (vendorId <= 0 || houseId < 0)
+            {
+                return Json(new List<PurchaseTaskPlaceOrder>(), JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(PurchaseNewManager.SelectCreatManuallyPlaceOrderList(vendorId, houseId),
+                JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 人工批量新增采购任务下单数据
+        /// RenYongQiang 2017/02/22
+        /// </summary>
+        public ActionResult InsertBatchCreatManuallyPlaceOrder(string placeOrder)
+        {
+            var list = JsonConvert.DeserializeObject<List<AjaxTaskPlaceOrder>>(placeOrder);
+
+            if (list.Any( x => x.VendorId <= 0 || x.WareHouseId < 0 
+                            || string.IsNullOrEmpty(x.PID) 
+                            || string.IsNullOrEmpty(x.WareHouseName) 
+                            || string.IsNullOrEmpty(x.VendorName)))
+            {
+                return Json("添加失败，数据异常！", JsonRequestBehavior.AllowGet);
+            }
+
+            PurchaseNewManager.BatchInsertPlaceOrderByManually(list);
+
+            return Json("新增成功！", JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 导入采购任务下单数据
+        /// RenYongQiang 2017/02/23
+        /// </summary>
+        [HttpPost]
+        public ActionResult ImportCreatManuallyPlaceOrder(HttpPostedFileBase efile, int vendorId, string vendorName, int wareId, string wareName)
+        {
+            var errors = new List<string>();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(efile?.FileName))
+                {
+                    errors.Add("失败,未获取到文件！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+                var fileName = efile.FileName;
+
+                if (!fileName.EndsWith(".xls") && !fileName.EndsWith(".xlsx"))
+                {
+                    errors.Add("失败,仅能上传.xls或.xlsx文件的格式！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+
+                if (efile.ContentLength / (1024 * 1024) > 10) //大于10M
+                {
+                    errors.Add("失败,文件容量大于10M！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+
+                var strem = efile.InputStream;
+
+                var ds = TuhuUtil.ExcelToDataTableByStream(true, strem, fileName);
+
+                if (ds == null || ds.Tables.Count <= 0 || ds.Tables[0].Rows.Count == 0)
+                {
+                    errors.Add("失败,文件内没有内容！");
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+                var dt = ds.Tables[0];
+                //验证列是否存在
+                var colums = "产品名称,产品编号,采购价格,采购数量";
+                errors.AddRange(from msg in colums.Split(',') where dt.Columns[msg] == null select $"该导入的文件中没有\"{msg}\"这一列！");
+                if (errors.Count > 0)
+                {
+                    return Json(errors, JsonRequestBehavior.AllowGet);
+                }
+                //过滤空白行
+                dt = dt.AsEnumerable().Where(x => !string.IsNullOrEmpty(x.Field<string>("产品名称"))).CopyToDataTable();
+
+                var placeList = new List<AjaxTaskPlaceOrder>();
+                //导入数据
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    var row = dt.Rows[i];
+                    var place = new AjaxTaskPlaceOrder()
+                    {
+                        VendorName = wareName,
+                        VendorId = vendorId,
+                        WareHouseName = vendorName,
+                        WareHouseId = wareId
+                    };
+                    //产品名称
+                    if (string.IsNullOrEmpty(row["产品名称"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写产品名称！");
+                        continue;
+                    }
+                    place.ProductName = row["产品名称"].ToString();
+                    //产品编号
+                    if (string.IsNullOrEmpty(row["产品编号"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写产品编号！");
+                        continue;
+                    }
+                    place.PID = row["产品编号"].ToString();
+                    //采购价格
+                    if (string.IsNullOrEmpty(row["采购价格"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写采购价格！");
+                        continue;
+                    }
+                    place.PurchasePrice = Convert.ToDecimal(row["采购价格"]);
+                    //采购数量
+                    if (string.IsNullOrEmpty(row["采购数量"].ToString()))
+                    {
+                        errors.Add($"第{i + 1}行导入失败,未填写采购数量！");
+                        continue;
+                    }
+                    place.PurchaseCount = Convert.ToInt32(row["采购数量"]);
+
+                    placeList.Add(place);
+                }
+
+                if (placeList.Count > 0)
+                {
+                    PurchaseNewManager.BatchInsertPlaceOrderByManually(placeList);
+                    errors.Add("本次共成功导入" + placeList.Count + "行!");
+                }
+                else
+                {
+                    errors.Add("导入失败,无有效数据！");
+                }
+
+                return Json(errors, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ExceptionMonitor.AddNewMonitor("采购任务下单", "导入", ex.ToString(), ThreadIdentity.Operator.Name, "采购任务下单导入",
+                    MonitorLevel.Error, MonitorModule.Purchase);
+                errors.Add("导入错误，操作无法进行！");
+                return Json(errors, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        /// <summary>
+        /// 删除采购任务下单产品
+        /// RenYongQiang 2017/02/23
+        /// </summary>
+        public ActionResult DeleteTaskPlaceOrder(int tpId)
+        {
+            if (tpId > 0)
+            {
+                return Json(PurchaseNewManager.DeletePlaceOrderById(tpId), JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -480,6 +658,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
         }
 
         #endregion
+
         #region 公共方法
         /// <summary>
         /// 根据区域获取仓库列表
@@ -500,6 +679,25 @@ namespace Tuhu.YeWu.TenGu.Controllers
             }
 
             return Json("错误，area为空", JsonRequestBehavior.AllowGet);
+        }
+        /// <summary>
+        /// 获取供应商税率下拉框数据源
+        /// RenYongQiang 2017/02/22
+        /// </summary>
+        public ActionResult GetVenderRateSelectData(int venderId)
+        {
+            if (venderId <= 0)
+            {
+                return Json("<option value=''>请选择</option>", JsonRequestBehavior.AllowGet);
+            }
+            var list = new PurchaseNewManager().SelectVenderInvoiceRateByVenderId(venderId);
+            if (!list.Any())
+            {
+                return Json("<option value=''>请选择</option>", JsonRequestBehavior.AllowGet);
+            }
+            var options = list.Aggregate("", (current, info) => current + ("<option value='" + Math.Round(Convert.ToDecimal(info.Rate)/100, 2) + "'>" + info.Rate + "%</option>"));
+
+            return Json(options, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

@@ -12,7 +12,7 @@ namespace Tuhu.YeWu.TenGu.Models
             MenuList = new List<MenuNode>()
             {
                 //new MenuNode(){ Icon = "icon icon-attachment", DisplayName = "销售订单采购",Url = "", ParentName = "采购下单", ParentIcon = "icon icon-direction"},
-                //new MenuNode(){ Icon = "icon icon-calendar", DisplayName = "批采下单",Url = "/PurchaseOrder/BatchPlaceOrder", ParentName = "采购下单", ParentIcon = "icon icon-direction"},
+                //new MenuNode(){ Icon = "icon icon-calendar", DisplayName = "批采下单",Url = "/PurchaseOrder/AddPurchaseTask", ParentName = "采购下单", ParentIcon = "icon icon-direction"},
                 new MenuNode(){ Icon = "icon icon-move", DisplayName = "采购任务池",Url = "/PurchaseOrder/TaskPoolIndex", ParentName = "采购下单", ParentIcon = "icon icon-direction"},
                 new MenuNode(){ Icon = "icon icon-align-right", DisplayName = "采购任务执行",Url = "/PurchaseOrder/ExecuteTaskIndex", ParentName = "采购下单", ParentIcon = "icon icon-direction"},
 

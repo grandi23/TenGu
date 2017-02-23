@@ -3,10 +3,7 @@
     Layout = "../Shared/_Inner.cshtml";
     var compelete = (int)ViewBag.Complete;
 }
-<div class="col-md-12 row">
-    <div class="form-inline">
-    </div>
-</div>
+
 <div class="col-md-12 row">
     @using (Html.BeginForm("ExportExecuteTask", "PurchaseOrder", FormMethod.Get, new {@class = "form-inline", id = "SearchForm"}))
     {

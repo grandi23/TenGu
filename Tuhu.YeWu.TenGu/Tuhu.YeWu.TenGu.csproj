@@ -541,7 +541,7 @@
     <Content Include="Views\Platform\EditPurchaseTaskAssignBrand.cshtml" />
     <Content Include="Views\PurchaseOrder\TaskPoolIndex.cshtml" />
     <Content Include="Views\PurchaseOrder\TaskPoolList.cshtml" />
-    <Content Include="Views\PurchaseOrder\BatchPlaceOrder.cshtml" />
+    <Content Include="Views\PurchaseOrder\AddPurchaseTask.cshtml" />
     <Content Include="Views\PurchaseOrder\ExecuteTaskIndex.cshtml" />
     <Content Include="Views\PurchaseOrder\ExecuteTaskList.cshtml" />
     <Content Include="Views\PurchaseOrder\SelectTaskCloseReson.cshtml" />
@@ -559,6 +559,7 @@
     <Content Include="Views\Platform\OperateActiveDetile.cshtml" />
     <Content Include="Views\Home\InputReson.cshtml" />
     <Content Include="Views\Platform\EditOperateActive.cshtml" />
+    <Content Include="Content\excel\采购任务下单导入模版.xlsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

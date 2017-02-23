@@ -59,8 +59,8 @@
     </table>
     @Html.Pager(Model.Pager, pageNumber => Url.Action("OperateActiveIndex", new { pageNumber }))
 }
-                                else
-                                {
+else
+{
     <div class="alert alert-success text-center">
         <span class="entypo-cancel-circled"></span>
         <strong>&nbsp;&nbsp;没有相关信息！</strong>
