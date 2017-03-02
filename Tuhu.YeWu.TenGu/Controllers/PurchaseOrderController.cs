@@ -409,6 +409,30 @@ namespace Tuhu.YeWu.TenGu.Controllers
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 创建采购任务提交
+        /// RenYongQiang 2017/02/23
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult PresentTaskPlaceOrder(string purchOrder)
+        {
+            var order = JsonConvert.DeserializeObject<PurchasePlaceModel>(purchOrder);
+            //判断数据
+            if (order.VendorId <= 0 || order.WareHouseId < 0 || string.IsNullOrEmpty(order.ShipmentType) ||
+                string.IsNullOrEmpty(order.DeliveryDate) || order.VendorRate <= 0 || !order.OrderProductList.Any()
+                || order.OrderProductList.Any( x => string.IsNullOrEmpty(x.PID) || x.FreightPrice < 0 || 
+                                                x.PurchasePrice <= 0 || x.PurchaseCount <= 0))
+            {
+                return Json("失败，提交的数据异常！", JsonRequestBehavior.AllowGet);
+            }
+            //判断重复产品
+            if (order.OrderProductList.Distinct(x => x.PID).Count() != order.OrderProductList.Count())
+            {
+                return Json("失败，提交中包涵重复产品！", JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(PurchaseNewManager.ManuallyTaskBatchCreatPurchaseOrder(order), JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region 采购任务执行

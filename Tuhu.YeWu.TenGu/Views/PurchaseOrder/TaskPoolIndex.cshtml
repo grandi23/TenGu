@@ -200,14 +200,134 @@
     }
     //新建采购任务
     function addTaskPlace() {
-        layer.open({
+        parent.layer.open({
             type: 2,
             title: "创建采购任务",
             skin: 'layui-layer-rim',
             content: "/PurchaseOrder/AddPurchaseTask",
             area: ['1030px', '650px'], //宽高
             btn: ['提交采购', '取消'],
-            yes: function () {
+            yes: function (index) {
+                var body = parent.layer.getChildFrame('body', index).contents();
+
+                var vendorId = body.find("#VendorId").val();//供应商id
+                if (vendorId == "" || vendorId == null) {
+                    parent.layer.msg("未选择供应商！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                var vendorName = body.find("#VendorId").find("option:selected").text();//供应商名称
+                var wareHouseId = body.find("#WareHouse").val();//仓库id
+                if (wareHouseId == "" || typeof wareHouseId == "undefined") {
+                    parent.layer.msg("未选择仓库！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                var wareHouseName = body.find("#WareHouse").find("option:selected").text();//仓库名称
+                var pickWay = body.find("#pickWay").val();//提货方式
+                if (pickWay === "" || typeof pickWay === "undefined") {
+                    parent.layer.msg("未选择提货方式！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                var purmode = body.find("#purchMode").val();//采购方式
+                var planDate = body.find("#planedDate").val();//预计到货日期
+                if (planDate === "" || typeof planDate === "undefined") {
+                    parent.layer.msg("未选择预计提货日期！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                var rate = body.find("#rate").val();//税率
+                if (rate === "" || typeof rate === "undefined") {
+                    parent.layer.msg("未选择税率！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                var tallyType = body.find("#tallyType").val();//运费记账类型
+                var tfreight = body.find("#tfreight").val();//总运费
+                if (tfreight === "" || parseFloat(tfreight) < 0 || typeof tfreight === "undefined") {
+                    parent.layer.msg("总运费不能为空或小于0！", { icon: 0, time: 2000 });
+                    return false;
+                }
+
+                if (body.find("#pbody tr[did!=0]").length === 0) {
+                    parent.layer.msg("未添加任何产品！", { icon: 0, time: 2000 });
+                    return false;
+                }
+                var plist = [];
+                for (var i = 0; i < body.find("#pbody tr[did!=0]").length ; i++) {
+                    var tdArr = $(body.find("#pbody tr[did!=0]")[i]).find("td");
+
+                    var pkid = $(body.find("#pbody tr[did!=0]")[i]).attr("did"); //id
+                    var pid = $(body.find("#pbody tr[did!=0]")[i]).attr("pid"); //产品编号
+                    if (pid === "" || typeof pid == "undefined") {
+                        parent.layer.msg("第" + (i + 1) + "行，采购产品数据错误！", { icon: 0, time: 2000 });
+                        return false;
+                    }
+                    var pname = tdArr.eq(1).text(); //产品名称
+                    var pcount = tdArr.eq(2).find('input').val(); //采购数量
+                    if (pcount === "" || parseInt(pcount) <= 0 || typeof pcount == "undefined") {
+                        parent.layer.msg("第" + (i + 1) + "行，采购数量必须大于0！", { icon: 0, time: 2000 });
+                        return false;
+                    }
+                    var pprice = tdArr.eq(3).find('input').val(); //采购价格
+                    if (pprice === "" || parseFloat(pprice) <= 0 || typeof pprice === "undefined") {
+                        parent.layer.msg("第" + (i + 1) + "行，采购价格必须大于0！", { icon: 0, time: 2000 });
+                        return false;
+                    }
+                    var freight = tdArr.eq(4).text(); //运费单价
+                    if (freight === "" || parseFloat(freight) < 0 || typeof freight === "undefined") {
+                        parent.layer.msg("第" + (i + 1) + "行，运费不能小于0！", { icon: 0, time: 2000 });
+                        return false;
+                    }
+                    var remark = tdArr.eq(5).find("input").val(); //修改原因
+                    plist.push({
+                        "PKID": pkid,
+                        "ProductName": pname,
+                        "PID": pid,
+                        "PurchasePrice": pprice,
+                        "PurchaseCount": pcount,
+                        "FreightPrice": freight,
+                        "Remark": remark
+                    });
+                }
+                var order = {
+                    "VendorId": vendorId,
+                    "VendorName": vendorName,
+                    "WareHouseId": wareHouseId,
+                    "WareHouseName": wareHouseName,
+                    "ShipmentType": pickWay,
+                    "PurchaseMode": purmode,
+                    "DeliveryDate": planDate,
+                    "VendorRate": rate,
+                    "FreightType": tallyType,
+                    "TotalFreight": tfreight,
+                    "OrderProductList": plist
+                }
+
+                var loading;
+                $.ajax({
+                    url: "/PurchaseOrder/PresentTaskPlaceOrder",
+                    data: { "purchOrder": JSON.stringify(order) },
+                    dataType: "json",
+                    type: "POST",
+                    beforeSend: function () {
+                        loading = parent.layer.load();
+                    },
+                    complete: function () {
+                        parent.layer.close(loading);
+                    },
+                    success: function (result) {
+                        if (result.indexOf("成功") > 0) {
+                            parent.layer.msg(result, {
+                                icon: 1,
+                                time: 2000
+                            }, function () {
+                                parent.layer.closeAll();
+                            });
+                        } else {
+                            parent.layer.msg(result, { icon: 1, time: 2000 });
+                        }
+                    },
+                    error: function () {
+                        parent.layer.msg("提交数据失败！", { icon: 2, time: 2000 });
+                    }
+                });
 
             },
             cancel: function () { }

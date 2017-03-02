@@ -182,7 +182,7 @@
                 var price = parseFloat(list[i].PurchasePrice);
                 var fright = parseFloat(list[i].FreightPrice);
                 txt +=
-                    "<tr did='" + list[i].PKID + "' style='display:table; width:100%; table-layout:fixed;'>" +
+                    "<tr did='" + list[i].PKID + "' pid='" + list[i].PID + "' style='display:table; width:100%; table-layout:fixed;'>" +
                     "<td style='width: 5%;'>" + (i+1) + "</td>" +
                     "<td style='width: 40%;'>" + list[i].ProductName + "</td>" +
                     "<td style='width: 10%;'><input type='number' value='" + count + "' style='width: 100%;' onchange='changePrice();'></td>" +
@@ -200,8 +200,8 @@
             $("#tfreight").val(ttferight.toFixed(2));
         } else {
             txt +=
-                "<tr>" +
-                "<td colspan='7' style='text-align: center; font-weight: 600;'>没有相关信息！</td>" +
+                "<tr did='0' pid='' style='display:table; width:100%; table-layout:fixed;'>" +
+                "<td colspan='7' style='text-align: center; font-weight: 600; style='width: 100%;'>没有相关信息！</td>" +
                 "</tr>";
         }
         $("#pbody").html(txt);
@@ -343,10 +343,10 @@
     }
     //更改价格
     function changePrice() {
-        var totalf = parseFloat($("#tfreight").val());//运费总价
         if ($("#tfreight").val() < 0) {
             $("#tfreight").val("0");
         }
+        var totalf = parseFloat($("#tfreight").val());//运费总价
         var singlef = 0;//运费单价
         var totalNum = 0; //总数量
         var totalMoney = 0; //采购总价
