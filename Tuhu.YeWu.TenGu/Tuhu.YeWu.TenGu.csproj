@@ -123,6 +123,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\js\gage\jquery.easy-pie-chart.css" />
+    <Content Include="Content\js\gage\jquery.easypiechart.min.js" />
+    <Content Include="Content\js\gage\justgage.js" />
+    <Content Include="Content\js\gage\raphael.2.1.0.min.js" />
     <Content Include="Content\js\jquery-3.1.1.min.js" />
     <Content Include="Content\css\awwwards.css" />
     <Content Include="Content\css\bootstrap.css" />
@@ -560,6 +564,7 @@
     <Content Include="Views\Home\InputReson.cshtml" />
     <Content Include="Views\Platform\EditOperateActive.cshtml" />
     <Content Include="Content\excel\采购任务下单导入模版.xlsx" />
+    <None Include="Properties\PublishProfiles\TenGu.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -569,7 +574,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\js\gage\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Yewu.Purchase\ThBiz.Business\ThBiz.Business.csproj">

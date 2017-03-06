@@ -969,8 +969,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
             string point, string coupon, string link, string products)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(channel) || string.IsNullOrEmpty(starDate) ||
-                string.IsNullOrEmpty(endDate) || string.IsNullOrEmpty(point) || string.IsNullOrEmpty(coupon) ||
-                string.IsNullOrEmpty(link) || string.IsNullOrEmpty(products))
+                string.IsNullOrEmpty(endDate) || string.IsNullOrEmpty(point) || string.IsNullOrEmpty(products))
             {
                 return Json("活动信息填写不完整，创建活动失败！", JsonRequestBehavior.AllowGet);
             }
@@ -1053,7 +1052,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
                     break;
                 case 4://采购，驳回活动
                     active.ActiveState = active.PurchaseReject == 4 ? "已取消" : "采购驳回";//驳回次数限制
-                    active.OperateReject += 1;
+                    active.PurchaseReject += 1;
 
                     log.Operation = "采购驳回";
                     log.AfterValue = reson;
@@ -1096,8 +1095,8 @@ namespace Tuhu.YeWu.TenGu.Controllers
             string point, string coupon, string link, string products)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(channel) || string.IsNullOrEmpty(starDate) ||
-                string.IsNullOrEmpty(endDate) || string.IsNullOrEmpty(point) || string.IsNullOrEmpty(coupon) ||
-                string.IsNullOrEmpty(link) || string.IsNullOrEmpty(products) || aId <= 0)
+                string.IsNullOrEmpty(endDate) || string.IsNullOrEmpty(point) || 
+                string.IsNullOrEmpty(products) || aId <= 0)
             {
                 return Json("活动信息填写不完整，修改活动失败！", JsonRequestBehavior.AllowGet);
             }

@@ -131,7 +131,7 @@
                          </td>
                          <td style="width: 8%;">
                              <span style="color: #428BCA; font-weight: bold;">
-                                 @Math.Round(item.PoItemList.FirstOrDefault(_ => !_.Status.StartsWith("已取消")) == null ? 0 : item.PoItemList.FirstOrDefault(_ => !_.Status.StartsWith("已取消")).ProductTotalFreight, 2)
+                                 @Math.Round(item.PoItemList.Where(_ => !_.Status.StartsWith("已取消")).Select(_ => new {_.ProductFreight, _.Num }).Sum(_ => _.ProductFreight * _.Num), 2)
                              </span>
                          </td>
                          <td style="width: 8%;">
