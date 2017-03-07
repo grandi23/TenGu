@@ -38,6 +38,12 @@
         <div class="form-group">
             <button type="submit" class="btn btn-sm btn-success" id="btnexport">导出</button>
         </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-primary" onclick="subPurch();">提交</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-warning" onclick="orderPurch();">下单</button>
+        </div>
     }<br/>
     <div id="dataList" style="overflow: auto; width: 100%;">
         @Html.Partial("ExecuteTaskList")
@@ -95,19 +101,6 @@
                 }
             });
         });
-    }
-    //全选，取消
-    function checkAll(col) {
-        var list = $("input[name='pcheck']");
-        if ($(col).prop('checked')) {
-            for (var j = 0; j < list.length; j++) {
-                list[j].checked = true;
-            }
-        } else {
-            for (var i = 0; i < list.length; i++) {
-                list[i].checked = false;
-            }
-        }
     }
     //下拉框动态更改仓库信息
     function changHouse(sel) {
@@ -220,7 +213,10 @@
                         var ids = "";
                         $("#pushAginBody").find("input[type=checkbox][name=pagin]:checked").map(function () {
                             var id = $(this).attr("data-id");
-                            ids += ids === "" ? id : "," + id;
+                            var pid = $(this).attr("data-p");
+                            ids += ids === ""
+                                ? id + ":" + pid
+                                : "," + id + ":" + pid;
                         });
                         if (ids === "") {
                             layer.msg("请选择至少一个供应商！", { icon: 0, time: 2000 });
@@ -247,6 +243,28 @@
                             }
                         });
                     },
+                    cancel: function () { }
+                });
+            }
+        });
+    }
+    //提交
+    function subPurch() {
+        layer.msg('功能暂无！', { icon: 0, time: 2000 });
+    }
+    //下单
+    function orderPurch() {
+        $.ajax({
+            url: "/PurchaseOrder/TaskPlaceOrder",
+            type: "POST",
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    title: "订单确认",
+                    skin: 'layui-layer-rim',
+                    content: html,
+                    area: ['1030px', '600px'], //宽高
+                    btn: ['关闭'],
                     cancel: function () { }
                 });
             }

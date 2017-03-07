@@ -426,7 +426,9 @@
     <Content Include="Content\css\pager.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\img\user.png" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\BaishiWmsUtil.cs" />
@@ -565,6 +567,7 @@
     <Content Include="Views\Platform\EditOperateActive.cshtml" />
     <Content Include="Content\excel\采购任务下单导入模版.xlsx" />
     <None Include="Properties\PublishProfiles\TenGu.pubxml" />
+    <Content Include="Views\PurchaseOrder\TaskPlaceOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

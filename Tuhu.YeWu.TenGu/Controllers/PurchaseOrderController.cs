@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.UI.WebControls;
 using Newtonsoft.Json;
 using NPOI.HSSF.UserModel;
+using NPOI.OpenXmlFormats.Dml;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using ThBiz.Business.CargoManagement;
@@ -658,7 +659,7 @@ namespace Tuhu.YeWu.TenGu.Controllers
             var model = PurchaseNewManager.GetPurchaseTaskInfoById(taskId);
             if (model != null)
             {
-                model.InquiryProductList = PurchaseNewManager.SelectInquiryProductListByPId(model.PID);
+                model.InquiryProductList = PurchaseNewManager.SelectInquiryProductListByPId(model.PKID);
             }
             return View(model);
         }
@@ -670,9 +671,9 @@ namespace Tuhu.YeWu.TenGu.Controllers
         {
             if (!string.IsNullOrEmpty(ids))
             {
-                foreach (var id in ids.Split(','))
+                foreach (var info in ids.Split(','))
                 {
-                    PurchaseNewManager.InquiryProductPushAgain(Convert.ToInt32(id));
+                    PurchaseNewManager.InquiryProductPushAgain(Convert.ToInt32(info.Split(':')[0]), info.Split(':')[1]);
                 }
 
                 return Json("重新推送成功！", JsonRequestBehavior.AllowGet);
@@ -680,7 +681,30 @@ namespace Tuhu.YeWu.TenGu.Controllers
 
             return Json("未选择可推送的供应商！", JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 任务下单页面
+        /// RenYongQiang 2017/03/07
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult TaskPlaceOrder()
+        {
+            var list = PurchaseNewManager.SelectCreatSystemPlaceOrderList(0, -1, string.Empty);
 
+            ViewBag.Vendor = list.GroupBy(x => new {x.VendorId, x.VendorName}).Select(s => s.First()).ToList();
+            ViewBag.Brand = list.GroupBy(x => new {x.Brand}).Select(s => s.First()).ToList();
+            ViewBag.HouseWare = list.GroupBy(x => new {x.WareHouseId, x.WareHouseName}).Select(s => s.First()).ToList();
+
+            return View();
+        }
+        /// <summary>
+        /// 获取确认下单数据
+        /// RenYongQiang 2017/02/15
+        /// </summary>
+        public ActionResult SelectTaskPlaceOrderData(int vendorId, int houseId, string brand)
+        {
+            return Json(PurchaseNewManager.SelectCreatSystemPlaceOrderList(vendorId, houseId, brand),
+                JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region 公共方法

@@ -24,7 +24,7 @@
                     <td style="width: 3%;">
                         @if (inquiry.InquiryProductState == "已提交")
                         {
-                            <input type="checkbox" name="pagin" data-id="@inquiry.PKID"/>
+                            <input type="checkbox" name="pagin" data-id="@inquiry.InquiryId" data-p="@inquiry.PID"/>
                         }
                     </td>
                     <td>@inquiry.VendorName</td>

@@ -4,22 +4,12 @@
     Layout = null;
     List<VendorInquiryProduct> vendors = ViewBag.VendorList;
 }
-<style>
-    .headtr{
-        
-    }
-    .headth {
-        
-    }
-</style>
+
 @if (Model.Any())
 {
     <table class="table table-bordered">
         <thead>
             <tr style="background: #428BCA; color: #fff; white-space: nowrap;">
-                <th style="min-width: 30px; vertical-align: inherit; text-align: center;" rowspan="2">
-                    <input type="checkbox" onclick="checkAll(this)"/>
-                </th>
                 <th style="min-width: 70px; vertical-align: inherit; text-align: center;" rowspan="2">任务编号</th>
                 <th style="min-width:300px; vertical-align: inherit; text-align: center;" rowspan="2">产品名称</th>
                 <th style="min-width: 80px; vertical-align: inherit; text-align: center;" rowspan="2">区域</th>
@@ -52,9 +42,6 @@
             {
                 var m = list.ToList()[i];
                 <tr>
-                    <td>
-                        <input type="checkbox" name="pcheck" data-id="@m.PKID"/>
-                    </td>
                     <td>@m.PKID</td>
                     @if (i == 0)
                     {
@@ -68,37 +55,34 @@
                     }
                     <td>@m.WareHouseName</td>
                     <td>@m.DemandCount</td>
-                    @if (i == 0)
+                    @foreach (var vendor in vendors)
                     {
-                        foreach (var vendor in vendors)
+                        var mv = m.InquiryProductList.FirstOrDefault(x => x.VendorId == vendor.VendorId);
+                        if (mv != null)
                         {
-                            var mv = list.First().InquiryProductList.FirstOrDefault(x => x.VendorId == vendor.VendorId);
-                            if (mv != null)
+                            if (mv.InquiryProductState == "已提交")
                             {
-                                if (mv.InquiryProductState == "已提交")
-                                {
-                                    <td rowspan="@count" style="vertical-align: middle;">
-                                        <input type="number" style="width: 60px;" value="@mv.QuotedPrice" onchange="determinPrice(this, @mv.QuotedPrice);"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">元</span>
-                                    </td>
-                                    <td rowspan="@count" style="vertical-align: middle;">
-                                        <input type="number" style="width: 60px;" value="@mv.ProvideCount" onchange="determinCount(this, @mv.ProvideCount);"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">个</span>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td rowspan="@count" style="vertical-align: middle;">
-                                        <input type="number" style="width: 60px;" value="0.00" disabled="disabled"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">元</span>
-                                    </td>
-                                    <td rowspan="@count" style="vertical-align: middle;">
-                                        <input type="number" style="width: 60px;" value="0" disabled="disabled"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">个</span>
-                                    </td>
-                                }
+                                <td>
+                                    <input type="number" style="width: 60px;" value="@mv.QuotedPrice" onchange="determinPrice(this, @mv.QuotedPrice);"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">元</span>
+                                </td>
+                                <td>
+                                    <input type="number" style="width: 60px;" value="@mv.ProvideCount" onchange="determinCount(this, @mv.ProvideCount);"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">个</span>
+                                </td>
                             }
                             else
                             {
-                                <td rowspan="@count" style="vertical-align: middle;"></td>
-                                <td rowspan="@count" style="vertical-align: middle;"></td>
+                                <td>
+                                    <input type="number" style="width: 60px;" value="0.00" disabled="disabled"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">元</span>
+                                </td>
+                                <td>
+                                    <input type="number" style="width: 60px;" value="0" disabled="disabled"/><span style="color: #EA3F3F; font-weight: 600; margin-left: 5px;">个</span>
+                                </td>
                             }
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
                         }
                     }
                     <td>

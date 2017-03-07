@@ -1,0 +1,100 @@
+﻿@using ThBiz.DataAccess.Entity
+@{
+    Layout = null;
+}
+
+<input type="hidden" id="vsele" value="" />
+<div class="col-md-12">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="control-label">供应商:</label>
+            @Html.DropDownList("VendorId", new SelectList(ViewBag.Vendor as System.Collections.IEnumerable, "WareHouseId", "WareHouseName"), "请选择", new {@class = "form-control", @style = "width: 150px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">仓库:</label>
+            @Html.DropDownList("WareHouse", new SelectList(ViewBag.HouseWare as System.Collections.IEnumerable, "WareHouseId", "WareHouseName"), "请选择", new {@class = "form-control", @style = "width: 150px;"})
+        </div>
+        <div class="form-group">
+            <label class="control-label">品牌:</label>
+            @Html.DropDownList("Brand", new SelectList(ViewBag.Brand as System.Collections.IEnumerable, "WareHouseId", "WareHouseName"), "请选择", new {@class = "form-control", @style = "width: 150px;"})
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-sm btn-info" onclick="searchPlace();">查询</button>
+        </div>
+    </div>
+    <div id="plodiv"></div>
+    @*<div class="form-inline" style="margin-top: 5px;">
+        <div class="form-group">
+            <label class="control-label">提货方式:</label>
+            <select id="pickWay" class="form-control" style="width: 100px;">
+                <option value="">请选择</option>
+                <option value="1途虎提货">途虎提货</option>
+                <option value="2供商送货">供商送货</option>
+                <option value="5第三方物流">第三方物流</option>
+                <option value="6快递">快递</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">采购方式:</label>
+            <select id="purchMode" class="form-control" style="width: 100px;">
+                <option value="0">正常</option>
+                <option value="1">补货</option>
+                <option value="2">专项</option>
+                <option value="3">扫货</option>
+                <option value="7">汽配龙</option>
+                <option value="8">预约采购</option>
+                <option value="9">活动备货</option>
+                <option value="10">大客户</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">预计到货:</label>
+            <input type="text" class="form-control" id="planedDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" style="width: 150px;" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd', skin: 'blueFresh' })" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">税率:</label>
+            <select id="rate" class="form-control" onchange="ChangeTotalFreight();" style="width: 100px;">
+                <option value="">请选择</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">运费记账类型:</label>
+            <select id="tallyType" class="form-control" style="width: 100px;">
+                <option value="采购成本">采购成本</option>
+                <option value="采购费用">采购费用</option>
+            </select>
+        </div>
+    </div>
+    <div id="dataList" style="width: 100%;">
+        <table class="table">
+            <thead>
+                <tr style="background: #428BCA; color: #fff; display:table; width: 100%; table-layout:fixed;">
+                    <th style="width: 5%;">序号</th>
+                    <th style="width: 40%;">产品名称</th>
+                    <th style="width: 10%;">采购数量</th>
+                    <th style="width: 10%;">采购价格</th>
+                    <th style="width: 10%;">运费单价</th>
+                    <th style="width: 20%;">备注</th>
+                    <th style="width: 5%;">操作</th>
+                </tr>
+            </thead>
+            <tbody id="pbody" style="display: block; max-height: 358px; height: 358px; overflow-y: auto; "></tbody>
+            <tr style="display: table; width: 100%; table-layout:fixed;">
+                <td colspan="2" style="text-align: right; font-weight: 600; width: 45%;">合计</td>
+                <td style="text-align: center; font-weight: 600; width: 10%;"><label id="tcount">0</label></td>
+                <td style="text-align: center; font-weight: 600; width: 10%;"><label id="tprice">0.00</label></td>
+                <td style="width: 10%;">
+                    <input type="number" id="tfreight" style="width: 100%;" onchange="changePrice();" />
+                </td>
+                <td colspan="2" style="width: 25%;"></td>
+            </tr>
+        </table>
+    </div>*@
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("#WareHouse").select2();
+        $("#VendorId").select2();
+        $("#VendorId").select2();
+    });
+</script>
